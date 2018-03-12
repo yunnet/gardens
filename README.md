@@ -1,12 +1,11 @@
-## SDRMS
+## gdkxdl
 
 # 简介
-SDRMS是基于Beego开发的易用、易扩展、界面友好的轻量级功能权限管理系统。前端框架基于AdminLTE2进行资源整合，包含了多款优秀的插件，是笔者对多年后台管理系统开发经验精华的萃取。
+基于Beego开发的易用、易扩展、界面友好的轻量级功能权限管理系统。前端框架基于AdminLTE2进行资源整合，包含了多款优秀的插件，是笔者对多年后台管理系统开发经验精华的萃取。
 本系统非常适合进行后台管理系统开发，统一的代码和交互给二次开发带来极大的方便，在没有前端工程师参与的情况下就可以进行快速的模块式开发，并保证用户使用的友好性和易用性。系统里整合了众多优秀的资源，在此感谢各位大神的无私奉献。
-# 笔者博客
-http://blog.csdn.net/lhtzbj12 
+# 非原创
+  框架来源于 https://github.com/lhtzbj12/sdrms
 本文博客
-http://blog.csdn.net/lhtzbj12/article/details/78847482
 # 特点
 1. 分页列表页面的搜索条件、搜索面板、PageSize、当前页数、显示/隐藏列在变化时自动保存，页面刷新后、重新进入时，这些状态依然保持；
 2. TreeTabe列表节点展开/收缩状态、滚动条位置时自动保存，页面刷新后、重新进入时，这些状态依然保持；
@@ -23,6 +22,8 @@ http://blog.csdn.net/lhtzbj12/article/details/78847482
 5. 下拉框使用Bootstrap-select（<a href="http://silviomoreto.github.io/bootstrap-select/">更多信息</a>）；
 6. 高亮显示使用的是笔者自已开发的插件；
 7. 分页列表里搜索条件、搜索面板状态自动保存使用的是笔者自已开发的插件。
+#增加部分
+1. 增加了font-awesome 图标选择的功能。
 
 # 安装方法
 
@@ -31,14 +32,14 @@ http://blog.csdn.net/lhtzbj12/article/details/78847482
 
 2.安装本系统
 ```
-go get github.com/lhtzbj12/sdrms
+go get github.com/yunnet/gdkxdl
 ```
-3.将根目录下的sdrms.sql导入mysql
+3.将根目录下的gdkxdl.sql导入mysql
 
 4.修改配置文件 conf/app.conf
 
 5.运行
-在 sdrms 目录使用beego官方提供的命令运行
+在 gdkxdl 目录使用beego官方提供的命令运行
 ```
 bee run
 ```
@@ -47,8 +48,3 @@ bee run
 # 系统截图
 
 ![这里写图片描述](http://img.blog.csdn.net/20171219211607394?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20171219211617294?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20171219211631456?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20171219222006504?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20171219222019726?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-![这里写图片描述](http://img.blog.csdn.net/20171219222029838?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
