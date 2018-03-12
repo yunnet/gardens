@@ -22,7 +22,7 @@
 5. 下拉框使用Bootstrap-select（<a href="http://silviomoreto.github.io/bootstrap-select/">更多信息</a>）；
 6. 高亮显示使用的是笔者自已开发的插件；
 7. 分页列表里搜索条件、搜索面板状态自动保存使用的是笔者自已开发的插件。
-#增加部分
+# 增加部分
 1. 增加了font-awesome 图标选择的功能。
 
 # 安装方法
