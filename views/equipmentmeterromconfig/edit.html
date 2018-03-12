@@ -1,0 +1,137 @@
+<div class="row">
+    <!-- form start -->
+    <form class="form-horizontal" id="thisForm">
+        <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">电表类型编码</label>
+            <div class="col-sm-8">
+                <input type="text" name="MeterTypeNO" class="form-control" placeholder="" onfocus=this.select() value="{{.m.MeterTypeNO}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">地址排序</label>
+            <div class="col-sm-8">
+                <input type="number" name="AddressSort" class="form-control" placeholder="" onfocus=this.select() value="{{.m.AddressSort}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">寄存器地址</label>
+            <div class="col-sm-8">
+                <input type="text" name="RomAddress" class="form-control" placeholder="" onfocus=this.select() value="{{.m.RomAddress}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">寄存器名称</label>
+            <div class="col-sm-8">
+                <input type="text" name="RomName" class="form-control" placeholder="" onfocus=this.select() value="{{.m.RomName}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">单位</label>
+            <div class="col-sm-8">
+                <input type="text" name="Units" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Units}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数据类型</label>
+            <div class="col-sm-8">
+                <select name="DataType" id="DataType" class="form-control bs-select">
+                    <option value="INT">INT</option>
+                    <option value="LONG">LONG</option>
+                    <option value="FLOAT">FLOAT</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">第几段</label>
+            <div class="col-sm-8">
+                <input type="number" name="SegmentNO" class="form-control" placeholder="" onfocus=this.select() value="{{.m.SegmentNO}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">偏移值</label>
+            <div class="col-sm-8">
+                <input type="number" name="Offset" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Offset}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否电压互感器变化</label>
+            <div class="col-sm-8">
+                <input type="number" name="Needpt" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Needpt}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否电流互感器变比</label>
+            <div class="col-sm-8">
+                <input type="number" name="Needct" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Needct}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">计算因子</label>
+            <div class="col-sm-8">
+                <input type="number" name="Calcfactor" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Calcfactor}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">最高位为符号位</label>
+            <div class="col-sm-8">
+                <input type="checkbox" name="Msbbit" lay-skin="switch" lay-text="ON|OFF" value="{{.m.Msbbit}}">
+                {{/*<input type="number" name="Msbbit" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Msbbit}}">*/}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数据长度</label>
+            <div class="col-sm-8">
+                <input type="number" name="Bytelength" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Bytelength}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表1</label>
+            <div class="col-sm-8">
+                <select name="FunctionTable1" id="FunctionTable1" class="form-control bs-select">
+                    <option value="collect_base_info">collect_base_info</option>
+                    <option value="collect_attach_info">collect_attach_info</option>
+                    <option value="collect_other_info">collect_other_info</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表2</label>
+            <div class="col-sm-8">
+                <select name="FunctionTable2" id="FunctionTable2" class="form-control bs-select">
+                    <option value="collect_base_info">collect_base_info</option>
+                    <option value="collect_attach_info">collect_attach_info</option>
+                    <option value="collect_other_info">collect_other_info</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">表3</label>
+            <div class="col-sm-8">
+                <select name="FunctionTable3" id="FunctionTable3" class="form-control bs-select">
+                    <option value="collect_base_info">collect_base_info</option>
+                    <option value="collect_attach_info">collect_attach_info</option>
+                    <option value="collect_other_info">collect_other_info</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">字段</label>
+            <div class="col-sm-8">
+                <input type="text" name="FunctionField" class="form-control" placeholder="" onfocus=this.select() value="{{.m.FunctionField}}">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">状态</label>
+            <div class="col-sm-8">
+                <select name="Used" id="Used" class="form-control bs-select">
+                    <option value="1">禁用</option>
+                    <option value="0">启用</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>

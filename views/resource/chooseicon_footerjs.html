@@ -1,0 +1,51 @@
+<!-- 验证插件 -->
+<script src="/static/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/static/plugins/jquery-validation/localization/messages_zh.min.js"></script>
+
+<!-- 弹出层插件layer -->
+<script src="/static/plugins/layer-v3.1.0/layer.js"></script>
+
+<!-- 针对当前主题进行简单封装，精简代码 -->
+<script src="/static/sdtheme/scripts/sdvalidate.js"></script>
+
+<script>
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    var $chooseicon = $("#chooseicon");
+
+    $(function () {
+        pageInit();
+    });
+
+    function pageInit() {
+        fillIcon();
+        //验证
+        validateInfo();
+    }
+
+    function fillIcon() {
+        var html = [];
+        $chooseicon.html('');
+        {{range $key, $icon := .Iconlist}}
+            html.push('<li data-font="' + {{$icon}} + '" title="' + {{$icon}} +'">');
+            html.push('<i class="fa fa-' + {{$icon}} + '"></i>');
+            html.push('</li>');
+        {{end}}
+        $chooseicon.html(html.join(''));
+    }
+
+    function validateInfo() {
+
+    }
+
+    $chooseicon.on('click', 'li', function () {
+        $("#Icon", parent.document).val('fa fa-' + $(this).data("font"));
+        parent.layer.close(index);
+    });
+
+    $("#js-icon-search").keyup(function () {
+        $("#chooseicon ul li").show();
+        if ($(this).val() != '') {
+            $("#chooseicon ul li:not([data-font*='" + $(this).val() + "'])").hide();
+        }
+    });
+</script>

@@ -1,0 +1,30 @@
+<script>
+  //判断当前页面是否在iframe里打开的
+  if (parent && parent != window) {
+    parent.window.location.href = window.location.href;
+  }
+</script>
+
+<!-- iCheck -->
+<link rel="stylesheet" href="/static/plugins/icheck/skins/square/blue.css">
+<style>
+    .node {
+        cursor: pointer;
+    }
+
+    .node circle {
+        fill: #fff;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+
+    .node text {
+        font: 14px sans-serif;
+    }
+
+    .link {
+        fill: none;
+        stroke: #ccc;
+        stroke-width: 1.5px;
+    }
+</style>
