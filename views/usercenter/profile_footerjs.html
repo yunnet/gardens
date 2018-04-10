@@ -7,10 +7,12 @@
 <script src="/static/plugins/ajaxfileupload.js"></script>
 <!-- 图片上传插件 -->
 <script src="/static/plugins/bootstrap-fileinput-jasny/bootstrap-fileinput.js"></script>
+
 <script>
     $(function () {
         pageInit();
     });
+
     function pageInit() {
         //图片上传初始化
         updloadCtrolInit();
@@ -19,6 +21,7 @@
         //密码表单验证
         validatepwdInfo();
     }
+
     //image upolad init
     function updloadCtrolInit() {
         //多个图共用一套上传代码
@@ -58,6 +61,7 @@
                 }
             });
         });
+
         //多个图片共用一套上传代码,在上传代码的clear事件里，清空图片地址
         $(".fileinput").on('clear.bs.fileinput', function () {
             var inputId = $("input[type='file']", this).attr('id');
@@ -66,18 +70,19 @@
             //这里验证
             //hiddeninput.valid();
         });
-
     }
     //正则表达式验证
     jQuery.validator.methods.mobile = function (value, element, param) {
         //如果为空，直接过
-        if (value.length == 0) return true;
+        if (value.length == 0)
+            return true;
         if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/.test(value)) {
             return true;
         } else {
             return false;
         }
-    }
+    };
+
     //表单验证及AJAX提交
     function validatebasicInfo() {
         var $thisForm = $('#thisForm');
@@ -89,23 +94,23 @@
                 },
                 Mobile: {
                     mobile: true,
-                    maxlength: 16,
+                    maxlength: 16
                 },
                 Email: {
                     email: true,
-                    maxlength: 256,
+                    maxlength: 256
                 },
                 ImageUrl: {
                     required: true                   
-                },                          
+                }
             },
             messages: {
                 Mobile: {
-                    mobile: "请输入正确的手机号",
-                },
+                    mobile: "请输入正确的手机号"
+                }
             },
             submitHandler: function (form) {
-                var url = '{{ urlfor "UserCenterController.BasicInfoSave"}}'
+                var url = '{{ urlfor "UserCenterController.BasicInfoSave"}}';
                 var data = $thisForm.serialize();
                 $.sdpost(url, data, function (re) {
                     if (re.code === 0) {
@@ -134,18 +139,18 @@
                 ConfirmPwd: {
                     required: true,
                     equalTo:"#NewUserPwd"          
-                },                          
+                }
             },
             messages: {
                 Mobile: {
-                    mobile: "请输入正确的手机号",
+                    mobile: "请输入正确的手机号"
                 },
                 ConfirmPwd: {
-                    equalTo: "两次输入的新密码不一致",
-                },
+                    equalTo: "两次输入的新密码不一致"
+                }
             },
             submitHandler: function (form) {
-                var url = '{{ urlfor "UserCenterController.PasswordSave"}}'
+                var url = '{{ urlfor "UserCenterController.PasswordSave"}}';
                 var data = $thisForm.serialize();
                 $.sdpost(url, data, function (re) {
                     if (re.code === 0) {
