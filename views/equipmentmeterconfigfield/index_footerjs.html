@@ -9,7 +9,7 @@
 
 <script>
     var $dataGrid = $('#dataGrid');
-    var $searchForm = $("#searchForm")
+    var $searchForm = $("#searchForm");
 
     //高亮显示id
     var highlightPk = null ;
@@ -80,7 +80,6 @@
                 //params的自带参数类型由queryParamsType决定
                 params.DTU_no = $('.searchForm input[name="DTU_no"]').val();
                 params.MeterAddress = $('.searchForm input[name="MeterAddress"]').val();
-
                 params.Used = $('.searchForm select[name="Used"]').selectpicker('val');
                 return params;
             },
@@ -132,7 +131,7 @@
                 sortable: true
             }, {
                 field: 'GatewayNO',
-                title: '通讯方式编号',
+                title: '网关编号',
                 width: '110px',
                 align: 'center',
                 sortable: true
@@ -181,21 +180,13 @@
                 title: '状态',
                 width: '100px',
                 align: 'center',
-                formatter: sdtheme.showtwostate
+                formatter: sdtheme.showTwoState
             }, {
                 field: 'operate',
                 title: '操作',
                 width: '100px',
-                formatter: function (value, row, index) {
-                    var html = [];
-                    html.push('<div class="btn-group">')
-                    if ('{{.canEdit}}' === 'true') {
-                        html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
-                                '<i class="fa fa-pencil"></i> 编辑</button>');
-                    }
-                    html.push('</div>')
-                    return html.join('');
-                }
+                visible: isVisible(),
+                formatter: formatterOperate
             }],
             onLoadSuccess: function (data) {
                 layer.closeAll('loading');
@@ -239,6 +230,26 @@
             return '<span title="' + value + '">' + value + '</span>';
         }
         return "";
+    }
+
+    //格式化操作字段中的编辑
+    function formatterOperate(value, row, index) {
+        var html = [];
+        html.push('<div class="btn-group">');
+        if ('{{.canEdit}}' === 'true') {
+            html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
+                    '<i class="fa fa-pencil"></i> 编辑</button>');
+        }
+        html.push('</div>');
+        return html.join('');
+    }
+
+    function isVisible() {
+        if ('{{.canEdit}}' === 'true') {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function EditFun(Id) {

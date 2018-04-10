@@ -5,11 +5,28 @@
   }
 </script>
 
+<link href="/static/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+<link href="/static/plugins/morris.js/morris.css" rel="stylesheet" >
+
 <!-- iCheck -->
-<link rel="stylesheet" href="/static/plugins/icheck/skins/square/blue.css">
+<link href="/static/plugins/icheck/skins/square/blue.css" rel="stylesheet" >
+
 <style>
+    /*.maximized {*/
+        /*z-index: 9999;*/
+        /*width: 100%;*/
+        /*height: 100%;*/
+        /*position: fixed;*/
+        /*top: 0;*/
+        /*left: 0;*/
+    /*}*/
+
     .node {
         cursor: pointer;
+    }
+
+    .overlay{
+        background-color:#EEE;
     }
 
     .node circle {
@@ -19,7 +36,8 @@
     }
 
     .node text {
-        font: 14px sans-serif;
+        font-size:12px;
+        font-family:sans-serif;
     }
 
     .link {
@@ -27,4 +45,58 @@
         stroke: #ccc;
         stroke-width: 1.5px;
     }
+
+    .templink {
+        fill: none;
+        stroke: red;
+        stroke-width: 3px;
+    }
+
+    .ghostCircle.show{
+        display:block;
+    }
+
+    .ghostCircle, .activeDrag .ghostCircle {
+        display: none;
+    }
+
+    #weather .row {
+        margin: 0
+    }
+
+    h2.degrees {
+        font-size: 18px;
+        font-weight: 400;
+        text-align: center
+    }
+
+    .degrees:after {
+        content: "o";
+        position: relative;
+        top: -12px;
+        font-size: 13px;
+        font-weight: 300
+    }
+
+    .degrees h3 {
+        font-size: 14px;
+    }
+
+    .daily-weather .day {
+        font-size: 12px;
+        border-top: 2px solid rgba(115, 135, 156, 0.36);
+        text-align: center;
+        border-bottom: 2px solid rgba(115, 135, 156, 0.36);
+        padding: 5px 0;
+    }
+
+    .weather-text h2{
+        font-size: 14px;
+    }
+
+    .weather-days .col-sm-2 {
+        overflow: hidden;
+        width: 16.66666667%
+    }
+
 </style>

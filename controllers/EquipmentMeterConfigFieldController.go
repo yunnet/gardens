@@ -21,7 +21,7 @@ func (this *EquipmentMeterConfigFieldController) Prepare() {
 }
 
 func (this *EquipmentMeterConfigFieldController) Index() {
-	this.Data["title"] = "字段映射顺序配置"
+	this.Data["pageTitle"] = "字段映射顺序配置"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
@@ -68,7 +68,7 @@ func (this *EquipmentMeterConfigFieldController) Edit() {
 			this.pageError("数据无效，请刷新后重试")
 		}
 	} else {
-		m.Used = enums.Enabled
+		m.Used = 0
 	}
 
 	this.Data["m"] = m

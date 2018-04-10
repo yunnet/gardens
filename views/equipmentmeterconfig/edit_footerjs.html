@@ -10,8 +10,13 @@
        pageInit();
    });
 
-    function pageInit(){
-       $("#Used").selectpicker('val', '{{.m.Used}}');
+    function pageInit() {
+        $("#Used").selectpicker('val', '{{.m.Used}}');
+
+        rms.selectDtuNO('{{ urlfor "EquipmentDtuConfigController.DataList"}}', '{{.m.DTU_no}}');
+        rms.selectMeterType('{{ urlfor "EquipmentMeterTypeController.DataGridSelect"}}', '{{.m.MeterTypeNO}}');
+        rms.selectGatewayNO('{{ urlfor "EquipmentGatewayController.DataList"}}', '{{.m.GatewayNO}}');
+
         //验证
         validateInfo();
     }
@@ -22,6 +27,21 @@
         $thisForm.sdvalidate({
             rules: {
                 DTU_no: {
+                    required: true
+                },
+                MeterAddress:{
+                    required: true
+                },
+                MeterTypeNO:{
+                    required: true
+                },
+                GatewayNO:{
+                    required: true
+                },
+                Pt:{
+                    required: true
+                },
+                Ct: {
                     required: true
                 }
             },

@@ -21,7 +21,7 @@ func (this *BackendConfController) Prepare() {
 }
 
 func (this *BackendConfController) Index() {
-	this.Data["title"] = "后台APP配置"
+	this.Data["pageTitle"] = "后台APP配置"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

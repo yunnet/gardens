@@ -11,7 +11,7 @@ type RoleQueryParam struct {
 
 //用户角色
 type Role struct {
-	Id                 int    `form:"Id"`
+	Id                 int    `form:"id"`
 	Name               string `form:"Name"`
 	Seq                int
 	RoleResourceRel    []*RoleResourceRel    `orm:"reverse(many)" json:"-"` // 设置一对多的反向关系

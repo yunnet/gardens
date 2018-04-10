@@ -8,6 +8,7 @@ import (
 	"github.com/astaxie/beego/orm"
 
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 type (
@@ -92,3 +93,17 @@ func TestStruct2JSON(t *testing.T) {
 	bytes, _ := json.Marshal(master)
 	fmt.Printf("%s\n", bytes)
 }
+
+func TestRows(t *testing.T) {
+	orm.RegisterDataBase("default", "mysql", "root:kxADMIN@%1001@tcp(120.76.200.33:3306)/kxtimingdata?charset=utf8&loc=Asia%2FShanghai", 30)
+	days := time.Now().Format("2006_01_02")
+	sql := "SELECT count(1) as rows FROM collect_base_info_" + days
+	o := orm.NewOrm()
+	var rows int
+	err := o.Raw(sql).QueryRow(&rows)
+	if err != nil {
+		fmt.Println("err: " + err.Error())
+	}
+	fmt.Printf("rows = %d", rows)
+}
+

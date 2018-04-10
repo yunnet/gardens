@@ -21,7 +21,7 @@ func (this *EquipmentDtuConfigController) Prepare() {
 }
 
 func (this *EquipmentDtuConfigController) Index() {
-	this.Data["title"] = "DTU管理"
+	this.Data["pageTitle"] = "DTU管理"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

@@ -4,7 +4,7 @@
 <script src="/static/plugins/bootstrap-table/cookie/bootstrap-table-cookie.js"></script>
 <script>
     var $dataGrid = $('#dataGrid');
-    var $searchForm = $("#searchForm")
+    var $searchForm = $("#searchForm");
     //高亮显示id
     var highlightPk = 99;
 
@@ -39,7 +39,7 @@
         });
         //保持搜索条件面板状态
         sdtheme.searchPanelStatusInit('searchpanelbtn');
-    };
+    }
 
     //刷新当前页
     function refresh(pk) {
@@ -92,41 +92,39 @@
             columns: [{
                 field: 'state',
                 checkbox: true,
-                radio: false,
+                radio: false
             }, {
                 field: 'Id',
                 title: 'ID',
                 width: '90px',
                 align: 'center',
-                sortable: true,
+                sortable: true
             }, {
                 field: 'UserName',
-                title: '用户名',                     
+                title: '用户名'
             }, {
                 field: 'RealName',
-                title: '姓名',                     
+                title: '姓名'
             }, {
                 field: 'IsSuper',
                 title: '是否超级管理员',
-                formatter: sdtheme.showyes                     
+                formatter: sdtheme.showYes
             }, {
                 field: 'Mobile',
-                title: '手机号',                     
+                title: '手机号'
             }, {
                 field: 'Status',
-                title: '状态',   
-                formatter:sdtheme.showenable,                  
+                title: '状态',
+                align: 'center',
+                width: '100px',
+                formatter:sdtheme.showEnable
             }, {
                 field: 'operate',
-                title: '操作',              
+                title: '操作',
+                align: 'center',
                 width: '100px',
-                formatter: function (value, row, index) {
-                    var ret = [];
-                    if ('{{.canEdit}}' === 'true') {
-                        ret.push('<button class="btn btn-primary btn-xs"  onclick="EditFun(' + row.Id + ')"><i class="fa fa-pencil"></i> 编辑</button>');
-                    }
-                    return ret.join('');
-                }
+                visible: isVisible(),
+                formatter: formatterOperate
             }],
             onLoadSuccess: function (data) {
                 layer.closeAll('loading');
@@ -166,7 +164,7 @@
 
     function GetStatusText(value) {
         var texts = [{ Text: '锁定', Value: -1 }, { Text: '禁用', Value: 0 }, { Text: '启用', Value: 1 } ]
-        return sdtheme.showenum(value, texts);
+        return sdtheme.showEnum(value, texts);
     }    
 
     ///用一个带有title值的span将值包裹起来
@@ -175,6 +173,26 @@
             return '<span title="' + value + '">' + value + '</span>';
         }
         return "";
+    }
+
+    //格式化操作字段中的编辑
+    function formatterOperate(value, row, index) {
+        var html = [];
+        html.push('<div class="btn-group">');
+        if ('{{.canEdit}}' === 'true') {
+            html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
+                    '<i class="fa fa-pencil"></i> 编辑</button>');
+        }
+        html.push('</div>');
+        return html.join('');
+    }
+
+    function isVisible() {
+        if ('{{.canEdit}}' === 'true') {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function EditFun(Id) {

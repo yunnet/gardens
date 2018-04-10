@@ -27,22 +27,24 @@ func (c *BackendUserController) Prepare() {
 	//c.checkLogin()
 
 }
-func (c *BackendUserController) Index() {
+func (this *BackendUserController) Index() {
+	this.Data["pageTitle"] = "用户管理"
+
 	//是否显示更多查询条件的按钮
-	c.Data["showMoreQuery"] = true
+	this.Data["showMoreQuery"] = true
 
 	//将页面左边菜单的某项激活
-	c.Data["activeSidebarUrl"] = c.URLFor(c.controllerName + "." + c.actionName)
+	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
 
 	//页面模板设置
-	c.setTpl()
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["headcssjs"] = "backenduser/index_headcssjs.html"
-	c.LayoutSections["footerjs"] = "backenduser/index_footerjs.html"
+	this.setTpl()
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["headcssjs"] = "backenduser/index_headcssjs.html"
+	this.LayoutSections["footerjs"] = "backenduser/index_footerjs.html"
 
 	//页面里按钮权限控制
-	c.Data["canEdit"] = c.checkActionAuthor("BackendUserController", "Edit")
-	c.Data["canDelete"] = c.checkActionAuthor("BackendUserController", "Delete")
+	this.Data["canEdit"] = this.checkActionAuthor("BackendUserController", "Edit")
+	this.Data["canDelete"] = this.checkActionAuthor("BackendUserController", "Delete")
 }
 
 func (c *BackendUserController) DataGrid() {
@@ -92,6 +94,7 @@ func (c *BackendUserController) Edit() {
 	}
 	c.Data["roles"] = strings.Join(roleIds, ",")
 	c.setTpl("backenduser/edit.html", "shared/layout_pullbox.html")
+
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["footerjs"] = "backenduser/edit_footerjs.html"
 }

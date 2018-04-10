@@ -3,11 +3,10 @@ package controllers
 import (
 	"strings"
 
-	"encoding/json"
 	"github.com/yunnet/gdkxdl/enums"
 	"github.com/yunnet/gdkxdl/models"
 	"github.com/yunnet/gdkxdl/utils"
-	"strconv"
+	"time"
 	"fmt"
 )
 
@@ -16,12 +15,11 @@ type HomeController struct {
 }
 
 func (this *HomeController) Index() {
+	this.Data["pageTitle"] = "首页"
+
 	//判断是否登录
 	this.checkLogin()
 
-	//url := this.URLFor("MainController.Index")
-	//this.Redirect(url, 302)
-	//this.StopRun()
 	this.setTpl()
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["headcssjs"] = "home/index_headcssjs.html"
@@ -44,9 +42,22 @@ func (this *HomeController) Login() {
 	this.setTpl("home/login.html", "shared/layout_base.html")
 }
 
+func (this *HomeController) Logout() {
+	user := models.BackendUser{}
+	this.SetSession("backenduser", user)
+	this.pageLogin()
+}
+
 func (this *HomeController) DoLogin() {
+	remoteAddr := this.Ctx.Request.RemoteAddr
 	username := strings.TrimSpace(this.GetString("UserName"))
 	userpwd := strings.TrimSpace(this.GetString("UserPwd"))
+
+	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil{
+		utils.LogError("LoginTraceAdd error.")
+	}
+	utils.LogInfo(fmt.Sprintf("login:[%s]/[%s] IP:%s", username, userpwd, remoteAddr))
+
 	if len(username) == 0 || len(userpwd) == 0 {
 		this.jsonResult(enums.JRCodeFailed, "用户名和密码不正确", "")
 	}
@@ -59,6 +70,7 @@ func (this *HomeController) DoLogin() {
 		}
 		//保存用户信息到session
 		this.setBackendUser2Session(user.Id)
+
 		//获取用户信息
 		this.jsonResult(enums.JRCodeSucc, "登录成功", "")
 	} else {
@@ -66,71 +78,47 @@ func (this *HomeController) DoLogin() {
 	}
 }
 
-//查询客户和电表
-func (this *HomeController) GetCustomerForMeter() {
-	data, err := models.CustomerForMeterDataList()
-	if err != nil {
-		return
+//采集进度查询
+func (this *HomeController) GetDtuRowForDay() {
+	if data, err := models.GetDtuRowForDayList(); err != nil{
+		this.jsonResult(enums.JRCodeFailed, "", 0)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
-
-	var master *models.RootItem
-	var company *models.CompanyItem
-	var dtu *models.DtuItem
-
-	master = &models.RootItem{Name: "电可托"}
-
-	for _, row := range data {
-		meter := models.MeterItem{strconv.Itoa(row.MeterAddress), row.CollectConfigName}
-
-		var dtu_cur *models.DtuItem
-		var company_cur *models.CompanyItem
-
-		if company == nil {
-			company_cur = &models.CompanyItem{Name: row.CustomerName}
-			master.CompanyItemList = append(master.CompanyItemList, company_cur)
-		} else {
-			company_cur = company
-			if company_cur.Name != row.CustomerName {
-				company_cur = &models.CompanyItem{Name: row.CustomerName}
-				master.CompanyItemList = append(master.CompanyItemList, company_cur)
-			}
-		}
-
-		if dtu == nil {
-			dtu_cur = &models.DtuItem{Name: row.DTU_no}
-			company_cur.DtuItemList = append(company_cur.DtuItemList, dtu_cur)
-		} else {
-			dtu_cur = dtu
-			if dtu_cur.Name != row.DTU_no {
-				dtu_cur = &models.DtuItem{Name: row.DTU_no}
-				company_cur.DtuItemList = append(company_cur.DtuItemList, dtu_cur)
-			}
-		}
-		dtu_cur.MeterItemList = append(dtu_cur.MeterItemList, &meter)
-
-		dtu = dtu_cur
-		company = company_cur
-	}
-
-	jsondata, _ := json.Marshal(master)
-	fmt.Println(jsondata)
-	this.jsonResult(enums.JRCodeSucc, "", jsondata)
 }
 
-//取DTU总条数
+//查询客户和电表
+func (this *HomeController) GetCustomerForMeter() {
+	if data, err := models.GetCustomerForMeter(); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "", 0)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", data)
+	}
+}
+
+//取DTU数量
 func (this *HomeController) GetDtuCount() {
 	count := models.EquipmentDtuConfigCount()
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
-//取电表总条数
+//取电表数量
 func (this *HomeController) GetMeterCount() {
 	count := models.EquipmentMeterConfigCount()
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
-func (this *HomeController) Logout() {
-	user := models.BackendUser{}
-	this.SetSession("backenduser", user)
-	this.pageLogin()
+//取今日采集数量
+func (this *HomeController) GetCollectRowsToday() {
+	count := models.GetCollectRowsToday()
+	this.jsonResult(enums.JRCodeSucc, "", count)
+}
+
+//取月采集数量
+func (this *HomeController) GetCollectCountOfMonth() {
+	if data, err := models.GetCollectRowsOfMonth(); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "", 0)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", data)
+	}
 }

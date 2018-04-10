@@ -18,39 +18,41 @@ type BaseController struct {
 	curUser        models.BackendUser //当前用户信息
 }
 
-func (c *BaseController) Prepare() {
+func (this *BaseController) Prepare() {
 	//附值
-	c.controllerName, c.actionName = c.GetControllerAndAction()
+	this.controllerName, this.actionName = this.GetControllerAndAction()
+
+	this.Data["siteName"] = beego.AppConfig.String("site.name")
 	//从Session里获取数据 设置用户信息
-	c.adapterUserInfo()
+	this.adapterUserInfo()
 }
 
 // checkLogin判断用户是否登录，未登录则跳转至登录页面
 // 一定要在BaseController.Prepare()后执行
-func (c *BaseController) checkLogin() {
-	if c.curUser.Id == 0 {
+func (this *BaseController) checkLogin() {
+	if this.curUser.Id == 0 {
 		//登录页面地址
-		urlstr := c.URLFor("HomeController.Login") + "?url="
+		urlstr := this.URLFor("HomeController.Login") + "?url="
 		//登录成功后返回的址为当前
-		returnURL := c.Ctx.Request.URL.Path
+		returnURL := this.Ctx.Request.URL.Path
 		//如果ajax请求则返回相应的错码和跳转的地址
-		if c.Ctx.Input.IsAjax() {
+		if this.Ctx.Input.IsAjax() {
 			//由于是ajax请求，因此地址是header里的Referer
-			returnURL := c.Ctx.Input.Refer()
-			c.jsonResult(enums.JRCode302, "请登录", urlstr+returnURL)
+			returnURL := this.Ctx.Input.Refer()
+			this.jsonResult(enums.JRCode302, "请登录", urlstr+returnURL)
 		}
-		c.Redirect(urlstr+returnURL, 302)
-		c.StopRun()
+		this.Redirect(urlstr+returnURL, 302)
+		this.StopRun()
 	}
 }
 
 // 判断某 Controller.Action 当前用户是否有权访问
-func (c *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
-	if c.curUser.Id == 0 {
+func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
+	if this.curUser.Id == 0 {
 		return false
 	}
 	//从session获取用户信息
-	user := c.GetSession("backenduser")
+	user := this.GetSession("backenduser")
 	//类型断言
 	v, ok := user.(models.BackendUser)
 	if ok {
@@ -104,16 +106,16 @@ func (c *BaseController) checkAuthor(ignores ...string) {
 }
 
 //从session里取用户信息
-func (c *BaseController) adapterUserInfo() {
-	a := c.GetSession("backenduser")
+func (this *BaseController) adapterUserInfo() {
+	a := this.GetSession("backenduser")
 	if a != nil {
-		c.curUser = a.(models.BackendUser)
-		c.Data["backenduser"] = a
+		this.curUser = a.(models.BackendUser)
+		this.Data["backenduser"] = a
 	}
 }
 
 //SetBackendUser2Session 获取用户信息（包括资源UrlFor）保存至Session
-func (c *BaseController) setBackendUser2Session(userId int) error {
+func (this *BaseController) setBackendUser2Session(userId int) error {
 	m, err := models.BackendUserOne(userId)
 	if err != nil {
 		return err
@@ -123,7 +125,7 @@ func (c *BaseController) setBackendUser2Session(userId int) error {
 	for _, item := range resourceList {
 		m.ResourceUrlForList = append(m.ResourceUrlForList, strings.TrimSpace(item.UrlFor))
 	}
-	c.SetSession("backenduser", *m)
+	this.SetSession("backenduser", *m)
 	return nil
 }
 

@@ -30,19 +30,21 @@ func (c *RoleController) Prepare() {
 }
 
 //Index 角色管理首页
-func (c *RoleController) Index() {
+func (this *RoleController) Index() {
+	this.Data["pageTitle"] = "角色管理"
+
 	//是否显示更多查询条件的按钮
-	c.Data["showMoreQuery"] = false
+	this.Data["showMoreQuery"] = false
 	//将页面左边菜单的某项激活
-	c.Data["activeSidebarUrl"] = c.URLFor(c.controllerName + "." + c.actionName)
-	c.setTpl()
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["headcssjs"] = "role/index_headcssjs.html"
-	c.LayoutSections["footerjs"] = "role/index_footerjs.html"
+	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
+	this.setTpl()
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["headcssjs"] = "role/index_headcssjs.html"
+	this.LayoutSections["footerjs"] = "role/index_footerjs.html"
 	//页面里按钮权限控制
-	c.Data["canEdit"] = c.checkActionAuthor("RoleController", "Edit")
-	c.Data["canDelete"] = c.checkActionAuthor("RoleController", "Delete")
-	c.Data["canAllocate"] = c.checkActionAuthor("RoleController", "Allocate")
+	this.Data["canEdit"] = this.checkActionAuthor("RoleController", "Edit")
+	this.Data["canDelete"] = this.checkActionAuthor("RoleController", "Delete")
+	this.Data["canAllocate"] = this.checkActionAuthor("RoleController", "Allocate")
 }
 
 // DataGrid 角色管理首页 表格获取数据

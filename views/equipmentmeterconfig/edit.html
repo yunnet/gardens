@@ -5,37 +5,58 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">DTU编号</label>
             <div class="col-sm-8">
-                <input type="text" name="DTU_no" class="form-control" placeholder="" onfocus=this.select() value="{{.m.DTU_no}}">
+                <select name="DTU_no" id="DTU_no" class="form-control selectpicker with-ajax" data-live-search="true">
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">表地址</label>
             <div class="col-sm-8">
-                <input type="number" name="MeterAddress" class="form-control" placeholder="" onfocus=this.select() value="{{.m.MeterAddress}}">
+                <input type="number" name="MeterAddress" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.MeterAddress}}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">电表类型编号</label>
             <div class="col-sm-8">
-                <input type="text" name="MeterTypeNO" class="form-control" placeholder="" onfocus=this.select() value="{{.m.MeterTypeNO}}">
+                <select name="MeterTypeNO" id="MeterTypeNO" class="form-control selectpicker with-ajax" data-live-search="true">
+                </select>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">网关编号</label>
             <div class="col-sm-8">
-                <input type="text" name="GatewayNO" class="form-control" placeholder="" onfocus=this.select() value="{{.m.GatewayNO}}">
+                <select name="GatewayNO" id="GatewayNO" class="form-control selectpicker with-ajax" data-live-search="true">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">网关区域编码</label>
+            <div class="col-sm-8">
+                <input type="text" name="GatewayQzone" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.GatewayQzone}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">网关地址</label>
+            <div class="col-sm-8">
+                <input type="text" name="GatewayAddress" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.GatewayAddress}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">网关主站标识</label>
+            <div class="col-sm-8">
+                <input type="number" name="GatewaySite" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.GatewaySite}}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">电压互感器变比</label>
             <div class="col-sm-8">
-                <input type="text" name="Pt" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Pt}}">
+                <input type="text" name="Pt" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.Pt}}">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">电流互感器变比</label>
             <div class="col-sm-8">
-                <input type="text" name="Ct" class="form-control" placeholder="" onfocus=this.select() value="{{.m.Ct}}">
+                <input type="text" name="Ct" class="form-control" placeholder="" onfocus="this.select()" value="{{.m.Ct}}">
             </div>
         </div>
         <div class="form-group">

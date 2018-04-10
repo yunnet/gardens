@@ -61,6 +61,6 @@
             var destOptions = $.extend({},defaults, options);
             //调用jquuery.validate插件方法
             this.validate(destOptions);
-        },
+        }
     });
 })(jQuery);

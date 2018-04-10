@@ -33,6 +33,7 @@ $.sdpost('/home/index', {'name':'lht'}, function (re) {
             if (typeof (data) === 'undefined' || data === null) data = {};
             if (typeof (async) === 'undefined' || async === null) async = true;
             if (typeof (dataType) === 'undefined' || dataType === null) dataType = 'json';
+
             var win = window;
             if(parent){
                 win = parent;
@@ -63,21 +64,23 @@ $.sdpost('/home/index', {'name':'lht'}, function (re) {
                         } else {
                             win.layer.alert("请求失败：" + XHR.responseText, { icon: 2, title: '错误' });
                         }
-                    }
-                    else {
+                    } else {
                         win.layer.alert("请求失败", { icon: 2, title: '错误' });
                     }
                 }
             });
         },
+
         sdget: function (url, data, success, async, dataType) {
             if (typeof (data) === 'undefined') data = {};
             if (typeof (async) === 'undefined' || async === null) async = true;
             if (typeof (dataType) === 'undefined' || dataType === null) dataType = 'json';
+
             var win = window;
             if(parent){
                 win = parent;
             }
+
             $.ajax({
                 url: url,
                 data: data,
@@ -103,8 +106,7 @@ $.sdpost('/home/index', {'name':'lht'}, function (re) {
                         } else {
                             win.layer.alert("请求失败：" + XHR.responseText, { icon: 2, title: '错误' });
                         }
-                    }
-                    else {
+                    } else {
                         win.layer.alert("请求失败", { icon: 2, title: '错误' });
                     }
                 }

@@ -8,7 +8,7 @@
 	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
    $(function () {
        pageInit();
-   })
+   });
 
     function pageInit(){
        $("#Used").selectpicker('val', '{{.m.Used}}');
@@ -21,19 +21,21 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                Name: {
-                    maxlength: 32,
+                VendorNO: {
+                    required: true
+                },
+                VendorDesc:{
                     required: true
                 }
             },
             messages: {},
             submitHandler: function (form) {
-				var url ='{{ urlfor "EquipmentVendorController.Edit"}}'
+				var url ='{{ urlfor "EquipmentVendorController.Edit"}}';
 				var data = $thisForm.serialize();
 				$.sdpost(url, data, function(re){
 					if(re.code === 0){
-						parent.layer.msg(re.msg)                        
-						parent.refresh(re.obj)
+						parent.layer.msg(re.msg);
+						parent.refresh(re.obj);
 						parent.layer.close(index)
 					}else{
 						parent.layer.alert(re.msg,{icon:2,title:'失败'})

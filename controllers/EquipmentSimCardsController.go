@@ -26,7 +26,7 @@ func (c *EquipmentSimCardsController) Prepare() {
 }
 
 func (this *EquipmentSimCardsController) Index() {
-	this.Data["title"] = "SIM卡管理"
+	this.Data["pageTitle"] = "SIM卡管理"
 	//是否显示更多查询条件的按钮
 	this.Data["showMoreQuery"] = true
 

@@ -4,7 +4,7 @@
  */
 layer.ready(function () {
     layer.config({
-        isOutAnim: false,
+        isOutAnim: false
        /* extend: 'metronic/style.css',
         skin: 'layer-ext-metronic'*/
     });
@@ -14,6 +14,7 @@ layer.ready(function () {
  * Created by lihaitao on 2017-7-11.
  */
 var sdtheme = function () {
+
     showstr = function (str, replace) {
         if (str === null || typeof (str) === "undefined") {
             if (typeof (replace) === 'undefined') {
@@ -23,11 +24,11 @@ var sdtheme = function () {
             }
         }
         return str;
-    }
+    };
 
     showlongstr = function (str, replace) {
         return '<span title="' + str + '">' + showstr(str, replace) + '</span>';
-    }
+    };
 
     //格式化日期 yyyy-MM-dd hh:mm:ss
     formatterDateBySpan = function (value, row, index){
@@ -36,8 +37,7 @@ var sdtheme = function () {
             return "<span>" + date + "</span>";
         }
         return "";
-    }
-
+    };
     Date.prototype.format = function (format) {
         var args = {
             "M+": this.getMonth() + 1,
@@ -60,7 +60,7 @@ var sdtheme = function () {
         return format;
     };
 
-    showenable = function (val) {
+    showEnable = function (val) {
         if (val === 1 || val === "1") {
             return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
         } else if (val === 0 || val === "0") {
@@ -70,9 +70,9 @@ var sdtheme = function () {
         else {
             return "";
         }
-    }
+    };
 
-    showtwostate = function (val) {
+    showTwoState = function (val) {
         if (val === 0 || val === "0") {
             return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
         } else if (val === 1 || val === "1")
@@ -80,9 +80,9 @@ var sdtheme = function () {
         else {
             return "";
         }
-    }
+    };
 
-    showyes = function (val) {
+    showYes = function (val) {
         if (val === 1 || val === "1" || val === true) {
             return '<label class="label label-primary label-sm"><i class="fa fa-check"></i> 是</label>';
         } else if (val === 0 || val === "0" || val === false) {
@@ -90,9 +90,9 @@ var sdtheme = function () {
         } else {
             return "";
         }
-    }
+    };
 
-    showenum = function (value, texts, css, icon) {
+    showEnum = function (value, texts, css, icon) {
         var index = 0, text = "", icss = 'label-default';
         if (css === null || typeof (css) === 'undefined') {
             css = ['label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger', 'label-default'];
@@ -108,7 +108,7 @@ var sdtheme = function () {
             icss = css[index];
         }
         return '<label class="label ' + icss + '  label-sm">' + text + '</label>';
-    }
+    };
 
     //从cookie加载查询条件
     function loadSearchText(formId) {
@@ -205,7 +205,7 @@ var sdtheme = function () {
             }
             $(object).toggleClass(hcss);
             setTimeout(spark, 300);
-        }
+        };
         spark();
     }
 
@@ -213,10 +213,9 @@ var sdtheme = function () {
     function searchPanelStatusInit(btnid) {
         var $btn = $('#' + btnid);
         if ($btn.length > 0) {
-            var $icon = $('i',$btn)
+            var $icon = $('i',$btn);
             //在点击事件里保存状态到cookie
             $btn.off('click').on('click', function () {
-                console.log('click')
                 //点击时保存，css会切换
                 var css = 'fa-plus';
                 if ($icon.hasClass('fa-plus')) {
@@ -228,11 +227,12 @@ var sdtheme = function () {
             var css = $.cookie('SearchPanelStatus' + btnid);
             if (css != null && typeof css !== 'undefined') {
                 if (css === 'fa-minus') {
-                    $icon.removeClass('fa-plus').addClass('fa-minus')
-                    $btn.closest('div.box').removeClass('collapsed-box')
+                    $icon.removeClass('fa-plus').addClass('fa-minus');
+                    $btn.closest('div.box').removeClass('collapsed-box');
                     $btn.closest('div.box-header').next().show()
                 }
             }
+
             //只要面板处于关闭
             if($icon.hasClass('fa-plus')){
                 //重点提示更多条件
@@ -292,16 +292,16 @@ var sdtheme = function () {
         formatterDateBySpan: formatterDateBySpan,
 
         //显示启用或者禁用
-        showenable: showenable,
+        showEnable: showEnable,
 
         //显示启用或删除
-        showtwostate: showtwostate,
+        showTwoState: showTwoState,
 
         //显示是否
-        showyes: showyes,
+        showYes: showYes,
 
         //显示枚举
-        showenum: showenum,
+        showEnum: showEnum,
 
         //保存form里的查询条件
         saveSearchText: saveSearchText,

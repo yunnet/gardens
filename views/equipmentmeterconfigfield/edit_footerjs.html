@@ -5,13 +5,17 @@
 <script src="/static/sdtheme/scripts/sdvalidate.js"></script>
 
 <script>
-	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-   $(function () {
-       pageInit();
-   });
+    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    $(function () {
+        pageInit();
+    });
 
-    function pageInit(){
-       $("#Used").selectpicker('val', '{{.m.Used}}');
+    function pageInit() {
+        $("#Used").selectpicker('val', '{{.m.Used}}');
+        rms.selectDtuNO('{{ urlfor "EquipmentDtuConfigController.DataList"}}', '{{.m.DTU_no}}');
+        rms.selectMeterType('{{ urlfor "EquipmentMeterTypeController.DataGridSelect"}}', '{{.m.MeterTypeNO}}');
+        rms.selectGatewayNO('{{ urlfor "EquipmentGatewayController.DataList"}}', '{{.m.GatewayNO}}');
+
         //验证
         validateInfo();
     }
@@ -21,31 +25,30 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                Name: {
-                    maxlength: 32,
+                FieldName: {
                     required: true
                 }
             },
             messages: {},
             submitHandler: function (form) {
-				var url ='{{ urlfor "EquipmentMeterConfigFieldController.Edit"}}';
-				var data = $thisForm.serialize();
+                var url = '{{ urlfor "EquipmentMeterConfigFieldController.Edit"}}';
+                var data = $thisForm.serialize();
 
-				$.sdpost(url, data, function(re){
-					if(re.code === 0){
-						parent.layer.msg(re.msg);
-						parent.refresh(re.obj);
-						parent.layer.close(index);
-					}else{
-						parent.layer.alert(re.msg,{icon:2,title:'失败'});
-					}
-				});
-               return false;
+                $.sdpost(url, data, function (re) {
+                    if (re.code === 0) {
+                        parent.layer.msg(re.msg);
+                        parent.refresh(re.obj);
+                        parent.layer.close(index);
+                    } else {
+                        parent.layer.alert(re.msg, {icon: 2, title: '失败'});
+                    }
+                });
+                return false;
             }
         });
     }
 
     function FormSubmit() {
-        $("#thisForm").submit();		
+        $("#thisForm").submit();
     }
 </script>

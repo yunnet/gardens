@@ -9,10 +9,10 @@
 
 <script>
     var $dataGrid = $('#dataGrid');
-    var $searchForm = $("#searchForm")
+    var $searchForm = $("#searchForm");
 
     //高亮显示id
-    var highlightPk = null ;
+    var highlightPk = null;
 
     //初始化加载
     $(function () {
@@ -50,7 +50,7 @@
 
         //保持搜索条件面板状态
         sdtheme.searchPanelStatusInit('searchpanelbtn');
-    };
+    }
 
     //刷新当前页
     function refresh(pk) {
@@ -63,9 +63,9 @@
         //表格刷新时，保存查询条件到cookie
         sdtheme.saveSearchText('searchForm');
         //刷新并跳转至第1页
-        $dataGrid.bootstrapTable('refresh', { pageNumber: 1 });
+        $dataGrid.bootstrapTable('refresh', {pageNumber: 1});
         //同时要更新cookie里保存当前页码
-        $.cookie('dataGrid.bs.table.pageNumber', 1, { expires: 1 });
+        $.cookie('dataGrid.bs.table.pageNumber', 1, {expires: 1});
     }
 
     //bootstrap table data init
@@ -77,10 +77,8 @@
             idField: 'Id',
             queryParamsType: 'limit',
             queryParams: function (params) {
-                //params的自带参数类型由queryParamsType决定
                 params.FieldName = $('.searchForm input[name="FieldName"]').val();
                 params.FieldDesc = $('.searchForm input[name="FieldDesc"]').val();
-
                 params.Used = $('.searchForm select[name="Used"]').selectpicker('val');
                 return params;
             },
@@ -98,103 +96,91 @@
             sortName: 'Id',
             sortOrder: 'asc',
             rowAttributes: function (row, index) {
-                return { 'data-pk': row.Id }
+                return {'data-pk': row.Id}
             },
 
             columns: [
-             {
-                field: 'state',
-                checkbox: true,
-                radio: false
-            }, {
-                field: 'Id',
-                title: '序号',
-                width: '90px',
-                align: 'center',
-                sortable: true
-            }, {
-                field: 'FieldName',
-                title: '字段',
-                align: 'center',
-                width: '120px',
-                formatter: formatterWapBySpan,
-                cellStyle: function (value, row, index, field) {
-                    return { classes: 'ellipsis' };
-                },
-                sortable: true
-            }, {
-                field: 'FieldDesc',
-                title: '字段名称',
-                sortable: true
-            }, {
-                field: 'FunctionTable1',
-                title: '表1',
-                width: '110px',
-                align: 'center',
-                sortable: true
-            }, {
-                field: 'FunctionTable2',
-                title: '表2',
-                width: '110px',
-                align: 'center',
-                sortable: true
-            }, {
-                field: 'FunctionTable3',
-                title: '表3',
-                width: '110px',
-                align: 'center',
-                sortable: true
-            }, {
-                field: 'CreateUser',
-                title: '创建人',
-                width: '110px',
-                align: 'center',
-                sortable: true,
-                visible: false
-            }, {
-                field: 'CreateDate',
-                title: '创建时间',
-                width: '150px',
-                align: 'center',
-                sortable: true,
-                visible: false,
-                formatter: sdtheme.formatterDateBySpan
-            }, {
-                field: 'ChangeUser',
-                title: '修改人',
-                width: '110px',
-                align: 'center',
-                sortable: true,
-                visible: false
-            }, {
-                field: 'ChangeDate',
-                title: '修改时间',
-                width: '150px',
-                align: 'center',
-                sortable: true,
-                visible: false,
-                formatter: sdtheme.formatterDateBySpan
-            }, {
-                field: 'Used',
-                title: '状态',
-                width: '100px',
-                align: 'center',
-                formatter: sdtheme.showtwostate
-            }, {
-                field: 'operate',
-                title: '操作',
-                width: '100px',
-                formatter: function (value, row, index) {
-                    var html = [];
-                    html.push('<div class="btn-group">')
-                    if ('{{.canEdit}}' === 'true') {
-                        html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
-                                '<i class="fa fa-pencil"></i> 编辑</button>');
-                    }
-                    html.push('</div>')
-                    return html.join('');
-                }
-            }],
+                {
+                    field: 'state',
+                    checkbox: true,
+                    radio: false
+                }, {
+                    field: 'Id',
+                    title: '序号',
+                    width: '90px',
+                    align: 'center',
+                    sortable: true
+                }, {
+                    field: 'FieldName',
+                    title: '字段',
+                    align: 'center',
+                    width: '120px',
+                    sortable: true
+                }, {
+                    field: 'FieldDesc',
+                    title: '字段名称',
+                    sortable: true
+                }, {
+                    field: 'FunctionTable1',
+                    title: '表1',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true
+                }, {
+                    field: 'FunctionTable2',
+                    title: '表2',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true
+                }, {
+                    field: 'FunctionTable3',
+                    title: '表3',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true
+                }, {
+                    field: 'CreateUser',
+                    title: '创建人',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true,
+                    visible: false
+                }, {
+                    field: 'CreateDate',
+                    title: '创建时间',
+                    width: '150px',
+                    align: 'center',
+                    sortable: true,
+                    visible: false,
+                    formatter: sdtheme.formatterDateBySpan
+                }, {
+                    field: 'ChangeUser',
+                    title: '修改人',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true,
+                    visible: false
+                }, {
+                    field: 'ChangeDate',
+                    title: '修改时间',
+                    width: '150px',
+                    align: 'center',
+                    sortable: true,
+                    visible: false,
+                    formatter: sdtheme.formatterDateBySpan
+                }, {
+                    field: 'Used',
+                    title: '状态',
+                    width: '100px',
+                    align: 'center',
+                    formatter: sdtheme.showTwoState
+                }, {
+                    field: 'operate',
+                    title: '操作',
+                    width: '100px',
+                    visible: isVisible(),
+                    formatter: formatterOperate
+                }],
             onLoadSuccess: function (data) {
                 layer.closeAll('loading');
                 //CheboxUniform()
@@ -239,6 +225,26 @@
         return "";
     }
 
+    //格式化操作字段中的编辑
+    function formatterOperate(value, row, index) {
+        var html = [];
+        html.push('<div class="btn-group">');
+        if ('{{.canEdit}}' === 'true') {
+            html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
+                    '<i class="fa fa-pencil"></i> 编辑</button>');
+        }
+        html.push('</div>');
+        return html.join('');
+    }
+
+    function isVisible() {
+        if ('{{.canEdit}}' === 'true') {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     function EditFun(Id) {
         var title = '添加';
         if (Id > 0) {
@@ -268,7 +274,7 @@
         var url = '{{ urlfor "EquipmentTableConfigController.Delete"}}';
         var rows = $dataGrid.bootstrapTable("getSelections")
         if (rows.length === 0) {
-            layer.alert('请选择想要删除的项', { icon: 0, title: '提示' });
+            layer.alert('请选择想要删除的项', {icon: 0, title: '提示'});
             return;
         }
         var ids = [];
@@ -278,14 +284,14 @@
 
         layer.confirm('您是否要删除所选的项？', {
             btn: ['是', '否'], icon: 3, title: '请确认'
-        }, function () {            
-            var dataValues = { ids: ids.join(',') };
+        }, function () {
+            var dataValues = {ids: ids.join(',')};
             $.sdpost(url, dataValues, function (re) {
                 if (re.code === 0) {
-                    layer.msg(re.msg, { icon: 1, title: '成功' });
+                    layer.msg(re.msg, {icon: 1, title: '成功'});
                     refresh();
                 } else {
-                    layer.alert(re.msg, { icon: 2, title: "失败" });
+                    layer.alert(re.msg, {icon: 2, title: "失败"});
                 }
             });
         });

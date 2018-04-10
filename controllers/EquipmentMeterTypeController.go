@@ -21,7 +21,7 @@ func (this *EquipmentMeterTypeController) Prepare() {
 }
 
 func (this *EquipmentMeterTypeController) Index() {
-	this.Data["title"] = "电表类型"
+	this.Data["pageTitle"] = "电表类型"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

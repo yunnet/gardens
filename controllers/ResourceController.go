@@ -27,6 +27,7 @@ func (this *ResourceController) Prepare() {
 }
 
 func (this *ResourceController) Index() {
+	this.Data["pageTitle"] = "资源管理"
 	//需要权限控制
 	this.checkAuthor()
 	//将页面左边菜单的某项激活

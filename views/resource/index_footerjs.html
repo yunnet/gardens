@@ -5,6 +5,7 @@
 
 <script>
     var $treeGrid = $("#treeGrid");
+
     //高亮显示id
     var highlightPk = 0;
 
@@ -144,7 +145,7 @@
 
     function GetRtypeText(value) {
         var texts = [{Text: '区域', Value: 0}, {Text: '菜单', Value: 1}, {Text: '按钮', Value: 2}];
-        return sdtheme.showenum(value, texts);
+        return sdtheme.showEnum(value, texts);
     }
 
     //初始化顺序可编辑

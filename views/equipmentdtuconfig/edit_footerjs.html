@@ -12,31 +12,11 @@
 
     function pageInit(){
        $("#Used").selectpicker('val', '{{.m.Used}}');
-       selectInit('{{.m.Sim_no}}');
+       var url = '{{ urlfor "EquipmentSimCardsController.DataGrid"}}';
+       rms.selectSimNO(url, '{{.m.Sim_no}}');
 
        //验证
        validateInfo();
-    }
-
-    function selectInit(item) {
-        var $select = $("#Sim_no");
-        $.ajax({
-            url: '{{ urlfor "EquipmentSimCardsController.DataGrid"}}',
-            dataType: "json",
-            success: function (data) {
-                var html = [];
-                $.each(data.rows, function (i, row) {
-                    html.push("<option value='"+ row.Sim_no + "'>" + row.Sim_no + "</option>");
-                });
-                $select.html(html.join(''));
-                $select.selectpicker('refresh');
-
-                $select.selectpicker('val', item);
-            },
-            error: function (data) {
-                layer.alert("获取数据失败", {icon: 2, title: '失败'});
-            }
-        });
     }
 
     //表单验证及AJAX提交

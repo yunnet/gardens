@@ -21,7 +21,7 @@ func (this *EquipmentMeterAddrConfigController) Prepare() {
 }
 
 func (this *EquipmentMeterAddrConfigController) Index() {
-	this.Data["title"] = "寄存器分段配置"
+	this.Data["pageTitle"] = "寄存器分段配置"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

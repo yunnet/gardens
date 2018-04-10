@@ -1,15 +1,31 @@
 <script>
-  //判断当前页面是否在iframe里打开的
-  if (parent && parent != window) {
-    parent.window.location.href = window.location.href;
-  }
+    //判断当前页面是否在iframe里打开的
+    if (parent && parent != window) {
+        parent.window.location.href = window.location.href;
+    }
 </script>
 
 <!-- iCheck -->
 <link rel="stylesheet" href="/static/plugins/icheck/skins/square/blue.css">
 
 <style>
-  body {
-    background: url("/static/sdtheme/img/login_bg.jpg")
-  }
+    body {
+        background: url("/static/sdtheme/img/login_img.jpg") no-repeat fixed 0 0;
+        /*background:url("/static/sdtheme/img/login_img.jpg")no-repeat;*/
+        /*width:100%;*/
+        /*height:100%;*/
+        /*background-size:100% 100%;*/
+        /*position:absolute;*/
+        /*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"/static/sdtheme/img/login_img.jpg"',sizingMethod='scale');*/
+    }
+
+    .login-box-body, .register-box-body{
+        background-color: rgba(31, 88, 69, 0.8);
+        box-shadow: 10px 5px 70px #0d957a;
+        border: 1px solid #0d957a;
+    }
+
+    .login-box-msg, .register-box-msg{
+        color: #fff;
+    }
 </style>

@@ -10,6 +10,7 @@ func (this *MainController)Prepare()  {
 }
 
 func (this *MainController)Index() {
+	this.Data["pageTitle"] = "首页"
 	//判断是否登录
 	//this.checkLogin()
 	this.setTpl()

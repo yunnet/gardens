@@ -21,7 +21,7 @@ func (this *EquipmentMeterRomConfigController) Prepare() {
 }
 
 func (this *EquipmentMeterRomConfigController) Index() {
-	this.Data["title"] = "寄存器地址管理"
+	this.Data["pageTitle"] = "寄存器地址管理"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

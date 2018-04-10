@@ -319,7 +319,7 @@
         paginationPreText: '&lsaquo;',
         paginationNextText: '&rsaquo;',
         paginationShowPageGo: true,//20170812 lht 扩展select跳转
-        paginationUseBSSelect:false,//20170812 lht 扩展select跳转 启用BoostrapSelect
+        paginationUseBSSelect: false,//20170812 lht 扩展select跳转 启用BoostrapSelect
         search: false,
         searchOnEnterKey: false,
         strictSearch: false,

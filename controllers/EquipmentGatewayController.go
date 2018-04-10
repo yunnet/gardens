@@ -21,7 +21,7 @@ func (this *EquipmentGatewayController) Prepare() {
 }
 
 func (this *EquipmentGatewayController) Index() {
-	this.Data["title"] = "通讯方式"
+	this.Data["pageTitle"] = "通讯方式"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

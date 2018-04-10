@@ -21,7 +21,7 @@ func (this *EquipmentVendorController) Prepare() {
 }
 
 func (this *EquipmentVendorController) Index() {
-	this.Data["title"] = "设备供应商"
+	this.Data["pageTitle"] = "设备供应商"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

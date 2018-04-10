@@ -21,7 +21,7 @@ func (this *EquipmentTableConfigController) Prepare() {
 }
 
 func (this *EquipmentTableConfigController) Index() {
-	this.Data["title"] = "字段映射表名配置"
+	this.Data["pageTitle"] = "字段映射表名配置"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)

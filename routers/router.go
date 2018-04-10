@@ -7,6 +7,24 @@ import (
 )
 
 func init() {
+	//logintrace
+	beego.Router("/logintrace/index", &controllers.LoginTraceController{}, "*:Index")
+	beego.Router("/logintrace/datagrid", &controllers.LoginTraceController{}, "Get,Post:DataGrid")
+	beego.Router("/logintrace/datalist", &controllers.LoginTraceController{}, "Post:DataList")
+
+	//icons
+	beego.Router("/icons/index", &controllers.IconsController{}, "*:Index")
+
+	//totalactivepowerminute
+	beego.Router("/totalactivepowerminute/index", &controllers.TotalActivePowerMinuteController{}, "*:Index")
+	beego.Router("/totalactivepowerminute/datagrid", &controllers.TotalActivePowerMinuteController{}, "Get,Post:DataGrid")
+	beego.Router("/totalactivepowerminute/datalist", &controllers.TotalActivePowerMinuteController{}, "Post:DataList")
+
+	//collectbaseinfo
+	beego.Router("/collectbaseinfo/index", &controllers.CollectBaseInfoController{}, "*:Index")
+	beego.Router("/collectbaseinfo/datagrid", &controllers.CollectBaseInfoController{}, "Get,Post:DataGrid")
+	beego.Router("/collectbaseinfo/datalist", &controllers.CollectBaseInfoController{}, "Post:DataList")
+
 	//EquipmentDtuConfig
 	beego.Router("/equipmentdtuconfig/index", &controllers.EquipmentDtuConfigController{}, "*:Index")
 	beego.Router("/equipmentdtuconfig/datagrid", &controllers.EquipmentDtuConfigController{}, "Get,Post:DataGrid")
@@ -132,13 +150,12 @@ func init() {
 	beego.Router("/home/metercount", &controllers.HomeController{}, "*:GetMeterCount")
 	beego.Router("/home/dtucount", &controllers.HomeController{}, "*:GetDtuCount")
 	beego.Router("/home/customerformeter", &controllers.HomeController{}, "*:GetCustomerForMeter")
-	//beego.Router("/home/customerformeter", &controllers.HomeController{}, "*.GetCustomerForMeter")
-
-	//beego.Router("home/subindex", &controllers.IndexController{}, "*.Index")
+	beego.Router("/home/dturowforday", &controllers.HomeController{}, "*:GetDtuRowForDay")
+	beego.Router("/home/collectrowstoday", &controllers.HomeController{}, "*:GetCollectRowsToday")
+	beego.Router("/home/collectcountofmonth", &controllers.HomeController{}, "*:GetCollectCountOfMonth")
 
 	beego.Router("/home/404", &controllers.HomeController{}, "*:Page404")
 	beego.Router("/home/error/?:error", &controllers.HomeController{}, "*:Error")
 
 	beego.Router("/", &controllers.HomeController{}, "*:Index")
-
 }

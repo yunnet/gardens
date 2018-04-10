@@ -8,7 +8,8 @@
    $(function () {		
         //验证
         validateInfo();       
-    })	
+    });
+
     //表单验证及AJAX提交
     function validateInfo() {
         var $thisForm = $('#thisForm');
@@ -21,12 +22,12 @@
             },
             messages: {},
             submitHandler: function (form) {
-				var url ='{{ urlfor "RoleController.Edit"}}'
+				var url ='{{ urlfor "RoleController.Edit"}}';
 				var data = $thisForm.serialize();				
 				$.sdpost(url,data,function(re){
 					if(re.code === 0){
-						parent.layer.msg(re.msg)
-						parent.refresh(re.obj)
+						parent.layer.msg(re.msg);
+						parent.refresh(re.obj);
 						parent.layer.close(index)
 					}else{
 						parent.layer.alert(re.msg,{icon:2,title:'失败'})

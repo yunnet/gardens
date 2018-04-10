@@ -50,7 +50,7 @@
 
         //保持搜索条件面板状态
         sdtheme.searchPanelStatusInit('searchpanelbtn');
-    };
+    }
 
     //刷新当前页
     function refresh(pk) {
@@ -79,7 +79,6 @@
             queryParams: function (params) {
                 //params的自带参数类型由queryParamsType决定
                 params.MeterTypeNO = $('.searchForm input[name="MeterTypeNO"]').val();
-
                 params.Used = $('.searchForm select[name="Used"]').selectpicker('val');
                 return params;
             },
@@ -171,21 +170,21 @@
                     width: '110px',
                     align: 'center',
                     sortable: true,
-                    formatter: sdtheme.showyes
+                    formatter: sdtheme.showYes
                 }, {
                     field: 'Needct',
                     title: '是否电流变比',
                     width: '110px',
                     align: 'center',
                     sortable: true,
-                    formatter: sdtheme.showyes
+                    formatter: sdtheme.showYes
                 }, {
                     field: 'Msbbit',
                     title: '最高位为符号位',
                     width: '110px',
                     align: 'center',
                     sortable: true,
-                    formatter: sdtheme.showyes
+                    formatter: sdtheme.showYes
                 }, {
                     field: 'Bytelength',
                     title: '数据长度',
@@ -252,21 +251,13 @@
                     title: '状态',
                     width: '100px',
                     align: 'center',
-                    formatter: sdtheme.showtwostate
+                    formatter: sdtheme.showTwoState
                 }, {
                     field: 'operate',
                     title: '操作',
                     width: '100px',
-                    formatter: function (value, row, index) {
-                        var html = [];
-                        html.push('<div class="btn-group">')
-                        if ('{{.canEdit}}' === 'true') {
-                            html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
-                                    '<i class="fa fa-pencil"></i> 编辑</button>');
-                        }
-                        html.push('</div>')
-                        return html.join('');
-                    }
+                    visible: isVisible(),
+                    formatter: formatterOperate
                 }],
             onLoadSuccess: function (data) {
                 layer.closeAll('loading');
@@ -310,6 +301,26 @@
             return '<span title="' + value + '">' + value + '</span>';
         }
         return "";
+    }
+
+    //格式化操作字段中的编辑
+    function formatterOperate(value, row, index) {
+        var html = [];
+        html.push('<div class="btn-group">');
+        if ('{{.canEdit}}' === 'true') {
+            html.push('<button class="btn btn-primary btn-xs" onclick="EditFun(' + row.Id + ')">' +
+                    '<i class="fa fa-pencil"></i> 编辑</button>');
+        }
+        html.push('</div>');
+        return html.join('');
+    }
+
+    function isVisible() {
+        if ('{{.canEdit}}' === 'true') {
+            return true;
+        }else{
+            return false;
+        }
     }
 
     function EditFun(Id) {

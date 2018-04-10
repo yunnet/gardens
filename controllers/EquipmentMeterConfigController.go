@@ -21,7 +21,7 @@ func (this *EquipmentMeterConfigController) Prepare() {
 }
 
 func (this *EquipmentMeterConfigController) Index() {
-	this.Data["title"] = "电表管理"
+	this.Data["pageTitle"] = "电表管理"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
@@ -68,7 +68,7 @@ func (this *EquipmentMeterConfigController) Edit() {
 			this.pageError("数据无效，请刷新后重试")
 		}
 	} else {
-		m.Used = enums.Enabled
+		m.Used = 0
 	}
 
 	this.Data["m"] = m
@@ -82,11 +82,6 @@ func (this *EquipmentMeterConfigController) Save() {
 	var err error
 	m := models.EquipmentMeterConfig{}
 
-	//获取form里的值
-	if err = this.ParseForm(&m); err != nil {
-		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
-	}
-
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
 	m.DTU_no = this.GetString("DTU_no")
@@ -96,6 +91,15 @@ func (this *EquipmentMeterConfigController) Save() {
 
 	m.MeterTypeNO = this.GetString("MeterTypeNO")
 	m.GatewayNO = this.GetString("GatewayNO")
+
+	tmpInt = this.Input().Get("GatewayQzone")
+	m.GatewayQzone, _ = strconv.Atoi(tmpInt)
+
+	tmpInt = this.Input().Get("GatewayAddress")
+	m.GatewayAddress, _ = strconv.Atoi(tmpInt)
+
+	tmpInt = this.Input().Get("GatewaySite")
+	m.GatewaySite, _ = strconv.Atoi(tmpInt)
 
 	tmpInt = this.Input().Get("Pt")
 	m.Pt, _ = strconv.Atoi(tmpInt)
@@ -117,7 +121,7 @@ func (this *EquipmentMeterConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "MeterAddress", "MeterTypeNO", "GatewayNO", "Pt", "Ct", "Used", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "DTU_no", "MeterAddress", "MeterTypeNO", "GatewayNO", "GatewayQzone", "GatewayAddress", "GatewaySite", "Pt", "Ct", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

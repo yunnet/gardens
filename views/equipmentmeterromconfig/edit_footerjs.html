@@ -12,6 +12,8 @@
 
     function pageInit() {
         $("#Used").selectpicker('val', '{{.m.Used}}');
+        rms.selectMeterType('{{ urlfor "EquipmentMeterTypeController.DataGridSelect"}}', '{{.m.MeterTypeNO}}');
+
         $("#FunctionTable1").selectpicker('val', '{{.m.FunctionTable1}}');
         $("#FunctionTable2").selectpicker('val', '{{.m.FunctionTable2}}');
         $("#FunctionTable3").selectpicker('val', '{{.m.FunctionTable3}}');

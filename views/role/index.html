@@ -1,7 +1,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        角色管理
+        {{.pageTitle}}
         <small>系统后台用户的角色</small>
     </h1>
     <ol class="breadcrumb">
@@ -9,7 +9,7 @@
             <a href="{{urlfor "HomeController.Index"}}">
                 <i class="fa fa-dashboard"></i> 首页</a>
         </li>
-        <li class="active">角色管理</li>
+        <li class="active">{{.pageTitle}}</li>
     </ol>
 </section>
 <!-- Main content -->

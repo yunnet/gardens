@@ -1,13 +1,30 @@
+<!-- jquery-ui -->
+<script src="/static/plugins/jquery-ui.min.js"></script>
+
 <!-- iCheck -->
 <script src="/static/plugins/icheck/icheck.min.js"></script>
+
 <!-- 验证插件 -->
 <script src="/static/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="/static/plugins/jquery-validation/localization/messages_zh.min.js"></script>
+
 <!-- 针对当前主题进行简单封装，精简代码 -->
 <script src="/static/sdtheme/scripts/sdvalidate.js"></script>
 
 <!-- d3.js -->
 <script src="/static/plugins/d3/d3.min.js"></script>
+<!-- datepicker -->
+<script src="/static/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+
+<!-- nicescroll -->
+<script src="/static/plugins/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+
+<script src="/static/plugins/raphael/raphael.min.js"></script>
+<script src="/static/plugins/morris.js/morris.min.js"></script>
+
+<script src="/static/plugins/skycons/skycons.js"></script>
+<script src="/static/plugins/jquery-knob/js/jquery.knob.js"></script>
 
 <script>
     $(function () {
@@ -15,16 +32,414 @@
     });
 
     function pageInit() {
+        moveContainer();
+        datepickerInit();
+        skyconsInit();
+
+        customerTreeInit();
+
+        dtuRowTodayInit();
+
         dtuCount();
         meterCount();
+        collectRowsToday();
+        monthCollectorInit();
+        collectCountOfMonth();
+    }
+
+    function monthCollectorInit() {
+        //jQueryKnob
+        $('.knob').knob();
+    }
+
+    function skyconsInit(){
+        if( typeof (Skycons) === 'undefined'){ return; }
+        var icons = new Skycons({
+                    "color": "#73879C"
+                }),
+                list = [
+                        "clear-day", "clear-night", "partly-cloudy-day",
+                        "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
+                        "fog"
+                        ],
+                        i;
+        for (i = list.length; i--;)
+            icons.set(list[i], list[i]);
+
+        icons.play();
+    }
+
+    /* Morris.js Charts */
+    // Sales chart
+    var line;
+
+    function datepickerInit() {
+        // The Calender
+        $('#calendar').datepicker({
+            language: 'zh-CN',       //语言
+            todayHighlight: true    //今天高亮
+        });
+    }
+
+    function customerTreeInit() {
+        var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
+        d3.json(url, function(error, re) {
+            if(re.code != 0) throw error;
+
+            // size of the diagram
+            var viewerWidth = $("#tree-container").width();
+            var viewerHeight = $("#tree-container").height() == 0 ? 300 : $("#tree-container").height();
+
+            // Define the root
+            var root = JSON.parse(re.obj);
+            root.x0 = 0;
+            root.y0 = 0;
+            // root.x0 = viewerHeight / 2;
+
+            // Calculate total nodes, max label length
+            var totalNodes = 0;
+            var maxLabelLength = 0;
+
+            // variables for drag/drop
+            var selectedNode = null;
+            var draggingNode = null;
+
+            // Misc. variables
+            var i = 0;
+            var duration = 750;
+
+            var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
+
+            // define a d3 diagonal projection for use by the node paths later on.
+            var diagonal = d3.svg.diagonal()
+                    .projection(function(d) {
+                        return [d.y, d.x];
+                    });
+
+            // A recursive helper function for performing some setup by walking through all nodes
+            function visit(parent, visitFn, childrenFn) {
+                if (!parent) return;
+
+                visitFn(parent);
+
+                var children = childrenFn(parent);
+                if (children) {
+                    var count = children.length;
+                    for (var i = 0; i < count; i++) {
+                        visit(children[i], visitFn, childrenFn);
+                    }
+                }
+            }
+
+            // Call visit function to establish maxLabelLength
+            visit(root, function(d) {
+                totalNodes++;
+                maxLabelLength = Math.max(d.name.length, maxLabelLength);
+            }, function(d) {
+                return d.children && d.children.length > 0 ? d.children : null;
+            });
+
+            // sort the tree according to the node names
+            function sortTree() {
+                tree.sort(function(a, b) {
+                    return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
+                });
+            }
+            // Sort the tree initially incase the JSON isn't in a sorted order.
+            sortTree();
+
+            // Define the zoom function for the zoomable tree
+            function zoom() {
+                svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            }
+
+            // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
+            var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
+
+            // define the baseSvg, attaching a class for styling and the zoomListener
+            var baseSvg = d3.select("#tree-container").append("svg")
+                    .attr("width", viewerWidth)
+                    .attr("height", viewerHeight)
+                    .attr("class", "overlay")
+                    .call(zoomListener);
+
+            var overCircle = function(d) {
+                selectedNode = d;
+                updateTempConnector();
+            };
+
+            var outCircle = function(d) {
+                selectedNode = null;
+                updateTempConnector();
+            };
+
+            // Function to update the temporary connector indicating dragging affiliation
+            var updateTempConnector = function() {
+                var data = [];
+                if (draggingNode !== null && selectedNode !== null) {
+                    // have to flip the source coordinates since we did this for the existing connectors on the original tree
+                    data = [{
+                        source: {
+                            x: selectedNode.y0,
+                            y: selectedNode.x0
+                        },
+                        target: {
+                            x: draggingNode.y0,
+                            y: draggingNode.x0
+                        }
+                    }];
+                }
+                var link = svgGroup.selectAll(".templink").data(data);
+
+                link.enter().append("path")
+                        .attr("class", "templink")
+                        .attr("d", d3.svg.diagonal())
+                        .attr('pointer-events', 'none');
+
+                link.attr("d", d3.svg.diagonal());
+
+                link.exit().remove();
+            };
+
+            // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
+            function centerNode(source) {
+                scale = zoomListener.scale();
+
+                x = -source.y0;
+                y = -source.x0;
+
+                x = x * scale + viewerWidth / 2;
+                y = y * scale + viewerHeight / 2;
+
+                d3.select('g').transition()
+                        .duration(duration)
+                        .attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
+                zoomListener.scale(scale);
+                zoomListener.translate([x, y]);
+            }
+
+            // Toggle children function
+            function toggleChildren(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else if (d._children) {
+                    d.children = d._children;
+                    d._children = null;
+                }
+                return d;
+            }
+
+            // Toggle children on click.
+            function click(d) {
+                if (d3.event.defaultPrevented) return; // click suppressed
+                d = toggleChildren(d);
+                update(d);
+                centerNode(d);
+            }
+
+            function update(source) {
+                // Compute the new height, function counts total children of root node and sets tree height accordingly.
+                // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
+                // This makes the layout more consistent.
+                var levelWidth = [1];
+                var childCount = function(level, n) {
+                    if (n.children && n.children.length > 0) {
+                        if (levelWidth.length <= level + 1)
+                            levelWidth.push(0);
+
+                        levelWidth[level + 1] += n.children.length;
+                        n.children.forEach(function(d) {
+                            childCount(level + 1, d);
+                        });
+                    }
+                };
+
+                childCount(0, root);
+                var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+                tree = tree.size([newHeight, viewerWidth]);
+
+                // Compute the new tree layout.
+                var nodes = tree.nodes(root).reverse(),
+                        links = tree.links(nodes);
+
+                // Set widths between levels based on maxLabelLength.
+                nodes.forEach(function(d) {
+                    d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+                    // alternatively to keep a fixed scale one can set a fixed depth per level
+                    // Normalize for fixed-depth by commenting out below line
+                    // d.y = (d.depth * 500); //500px per level.
+                });
+
+                // Update the nodes…
+                node = svgGroup.selectAll("g.node")
+                        .data(nodes, function(d) {
+                            return d.id || (d.id = ++i);
+                        });
+
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                        .attr("class", "node")
+                        .attr("transform", function(d) {
+                            return "translate(" + source.y0 + "," + source.x0 + ")";
+                        })
+                        .on('click', click);
+
+                nodeEnter.append("circle")
+                        .attr('class', 'nodeCircle')
+                        .attr("r", 0)
+                        .style("fill", function(d) {
+                            return d._children ? "lightsteelblue" : "#fff";
+                        });
+
+                nodeEnter.append("text")
+                        .attr("x", function(d) {
+                            return d.children || d._children ? -10 : 10;
+                        })
+                        .attr("dy", ".35em")
+                        .attr('class', 'nodeText')
+                        .attr("text-anchor", function(d) {
+                            return d.children || d._children ? "end" : "start";
+                        })
+                        .text(function(d) {
+                            return d.children || d._children ? d.name : d.name + ": " + d.desc;
+                        })
+                        .style("fill-opacity", 0);
+
+                // phantom node to give us mouseover in a radius around it
+                nodeEnter.append("circle")
+                        .attr('class', 'ghostCircle')
+                        .attr("r", 30)
+                        .attr("opacity", 0.2) // change this to zero to hide the target area
+                        .style("fill", "red")
+                        .attr('pointer-events', 'mouseover')
+                        .on("mouseover", function(node) {
+                            overCircle(node);
+                        })
+                        .on("mouseout", function(node) {
+                            outCircle(node);
+                        });
+
+                // Update the text to reflect whether node has children or not.
+                node.select('text')
+                        .attr("x", function(d) {
+                            return d.children || d._children ? -10 : 10;
+                        })
+                        .attr("text-anchor", function(d) {
+                            return d.children || d._children ? "end" : "start";
+                        })
+                        .text(function(d) {
+                            return d.children || d._children ? d.name : d.name + ": " + d.desc;
+                        });
+
+                // Change the circle fill depending on whether it has children and is collapsed
+                node.select("circle.nodeCircle")
+                        .attr("r", 4.5)
+                        .style("fill", function(d) {
+                            return d._children ? "lightsteelblue" : "#fff";
+                        });
+
+                // Transition nodes to their new position.
+                var nodeUpdate = node.transition()
+                        .duration(duration)
+                        .attr("transform", function(d) {
+                            return "translate(" + d.y + "," + d.x + ")";
+                        });
+
+                // Fade the text in
+                nodeUpdate.select("text").style("fill-opacity", 1);
+
+                // Transition exiting nodes to the parent's new position.
+                var nodeExit = node.exit().transition()
+                        .duration(duration)
+                        .attr("transform", function(d) {
+                            return "translate(" + source.y + "," + source.x + ")";
+                        })
+                        .remove();
+
+                nodeExit.select("circle").attr("r", 0);
+
+                nodeExit.select("text").style("fill-opacity", 0);
+
+                // Update the links…
+                var link = svgGroup.selectAll("path.link")
+                        .data(links, function(d) {
+                            return d.target.id;
+                        });
+
+                // Enter any new links at the parent's previous position.
+                link.enter().insert("path", "g")
+                        .attr("class", "link")
+                        .attr("d", function(d) {
+                            var o = {
+                                x: source.x0,
+                                y: source.y0
+                            };
+
+                            return diagonal({
+                                source: o,
+                                target: o
+                            });
+                        });
+
+                // Transition links to their new position.
+                link.transition()
+                        .duration(duration)
+                        .attr("d", diagonal);
+
+                // Transition exiting nodes to the parent's new position.
+                link.exit().transition()
+                        .duration(duration)
+                        .attr("d", function(d) {
+                            var o = {
+                                x: source.x,
+                                y: source.y
+                            };
+                            return diagonal({
+                                source: o,
+                                target: o
+                            });
+                        })
+                        .remove();
+
+                // Stash the old positions for transition.
+                nodes.forEach(function(d) {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+            }
+
+            // Append a group which holds all nodes and which the zoom Listener can act upon.
+            var svgGroup = baseSvg.append("g");
+
+            // Layout the tree initially and center on the root node.
+            update(root);
+            centerNode(root);
+        });
+    }
+
+    function moveContainer() {
+        // Make the dashboard widgets sortable Using jquery UI
+        $('.connectedSortable').sortable({
+            placeholder         : 'sort-highlight',
+            connectWith         : '.connectedSortable',
+            handle              : '.box-header, .nav-tabs',
+            forcePlaceholderSize: true,
+            zIndex              : 99,
+            update              : function (event, ui) {
+                line.redraw();
+                $('#dtuRowToday').getNiceScroll().resize();
+            }
+        });
+        $('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
     }
 
     function dtuCount() {
         var url = '{{ urlfor "HomeController.GetDtuCount"}}';
         $.sdpost(url, {}, function (re) {
-            if(re.code === 0){
+            if (re.code === 0) {
                 $("#dtuCount").html(re.obj);
-            }else {
+            } else {
                 layer.alert("数据获取失败", {icon: 2, title: '错误'})
             }
         });
@@ -33,194 +448,95 @@
     function meterCount() {
         var url = '{{ urlfor "HomeController.GetMeterCount"}}';
         $.sdpost(url, {}, function (re) {
-            if(re.code === 0){
+            if (re.code === 0) {
                 $("#meterCount").html(re.obj);
-            }else {
+            } else {
                 layer.alert("数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
-</script>
 
-
-
-<script>
-    var margin = {top: 20, right: 120, bottom: 20, left: 120},
-        width = 960 - margin.right - margin.left,
-        height = 400 - margin.top - margin.bottom;
-
-    var i = 0,
-        duration = 750,
-        root;
-
-    var tree = d3.layout.tree().size([height, width]);
-
-    var diagonal = d3.svg.diagonal().projection(function (d) {
-        return [d.y, d.x];
-    });
-
-    var svg = d3.select("#box-body").append("svg")
-            .attr("width", width + margin.right + margin.left)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    function getJsondata () {
-        var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
-        alert(url);
-
+    function collectRowsToday() {
+        var url = '{{ urlfor "HomeController.GetCollectRowsToday"}}';
         $.sdpost(url, {}, function (re) {
-            if(re.code === 0){
-                return re.obj;
-            }else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'});
-                return null;
+            if (re.code === 0) {
+                $("#rowsToday").html(re.obj);
+            } else {
+                layer.alert("数据获取失败", {icon: 2, title: '错误'})
             }
-        }, false, 'json');
-    }
-
-    var jsondata = getJsondata();
-    console.log(jsondata);
-
-    d3.json(jsondata, function (error, flare) {
-        if (error) throw error;
-
-        root = flare;
-        root.x0 = height / 2;
-        root.y0 = 0;
-
-        function collapse(d) {
-            if (d.children) {
-                d._children = d.children;
-                d._children.forEach(collapse);
-                d.children = null;
-            }
-        }
-
-        root.children.forEach(collapse);
-        update(root);
-    });
-
-    d3.select(self.frameElement).style("height", "800px");
-
-    function update(source) {
-
-        // Compute the new tree layout.
-        var nodes = tree.nodes(root).reverse(),
-                links = tree.links(nodes);
-
-        // Normalize for fixed-depth.
-        nodes.forEach(function (d) {
-            d.y = d.depth * 180;
-        });
-
-        // Update the nodes…
-        var node = svg.selectAll("g.node")
-                .data(nodes, function (d) {
-                    return d.id || (d.id = ++i);
-                });
-
-        // Enter any new nodes at the parent's previous position.
-        var nodeEnter = node.enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function (d) {
-                    return "translate(" + source.y0 + "," + source.x0 + ")";
-                })
-                .on("click", click);
-
-        nodeEnter.append("circle")
-                .attr("r", 1e-6)
-                .style("fill", function (d) {
-                    return d._children ? "lightsteelblue" : "#fff";
-                });
-
-        nodeEnter.append("text")
-                .attr("x", function (d) {
-                    return d.children || d._children ? -10 : 10;
-                })
-                .attr("dy", ".35em")
-                .attr("text-anchor", function (d) {
-                    return d.children || d._children ? "end" : "start";
-                })
-                .text(function (d) {
-                    return  d.children || d._children ? d.name : d.name + ": " + d.desc;
-                })
-                .style("fill-opacity", 1e-6);
-
-        // Transition nodes to their new position.
-        var nodeUpdate = node.transition()
-                .duration(duration)
-                .attr("transform", function (d) {
-                    return "translate(" + d.y + "," + d.x + ")";
-                });
-
-        nodeUpdate.select("circle")
-                .attr("r", 4.5)
-                .style("fill", function (d) {
-                    return d._children ? "lightsteelblue" : "#fff";
-                });
-
-        nodeUpdate.select("text")
-                .style("fill-opacity", 1);
-
-        // Transition exiting nodes to the parent's new position.
-        var nodeExit = node.exit().transition()
-                .duration(duration)
-                .attr("transform", function (d) {
-                    return "translate(" + source.y + "," + source.x + ")";
-                })
-                .remove();
-
-        nodeExit.select("circle")
-                .attr("r", 1e-6);
-
-        nodeExit.select("text")
-                .style("fill-opacity", 1e-6);
-
-        // Update the links
-        var link = svg.selectAll("path.link")
-                .data(links, function (d) {
-                    return d.target.id;
-                });
-
-        // Enter any new links at the parent's previous position.
-        link.enter().insert("path", "g")
-                .attr("class", "link")
-                .attr("d", function (d) {
-                    var o = {x: source.x0, y: source.y0};
-                    return diagonal({source: o, target: o});
-                });
-
-        // Transition links to their new position.
-        link.transition()
-                .duration(duration)
-                .attr("d", diagonal);
-
-        // Transition exiting nodes to the parent's new position.
-        link.exit().transition()
-                .duration(duration)
-                .attr("d", function (d) {
-                    var o = {x: source.x, y: source.y};
-                    return diagonal({source: o, target: o});
-                })
-                .remove();
-
-        // Stash the old positions for transition.
-        nodes.forEach(function (d) {
-            d.x0 = d.x;
-            d.y0 = d.y;
         });
     }
 
-    // Toggle children on click.
-    function click(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        } else {
-            d.children = d._children;
-            d._children = null;
-        }
-        update(d);
+    function dtuRowTodayInit() {
+        var url = '{{ urlfor "HomeController.GetDtuRowForDay"}}';
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                var html = [];
+                var maxValue = 0;
+                $(re.obj).each(function (i, row) {
+                    html.push('<div class="progress-group">');
+                    html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+                    html.push('<i class="fa fa-clock-o"></i>');
+                    html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
+                    html.push('<span class="progress-number"><b>' + row.Rows + '</b>/288</span>');
+                    html.push('<div class="progress sm">');
+                    if(maxValue < row.Rows)
+                        maxValue = row.Rows;
+                    var rate = Math.round((row.Rows / 288) * 10000) / 100;
+
+                    if(row.Rows  < (maxValue * 0.60 )) {
+                        html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
+                    } else if(row.Rows < (maxValue * 0.95 )){
+                        html.push('<div class="progress-bar progress-bar-yellow" style="width:' + rate + '%"></div>');
+                    } else {
+                        html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
+                    }
+                    html.push('</div>');
+                });
+
+                $("#dtuRowToday").html(html.join(''));
+
+                $('#dtuRowToday').height(250);
+                // $('#dtuRowToday').getNiceScroll().resize();
+                // $('#dtuRowToday').getNiceScroll(0).doScrollLeft(x, duration); // Scroll X Axis
+                // $('#dtuRowToday').getNiceScroll(0).doScrollTop(y, duration); // Scroll Y Axis
+                $('#dtuRowToday').niceScroll({
+                    touchbehavior: true // 激活拖拽滚动
+                });
+            } else {
+                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+    function collectCountOfMonth() {
+        var url = '{{ urlfor "HomeController.GetCollectCountOfMonth"}}';
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                var dataobj = eval(re.obj);
+                line = new Morris.Line({
+                    element          : 'line-chart',
+                    resize           : true,
+                    data             : dataobj,
+                    xkey             : 'CollectTime',
+                    ykeys            : ['Rows'],
+                    labels           : ['采集量'],
+                    lineColors       : ['#efefef'],
+                    lineWidth        : 2,             //线条粗细
+                    hideHover        : 'auto',
+                    gridTextColor    : '#fff',        //x,y轴上文字的颜色
+                    gridStrokeWidth  : 0.4,
+                    pointSize        : 4,             //圆圈大小
+                    pointStrokeColors: ['#efefef'],
+                    gridLineColor    : '#efefef',
+                    gridTextFamily   : 'Open Sans',
+                    gridTextSize     : 10,
+                    hoverFillColor   : '#10B9E3',
+                    hoverCallback    : function (index, options, content) {
+                        return content.replace('color: #efefef', 'color: #ff000');
+                    }
+                });
+            }
+        });
     }
 </script>
