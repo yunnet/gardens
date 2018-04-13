@@ -73,17 +73,16 @@
     <!-- Main row -->
     <div class="row">
         <section class="col-lg-12 connectedSortable">
+            <!-- today collect -->
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <i class="fa fa-bar-chart-o"></i>
                     <h3 class="box-title">今日采集
-                        <small>条数</small>
+                        <small>设备在线数: <span id="dtuOnline">0</span></small>
                     </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
@@ -102,12 +101,9 @@
                         <small>客户所有的电表信息</small>
                     </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="maximize"><i class="fa fa-expand"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool tree-expand" data-widget="maximize"><i class="fa fa-expand"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <div class="box-body">
@@ -116,137 +112,254 @@
                     </div>
                 </div>
             </div>
+            <!-- /.box -->
 
-            <!-- Daily users -->
-            <div class="box box-danger">
-                <div class="box-header with-border">
-                    <i class="fa fa-line-chart"></i>
-                    <h3 class="box-title">Daily users
-                        <small>Sessions</small>
-                    </h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="maximize"><i class="fa fa-expand"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-                    <table class="" style="width:100%">
-                        <tr>
-                            <th style="width:37%;">
-                                <p>Top 5</p>
-                            </th>
-                            <th>
-                                <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
-                                    <p class="">Device</p>
-                                </div>
-                                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                                    <p class="">Progress</p>
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                <canvas id="canvas1" height="140" width="140" style="margin: 15px 10px 10px 0"></canvas>
-                            </td>
-                            <td>
-                                <table class="tile_info">
-                                    <tr>
-                                        <td>
-                                            <p><i class="fa fa-square blue"></i>IOS </p>
-                                        </td>
-                                        <td>30%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p><i class="fa fa-square green"></i>Android </p>
-                                        </td>
-                                        <td>10%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p><i class="fa fa-square purple"></i>Blackberry </p>
-                                        </td>
-                                        <td>20%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p><i class="fa fa-square aero"></i>Symbian </p>
-                                        </td>
-                                        <td>15%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p><i class="fa fa-square red"></i>Others </p>
-                                        </td>
-                                        <td>30%</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Profile Settings -->
+            <!-- 地图 & BOX PANE -->
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <i class="fa fa-line-chart"></i>
-                    <h3 class="box-title">Profile Settings
-                        <small>Sessions</small>
+                    <i class="fa fa-map"></i>
+                    <h3 class="box-title">客户分布
+                        <small>市区客户分布</small>
                     </h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
+                <!-- /.box-header -->
                 <div class="box-body">
-                    <div class="dashboard-widget-content">
-                        <ul class="quick-list">
-                            <li><i class="fa fa-line-chart"></i><a href="#">Achievements</a></li>
-                            <li><i class="fa fa-thumbs-up"></i><a href="#">Favorites</a></li>
-                            <li><i class="fa fa-calendar-o"></i><a href="#">Activities</a></li>
-                            <li><i class="fa fa-cog"></i><a href="#">Settings</a></li>
-                            <li><i class="fa fa-area-chart"></i><a href="#">Logout</a></li>
-                        </ul>
+                    <div class="row">
+                        <div class="col-md-3 col-sm-4">
+                            <p class="text-center">
+                                <strong>广州市区</strong>
+                            </p>
+                            <div class="progress-group">
+                                <span class="progress-text"> 天河区</span>
+                                <span class="progress-number">69</span>
 
-                        <div class="sidebar-widget">
-                            <h4>Profile Completion</h4>
-                            <canvas width="150" height="80" id="chart_gauge_01" class="" style="width: 160px; height: 100px;"></canvas>
-                            <div class="goal-wrapper">
-                                <span id="gauge-text" class="gauge-value gauge-chart pull-left">0</span>
-                                <span class="gauge-value pull-left">%</span>
-                                <span id="goal-text" class="goal-value pull-right">100%</span>
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 69%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 海珠区</span>
+                                <span class="progress-number">56</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 56%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 白云区</span>
+                                <span class="progress-number">16</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 16%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 荔湾区</span>
+                                <span class="progress-number">11</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 11%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 黄埔区</span>
+                                <span class="progress-number">32</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 32%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 花都区</span>
+                                <span class="progress-number">32</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 32%"></div>
+                                </div>
                             </div>
                         </div>
+                        <!-- /.col -->
+                        <div class="col-md-9 col-sm-8">
+                            <div class="pad">
+                                <!-- Map will be created here -->
+                                <div id="world-map-gdp" style="height: 325px;width: 100%"></div>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <i class="fa  fa-houzz"></i>
+                    <h3 class="box-title">Latest Orders</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Item</th>
+                                <th>Status</th>
+                                <th>Popularity</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR9842</a></td>
+                                <td>Call of Duty IV</td>
+                                <td><span class="label label-success">Shipped</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR1848</a></td>
+                                <td>Samsung Smart TV</td>
+                                <td><span class="label label-warning">Pending</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                <td>iPhone 6 Plus</td>
+                                <td><span class="label label-danger">Delivered</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                <td>Samsung Smart TV</td>
+                                <td><span class="label label-info">Processing</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR1848</a></td>
+                                <td>Samsung Smart TV</td>
+                                <td><span class="label label-warning">Pending</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
+                                <td>iPhone 6 Plus</td>
+                                <td><span class="label label-danger">Delivered</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><a href="pages/examples/invoice.html">OR9842</a></td>
+                                <td>Call of Duty IV</td>
+                                <td><span class="label label-success">Shipped</span></td>
+                                <td>
+                                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+                </div>
+                <!-- /.box-footer -->
             </div>
+            <!-- /.box -->
         </section>
 
         <section class="col-lg-4 connectedSortable">
-            <!-- month collect -->
+            <!-- 月采集统计 -->
             <div class="box box-solid bg-aqua-gradient">
                 <div class="box-header">
                     <i class="fa fa-line-chart"></i>
-                    <h3 class="box-title">月采集统计</h3>
+                    <h3 class="box-title">月采集统计
+                        <small>30日采集趋势</small>
+                    </h3>
 
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-info btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-info btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                        <button type="button" class="btn btn-info btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-info btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
 
                 <div class="box-body border-radius-none">
                     <div id="line-chart" class="chart" style="height: 250px;"></div>
                 </div>
+            </div>
+            <!-- /.box -->
+
+            <!-- Browser Usage -->
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <i class="fa fa-university"></i>
+                    <h3 class="box-title">Browser Usage</h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="chart-responsive">
+                                <canvas id="pieChart" height="150"></canvas>
+                            </div>
+                            <!-- ./chart-responsive -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-4">
+                            <ul class="chart-legend clearfix">
+                                <li><i class="fa fa-circle-o text-red"></i> Chrome</li>
+                                <li><i class="fa fa-circle-o text-green"></i> IE</li>
+                                <li><i class="fa fa-circle-o text-yellow"></i> FireFox</li>
+                                <li><i class="fa fa-circle-o text-aqua"></i> Safari</li>
+                                <li><i class="fa fa-circle-o text-light-blue"></i> Opera</li>
+                                <li><i class="fa fa-circle-o text-gray"></i> Navigator</li>
+                            </ul>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#">United States of America
+                            <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+                        <li><a href="#">India <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a>
+                        </li>
+                        <li><a href="#">China
+                            <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
+                    </ul>
+                </div>
+                <!-- /.footer -->
             </div>
             <!-- /.box -->
 
@@ -259,8 +372,7 @@
                     <div class="box-tools pull-right">
                         <!-- button with a dropdown -->
                         <div class="btn-group">
-                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-bars"></i></button>
+                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i></button>
                             <ul class="dropdown-menu pull-right" role="menu">
                                 <li><a href="#">添加新事件</a></li>
                                 <li><a href="#">清除事件</a></li>
@@ -268,10 +380,8 @@
                                 <li><a href="#">View calendar</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                        </button>
+                        <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                     <!-- /. tools -->
                 </div>
@@ -414,16 +524,15 @@
                         </div>
                         <!-- /.row -->
                     </div>
-
                 </div>
-
                 <!-- /.box-footer -->
             </div>
             <!-- /.box -->
-
         </section>
     </div>
-
 </section>
-<!-- /.content -->
+<!-- /.Main content -->
+
+
+
 

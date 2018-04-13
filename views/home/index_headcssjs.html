@@ -11,15 +11,19 @@
 <!-- iCheck -->
 <link href="/static/plugins/icheck/skins/square/blue.css" rel="stylesheet" >
 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Bp7u5buCk50MW9vp9ufmnFD34d2z2KBH"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts-all-3.js"></script>
+<!-- 引入百度地图扩展 -->
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+
 <style>
-    /*.maximized {*/
-        /*z-index: 9999;*/
-        /*width: 100%;*/
-        /*height: 100%;*/
-        /*position: fixed;*/
-        /*top: 0;*/
-        /*left: 0;*/
-    /*}*/
+    .pad{
+        padding: 10px;
+    }
+    /*去掉百度logo*/
+    .anchorBL{
+        display:none;
+    }
 
     .node {
         cursor: pointer;

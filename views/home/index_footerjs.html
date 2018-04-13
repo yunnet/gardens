@@ -26,7 +26,16 @@
 <script src="/static/plugins/skycons/skycons.js"></script>
 <script src="/static/plugins/jquery-knob/js/jquery.knob.js"></script>
 
+<script src="/static/plugins/chart.js/Chart.js"></script>
+
+
+
 <script>
+    /* Morris.js Charts */
+    var line;
+    var d3tree;
+    var customerData;
+
     $(function () {
         pageInit();
     });
@@ -36,7 +45,7 @@
         datepickerInit();
         skyconsInit();
 
-        customerTreeInit();
+        treeInit();
 
         dtuRowTodayInit();
 
@@ -45,6 +54,209 @@
         collectRowsToday();
         monthCollectorInit();
         collectCountOfMonth();
+
+        pieChartInit();
+
+        echartsMapInit();
+
+        $('#tree-expand').click(function () {
+            alert("expand");
+        })
+    }
+
+    function echartsMapInit() {
+        var myChart = echarts.init(document.getElementById('world-map-gdp'));
+
+        var data = [
+            {name: '太古汇', value: 152},
+            {name: '执行中学', value: 153},
+            {name: '琶洲国际会展中心', value: 300},
+            {name: '广州绿地中央广场', value: 250},
+            {name: '华南汽车贸易城', value: 169},
+            {name: '广州美术学院', value: 279}
+        ];
+        var geoCoordMap = {
+            '太古汇':[113.338642,23.139578],
+            '执行中学':[113.306168,23.116248],
+            '琶洲国际会展中心':[113.368753,23.103172],
+            '广州绿地中央广场':[113.437339,23.170597],
+            '华南汽车贸易城':[113.321354,23.079257],
+            '广州美术学院':[113.28493,23.099511]
+        };
+
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+            return res;
+        };
+
+        var option = {
+            tooltip : {
+                trigger: 'item'
+            },
+            bmap: {
+                center: [113.329147,23.115899],
+                zoom: 12,
+                roam: true
+            },
+            series : [
+                {
+                    name: 'A级客户',
+                    type: 'scatter',
+                    coordinateSystem: 'bmap',
+                    data: convertData(data),
+                    symbolSize: function (val) {
+                        return val[2] / 10;
+                    },
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: false
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: 'orangered'
+                        }
+                    }
+                },
+
+                {
+                    name: 'B级客户',
+                    type: 'effectScatter',
+                    coordinateSystem: 'bmap',
+                    data: convertData(data.sort(function (a, b) {
+                        return b.value - a.value;
+                    }).slice(0, 6)),
+                    symbolSize: function (val) {
+                        return val[2] / 10;
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            formatter: '{b}',
+                            position: 'right',
+                            show: true
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#00c0ef',
+                            shadowBlur: 10,
+                            shadowColor: '#0ff'
+                        }
+                    },
+                    zlevel: 1
+                }
+            ]
+        };
+
+        // 添加百度地图插件
+        // var bmap = myChart.getModel().getComponent('bmap').getBMap();
+        // bmap.addControl(new BMap.ScaleControl());        //比例尺
+        // bmap.addControl(new BMap.MapTypeControl());
+
+        // var bmap = myChart.getModel().getComponent('bmap').getBMap();
+        // bmap.addControl(new BMap.NavigationControl());   //缩放控件
+        // bmap.addControl(new BMap.ScaleControl());        //比例尺
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    }
+
+    function pieChartInit() {
+        // -------------
+        // - PIE CHART -
+        // -------------
+        // Get context with jQuery - using jQuery's .get() method.
+        var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+        var pieChart       = new Chart(pieChartCanvas);
+        var PieData        = [
+            {
+                value    : 700,
+                color    : '#f56954',
+                highlight: '#f56954',
+                label    : 'Chrome'
+            },
+            {
+                value    : 500,
+                color    : '#00a65a',
+                highlight: '#00a65a',
+                label    : 'IE'
+            },
+            {
+                value    : 400,
+                color    : '#f39c12',
+                highlight: '#f39c12',
+                label    : 'FireFox'
+            },
+            {
+                value    : 600,
+                color    : '#00c0ef',
+                highlight: '#00c0ef',
+                label    : 'Safari'
+            },
+            {
+                value    : 300,
+                color    : '#3c8dbc',
+                highlight: '#3c8dbc',
+                label    : 'Opera'
+            },
+            {
+                value    : 100,
+                color    : '#d2d6de',
+                highlight: '#d2d6de',
+                label    : 'Navigator'
+            }
+        ];
+        var pieOptions     = {
+            // Boolean - Whether we should show a stroke on each segment
+            segmentShowStroke    : true,
+            // String - The colour of each segment stroke
+            segmentStrokeColor   : '#fff',
+            // Number - The width of each segment stroke
+            segmentStrokeWidth   : 1,
+            // Number - The percentage of the chart that we cut out of the middle
+            percentageInnerCutout: 50, // This is 0 for Pie charts
+            // Number - Amount of animation steps
+            animationSteps       : 100,
+            // String - Animation easing effect
+            animationEasing      : 'easeOutBounce',
+            // Boolean - Whether we animate the rotation of the Doughnut
+            animateRotate        : true,
+            // Boolean - Whether we animate scaling the Doughnut from the centre
+            animateScale         : false,
+            // Boolean - whether to make the chart responsive to window resizing
+            responsive           : true,
+            // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
+            maintainAspectRatio  : false,
+            // String - A legend template
+            legendTemplate       : '<ul class=\'<%=name.toLowerCase()%>-legend\'><% for (var i=0; i<segments.length; i++){%><li><span style=\'background-color:<%=segments[i].fillColor%>\'></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>',
+            // String - A tooltip template
+            tooltipTemplate      : '<%=value %> <%=label%> users'
+        };
+        // Create pie or douhnut chart
+        // You can switch between pie and douhnut using the method below.
+        pieChart.Doughnut(PieData, pieOptions);
+        // -----------------
+        // - END PIE CHART -
+        // -----------------
     }
 
     function monthCollectorInit() {
@@ -69,10 +281,6 @@
         icons.play();
     }
 
-    /* Morris.js Charts */
-    // Sales chart
-    var line;
-
     function datepickerInit() {
         // The Calender
         $('#calendar').datepicker({
@@ -81,9 +289,9 @@
         });
     }
 
-    function customerTreeInit() {
+    function treeInit() {
         var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
-        d3.json(url, function(error, re) {
+        d3tree = d3.json(url, function(error, re) {
             if(re.code != 0) throw error;
 
             // size of the diagram
@@ -94,7 +302,6 @@
             var root = JSON.parse(re.obj);
             root.x0 = 0;
             root.y0 = 0;
-            // root.x0 = viewerHeight / 2;
 
             // Calculate total nodes, max label length
             var totalNodes = 0;
@@ -414,6 +621,7 @@
 
             // Layout the tree initially and center on the root node.
             update(root);
+
             centerNode(root);
         });
     }
@@ -473,6 +681,7 @@
             if (re.code === 0) {
                 var html = [];
                 var maxValue = 0;
+                var dtuOnline = 0;
                 $(re.obj).each(function (i, row) {
                     html.push('<div class="progress-group">');
                     html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
@@ -492,14 +701,14 @@
                         html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
                     }
                     html.push('</div>');
+
+                    dtuOnline = i;
                 });
 
+                $("#dtuOnline").html(dtuOnline);
                 $("#dtuRowToday").html(html.join(''));
 
                 $('#dtuRowToday').height(250);
-                // $('#dtuRowToday').getNiceScroll().resize();
-                // $('#dtuRowToday').getNiceScroll(0).doScrollLeft(x, duration); // Scroll X Axis
-                // $('#dtuRowToday').getNiceScroll(0).doScrollTop(y, duration); // Scroll Y Axis
                 $('#dtuRowToday').niceScroll({
                     touchbehavior: true // 激活拖拽滚动
                 });

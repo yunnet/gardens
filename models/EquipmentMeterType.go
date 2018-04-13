@@ -70,6 +70,10 @@ func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam)([]*Equipment
 		sortorder = "Id"
 	}
 
+	if params.Order == "desc" {
+		sortorder = "-" + sortorder
+	}
+
 	data := make([]*EquipmentMeterType, 0)
 	_, err := query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
 	if(err != nil){

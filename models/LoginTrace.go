@@ -37,7 +37,7 @@ func LoginTracePageList(params *LoginTraceQueryParam)([] *LoginTrace, int64)  {
 	}
 
 	if params.Order == "desc" {
-		sortorder += " DESC"
+		sortorder = "-" + sortorder
 	}
 
 	query := orm.NewOrm().QueryTable(LoginTraceTBName())

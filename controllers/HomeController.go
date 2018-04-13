@@ -8,6 +8,7 @@ import (
 	"github.com/yunnet/gdkxdl/utils"
 	"time"
 	"fmt"
+	"github.com/astaxie/beego"
 )
 
 type HomeController struct {
@@ -36,6 +37,8 @@ func (this *HomeController) Error() {
 }
 
 func (this *HomeController) Login() {
+	this.Data["pageTitle"] = beego.AppConfig.String("site.name") + " - 登陆"
+
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["headcssjs"] = "home/login_headcssjs.html"
 	this.LayoutSections["footerjs"] = "home/login_footerjs.html"

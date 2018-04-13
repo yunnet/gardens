@@ -630,14 +630,14 @@ a:focus {
   float: right;
   width: auto !important;
   left: 180px !important;
-  top: -22px !important;
+  top: -20px !important;
   z-index: 900;
 }
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > a > .pull-right-container > .label:not(:first-of-type) {
   display: none;
 }
 .sidebar-mini:not(.sidebar-mini-expand-feature).sidebar-collapse .sidebar-menu > li:hover > .treeview-menu {
-  top: 44px;
+  top: 40px;
   margin-left: 0;
 }
 .sidebar-expanded-on-hover .main-footer,
@@ -1558,15 +1558,13 @@ a:focus {
   display: none;
 }
 
-.box.maximized-box .box-body,
-.box.maximized-box .box-footer{
+.box.maximized-box {
   z-index: 9999;
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: fixed!important;
   top: 0;
   left: 0;
-  border: 1px solid red;
 }
 
 .box .nav-stacked > li {
@@ -1740,10 +1738,6 @@ a:focus {
 }
 .collapsed-box .box-header.with-border {
   border-bottom: none;
-}
-.maximized-box .box-header.with-border {
-  width: 100%;
-  border: 1px solid red;
 }
 
 .box-header > .fa,

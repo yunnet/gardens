@@ -156,16 +156,17 @@ throw new Error('AdminLTE requires jQuery')
     collapseTrigger: '[data-widget="collapse"]',
     removeTrigger  : '[data-widget="remove"]',
     maximizeTrigger: '[data-widget="maximize"]',
-    collapseIcon   : 'fa-minus',    //减号
-    expandIcon     : 'fa-plus',     //加号
-    removeIcon     : 'fa-times',    //叉号
-    maximizeIcon   : 'fa-expand',   //扩大
-    restoreIcon    : 'fa-compress'  //恢复
+    collapseIcon   : 'fa-minus',
+    expandIcon     : 'fa-plus',
+    removeIcon     : 'fa-times',
+    maximizeIcon   : 'fa-expand',
+    restoreIcon    : 'fa-compress'
   };
 
   var Selector = {
     data     : '.box',
     collapsed: '.collapsed-box',
+    maximized: '.maximized-box',
     header   : '.box-header',
     body     : '.box-body',
     footer   : '.box-footer',
@@ -194,71 +195,27 @@ throw new Error('AdminLTE requires jQuery')
     this._setUpListeners();
   };
 
-  //扩大
-  BoxWidget.prototype.maximize = function () {
-      console.log("这里是最大化功能");
-    var maximizedEvent = $.Event(Event.maximized);
-    var maximizeIcon = this.options.maximizeIcon;
-    var restoreIcon = this.options.restoreIcon;
-
-    $(this.element)
-        .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
-        .children(Selector.tools)
-        .find('.' + maximizeIcon)
-        .removeClass(maximizeIcon)
-        .addClass(restoreIcon);
-
-    $(this.element).children(Selector.body + ', ' + Selector.footer)
-        .slideUp(this.options.animationSpeed, function () {
-            $(this.element).addClass(ClassName.maximized);
-            $(this.element).trigger(maximizedEvent);
-        }.bind(this));
-  };
-
-  //恢复
-  BoxWidget.prototype.restore = function () {
-    console.log("这里是恢复功能");
-
-      var restoredEvent = $.Event(Event.restored);
-      var maximizeIcon = this.options.maximizeIcon;
-      var restoreIcon = this.options.restoreIcon;
-
-      $(this.element).removeClass(ClassName.maximized);
-
-      $(this.element)
-          .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
-          .children(Selector.tools)
-          .find('.' + restoreIcon)
-          .removeClass(restoreIcon)
-          .addClass(maximizeIcon);
-
-      $(this.element).children(Selector.body + ', ' + Selector.footer)
-          .slideDown(this.options.animationSpeed, function () {
-              $(this.element).trigger(restoredEvent);
-          }.bind(this));
-  };
-
   BoxWidget.prototype.toggle = function () {
     var isOpen = !$(this.element).is(Selector.collapsed);
 
     if (isOpen) {
-      this.collapse();
+      this.collapse();   //-
     } else {
-      this.expand();
+      this.expand();     //+
     }
   };
 
   BoxWidget.prototype.toggle2 = function () {
-        var isOpen = !$(this.element).is(Selector.maximized);
+    var isOpen = !$(this.element).is(Selector.maximized);
 
-        if (isOpen) {
-            this.maximize();
-        } else {
-            this.restore();
-        }
-    };
+    if (isOpen) {
+        this.maximize();
+    } else {
+        this.restore();
+    }
+  };
 
-  //加号
+  //expand
   BoxWidget.prototype.expand = function () {
     var expandedEvent = $.Event(Event.expanded);
     var collapseIcon  = this.options.collapseIcon;
@@ -279,7 +236,7 @@ throw new Error('AdminLTE requires jQuery')
       }.bind(this));
   };
 
-  //减号
+  //collapse
   BoxWidget.prototype.collapse = function () {
     var collapsedEvent = $.Event(Event.collapsed);
     var collapseIcon   = this.options.collapseIcon;
@@ -299,6 +256,7 @@ throw new Error('AdminLTE requires jQuery')
       }.bind(this));
   };
 
+  //remove
   BoxWidget.prototype.remove = function () {
     var removedEvent = $.Event(Event.removed);
 
@@ -307,6 +265,69 @@ throw new Error('AdminLTE requires jQuery')
       $(this.element).remove();
     }.bind(this));
   };
+
+  //maximize
+  BoxWidget.prototype.maximize = function () {
+        var maximizedEvent = $.Event(Event.maximized);
+        var maximizeIcon = this.options.maximizeIcon;
+        var restoreIcon = this.options.restoreIcon;
+        var collapseIcon  = this.options.collapseIcon;
+        var removeIcon = this.options.removeIcon;
+
+        var boxtoolsElement =  $(this.element)
+            .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
+            .children(Selector.tools);
+
+        boxtoolsElement.find('.' + maximizeIcon)
+            .removeClass(maximizeIcon)
+            .addClass(restoreIcon);
+
+        var collapseElement = boxtoolsElement.find('.' + collapseIcon).parent();
+        collapseElement.hide();
+        collapseElement.attr("disabled", true);
+
+        var removeElement = boxtoolsElement.find('.' + removeIcon).parent();
+        removeElement.hide();
+        removeElement.attr("disabled", true);
+
+        $(this.element).children(Selector.body + ', ' + Selector.footer)
+            .show(this.options.animationSpeed, function () {
+                $(this.element).addClass(ClassName.maximized);
+                $(this.element).trigger(maximizedEvent);
+            }.bind(this));
+    };
+
+  //restore
+  BoxWidget.prototype.restore = function () {
+        var restoredEvent = $.Event(Event.restored);
+        var maximizeIcon = this.options.maximizeIcon;
+        var restoreIcon = this.options.restoreIcon;
+        var collapseIcon  = this.options.collapseIcon;
+        var removeIcon = this.options.removeIcon;
+
+        $(this.element).removeClass(ClassName.maximized);
+
+        var boxtoolsElement = $(this.element)
+            .children(Selector.header + ', ' + Selector.body + ', ' + Selector.footer)
+            .children(Selector.tools);
+
+        var collapseElement = boxtoolsElement.find('.' + collapseIcon).parent();
+        collapseElement.show();
+        collapseElement.removeAttr("disabled");
+
+        var removeElement = boxtoolsElement.find('.' + removeIcon).parent();
+        removeElement.show();
+        removeElement.removeAttr("disabled");
+
+        boxtoolsElement.find('.' + restoreIcon)
+            .removeClass(restoreIcon)
+            .addClass(maximizeIcon);
+
+        $(this.element).children(Selector.body + ', ' + Selector.footer)
+            .slideDown(this.options.animationSpeed, function () {
+                $(this.element).trigger(restoredEvent);
+            }.bind(this));
+    };
 
   // Private
   BoxWidget.prototype._setUpListeners = function () {
@@ -318,15 +339,15 @@ throw new Error('AdminLTE requires jQuery')
       return false;
     });
 
-    $(this.element).on('click', this.options.maximizeTrigger, function (event) {
-        if (event) event.preventDefault();
-        that.toggle2($(this));
-        return false;
-    });
-
     $(this.element).on('click', this.options.removeTrigger, function (event) {
       if (event) event.preventDefault();
       that.remove($(this));
+      return false;
+    });
+
+    $(this.element).on('click', this.options.maximizeTrigger, function (event) {
+      if (event) event.preventDefault();
+      that.toggle2($(this));
       return false;
     });
   };
