@@ -30,6 +30,7 @@
 5. 增加了eCharts和百度地图的展示；
 6. 增加了BoxWidget.prototype.maximize功能；
 7. 增加了websocket测试实例；
+8. 增加了nprogress;
 
 
 # 安装方法
