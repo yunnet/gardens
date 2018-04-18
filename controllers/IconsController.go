@@ -4,6 +4,11 @@ type IconsController struct {
 	BaseController
 }
 
+func (this *IconsController) Prepare() {
+	this.BaseController.Prepare()
+	this.checkLogin()
+}
+
 func (this *IconsController) Index() {
 	this.Data["pageTitle"] = "图标信息"
 

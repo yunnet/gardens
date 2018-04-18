@@ -53,13 +53,18 @@ func (this *HomeController) Logout() {
 
 func (this *HomeController) DoLogin() {
 	remoteAddr := this.Ctx.Request.RemoteAddr
+	addrs := strings.Split(remoteAddr, "::1")
+	if len(addrs) > 1{
+		remoteAddr = "localhost"
+	}
+
 	username := strings.TrimSpace(this.GetString("UserName"))
 	userpwd := strings.TrimSpace(this.GetString("UserPwd"))
 
 	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil{
 		utils.LogError("LoginTraceAdd error.")
 	}
-	utils.LogInfo(fmt.Sprintf("login:[%s]/[%s] IP:%s", username, userpwd, remoteAddr))
+	utils.LogInfo(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
 
 	if len(username) == 0 || len(userpwd) == 0 {
 		this.jsonResult(enums.JRCodeFailed, "用户名和密码不正确", "")
@@ -83,7 +88,11 @@ func (this *HomeController) DoLogin() {
 
 //采集进度查询
 func (this *HomeController) GetDtuRowForDay() {
-	if data, err := models.GetDtuRowForDayList(); err != nil{
+	before := time.Now().Unix()
+	if data, err := models.GetDtuRowsTodayList(); err != nil{
+		after := time.Now().Unix()
+		utils.LogInfo(fmt.Sprintf("GetDtuRowForDay spend: %d s", after - before))
+
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
@@ -92,7 +101,11 @@ func (this *HomeController) GetDtuRowForDay() {
 
 //查询客户和电表
 func (this *HomeController) GetCustomerForMeter() {
+	before := time.Now().Unix()
 	if data, err := models.GetCustomerForMeter(); err != nil {
+		after := time.Now().Unix()
+		utils.LogInfo(fmt.Sprintf("GetCustomerForMeter spend: %d s", after - before))
+
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
@@ -101,25 +114,41 @@ func (this *HomeController) GetCustomerForMeter() {
 
 //取DTU数量
 func (this *HomeController) GetDtuCount() {
+	before := time.Now().Unix()
 	count := models.EquipmentDtuConfigCount()
+	after := time.Now().Unix()
+	utils.LogInfo(fmt.Sprintf("GetDtuCount spend: %d ns", after - before))
+
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
 //取电表数量
 func (this *HomeController) GetMeterCount() {
+	before := time.Now().Unix()
 	count := models.EquipmentMeterConfigCount()
+	after := time.Now().Unix()
+	utils.LogInfo(fmt.Sprintf("GetMeterCount spend: %d s", after - before))
+
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
 //取今日采集数量
 func (this *HomeController) GetCollectRowsToday() {
+	before := time.Now().Unix()
 	count := models.GetCollectRowsToday()
+	after := time.Now().Unix()
+	utils.LogInfo(fmt.Sprintf("GetCollectRowsToday spend: %d s", after - before))
+
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
 //取月采集数量
 func (this *HomeController) GetCollectCountOfMonth() {
+	before := time.Now().Unix()
 	if data, err := models.GetCollectRowsOfMonth(); err != nil {
+		after := time.Now().Unix()
+		utils.LogInfo(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
+
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)

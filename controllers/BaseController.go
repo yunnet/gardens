@@ -68,7 +68,7 @@ func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
 			}
 			// TestController.Get,:last,xie,:first,asta
 			strs := strings.Split(urlfor, ",")
-			if len(strs) > 0 && strs[0] == (ctrlName+"."+ActName) {
+			if len(strs) > 0 && strs[0] == (ctrlName + "." + ActName) {
 				return true
 			}
 		}
@@ -80,26 +80,26 @@ func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
 //一定要在BaseController.Prepare()后执行
 // 会调用checkLogin
 // 传入的参数为忽略权限控制的Action
-func (c *BaseController) checkAuthor(ignores ...string) {
+func (this *BaseController) checkAuthor(ignores ...string) {
 	//先判断是否登录
-	c.checkLogin()
+	this.checkLogin()
 
 	//如果Action在忽略列表里，则直接通用
 	for _, ignore := range ignores {
-		if ignore == c.actionName {
+		if ignore == this.actionName {
 			return
 		}
 	}
 
-	hasAuthor := c.checkActionAuthor(c.controllerName, c.actionName)
+	hasAuthor := this.checkActionAuthor(this.controllerName, this.actionName)
 	if !hasAuthor {
-		utils.LogDebug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", c.controllerName, c.actionName, c.curUser.Id))
+		utils.LogDebug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", this.controllerName, this.actionName, this.curUser.Id))
 		//如果没有权限
 		if !hasAuthor {
-			if c.Ctx.Input.IsAjax() {
-				c.jsonResult(enums.JRCode401, "无权访问", "")
+			if this.Ctx.Input.IsAjax() {
+				this.jsonResult(enums.JRCode401, "无权访问", "")
 			} else {
-				c.pageError("无权访问")
+				this.pageError("无权访问")
 			}
 		}
 	}
@@ -131,7 +131,7 @@ func (this *BaseController) setBackendUser2Session(userId int) error {
 
 // 设置模板
 // 第一个参数模板，第二个参数为layout
-func (c *BaseController) setTpl(template ...string) {
+func (this *BaseController) setTpl(template ...string) {
 	var tplName string
 	layout := "shared/layout_page.html"
 	switch {
@@ -142,37 +142,37 @@ func (c *BaseController) setTpl(template ...string) {
 		layout = template[1]
 	default:
 		//不要Controller这个10个字母
-		ctrlName := strings.ToLower(c.controllerName[0 : len(c.controllerName)-10])
-		actionName := strings.ToLower(c.actionName)
+		ctrlName := strings.ToLower(this.controllerName[0 : len(this.controllerName)-10])
+		actionName := strings.ToLower(this.actionName)
 		tplName = ctrlName + "/" + actionName + ".html"
 	}
-	c.Layout = layout
-	c.TplName = tplName
+	this.Layout = layout
+	this.TplName = tplName
 }
 
-func (c *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
+func (this *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
 	r := &models.JsonResult{code, msg, obj}
-	c.Data["json"] = r
-	c.ServeJSON()
-	c.StopRun()
+	this.Data["json"] = r
+	this.ServeJSON()
+	this.StopRun()
 }
 
 // 重定向
-func (c *BaseController) redirect(url string) {
-	c.Redirect(url, 302)
-	c.StopRun()
+func (this *BaseController) redirect(url string) {
+	this.Redirect(url, 302)
+	this.StopRun()
 }
 
 // 重定向 去错误页
-func (c *BaseController) pageError(msg string) {
-	errorurl := c.URLFor("HomeController.Error") + "/" + msg
-	c.Redirect(errorurl, 302)
-	c.StopRun()
+func (this *BaseController) pageError(msg string) {
+	errorurl := this.URLFor("HomeController.Error") + "/" + msg
+	this.Redirect(errorurl, 302)
+	this.StopRun()
 }
 
 // 重定向 去登录页
-func (c *BaseController) pageLogin() {
-	url := c.URLFor("HomeController.Login")
-	c.Redirect(url, 302)
-	c.StopRun()
+func (this *BaseController) pageLogin() {
+	url := this.URLFor("HomeController.Login")
+	this.Redirect(url, 302)
+	this.StopRun()
 }
