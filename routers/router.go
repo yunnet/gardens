@@ -7,6 +7,11 @@ import (
 )
 
 func init() {
+	//websocket
+	beego.Router("/websocketwidget/index", &controllers.WebsocketWidgetController{}, "*:Index")
+	beego.Router("/websocketwidget/ws", &controllers.WebsocketWidgetController{}, "Get:Get")
+
+
 	//logintrace
 	beego.Router("/logintrace/index", &controllers.LoginTraceController{}, "*:Index")
 	beego.Router("/logintrace/datagrid", &controllers.LoginTraceController{}, "Get,Post:DataGrid")

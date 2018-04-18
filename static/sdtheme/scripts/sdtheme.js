@@ -45,7 +45,7 @@ var sdtheme = function () {
             "h+": this.getHours(),
             "m+": this.getMinutes(),
             "s+": this.getSeconds(),
-            "q+": Math.floor((this.getMonth() + 3) / 3),  //quarter
+            "q+": Math.floor((this.getMonth() + 3) / 3),  //季度
             "S": this.getMilliseconds()
         };
 

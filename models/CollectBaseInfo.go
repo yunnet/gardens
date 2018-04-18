@@ -134,19 +134,14 @@ func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) [] *CollectBaseI
 }
 
 //采集进度查询
-func GetDtuRowForDayList() ([] *DtuRowOfDay, error) {
+func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
 	data := make([] *DtuRowOfDay, 0)
 
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	//sql := "call p_dtu_day_rowtotal('collect_base_info', '')"
-	sql := fmt.Sprintf(`SELECT dtu_no, 
-                                        meter_address, 
-                                        max(collect_time) as collect_time, 
-                                        count(1) as rows 
-                                   FROM collect_base_info_%s 
-                               GROUP BY dtu_no, meter_address
-                               `, formatTodayUnderline())
+	sql := "call p_dtu_day_row_today()"
+	//sql := fmt.Sprintf(`SELECT dtu_no, meter_address, max(collect_time) as collect_time, count(1) as rows FROM collect_base_info_%s GROUP BY dtu_no, meter_address`, formatTodayUnderline())
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err

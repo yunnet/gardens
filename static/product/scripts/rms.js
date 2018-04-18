@@ -101,7 +101,6 @@ var rms = function () {
         });
     }
 
-
     //菜单初化
     function pageSidebarInit(options) {
         var url = options.url;
@@ -305,6 +304,8 @@ jQuery(document).ready(function () {
 
 // NProgress
 if (typeof NProgress != 'undefined') {
+    NProgress.configure({showSpinner: false, easing: 'ease', speed: 500});
+
     $(document).ready(function () {
         NProgress.start();
     });
