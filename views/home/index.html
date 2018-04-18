@@ -23,8 +23,8 @@
                 <a href="../equipmentdtuconfig/index" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
-
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-green">
@@ -38,8 +38,8 @@
                 <a href="../equipmentmeterconfig/index" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
-
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-purple">
@@ -53,8 +53,8 @@
                 <a href="../collectbaseinfo/index" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
-
         <!-- ./col -->
+
         <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-blue-active">
@@ -68,27 +68,52 @@
                 <a href="#" class="small-box-footer">更多信息 <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
+        <!-- ./col -->
     </div>
 
     <!-- Main row -->
     <div class="row">
         <section class="col-lg-12 connectedSortable">
             <!-- today collect -->
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <h3 class="box-title">今日采集
-                        <small>设备在线数: <span id="dtuOnline">0</span></small>
-                    </h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs pull-right">
+                    <li class=""><a href="#tab_1-1" data-toggle="tab" aria-expanded="false">离线</a></li>
+                    <li class="active"><a href="#tab_2-2" data-toggle="tab" aria-expanded="true">在线</a></li>
+                    <li class="pull-left header">
+                        <i class="fa fa-bar-chart-o"></i>
+                        今日设备
+                        <small>
+                            <span id="dtuState"></span>
+                        </small>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane" id="tab_1-1">
+                        <div class="box-body table-responsive no-padding">
+                            <table id="offlineTable" class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px">序号</th>
+                                        <th>DTU编号</th>
+                                        <th>电表地址</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class="box-body">
-                    <div id="dtuRowToday">
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane active" id="tab_2-2">
+                        <div id="dtuRowToday">
+                        </div>
                     </div>
+                    <!-- /.tab-pane -->
                 </div>
+                <!-- /.tab-content -->
+
             </div>
         </section>
 
@@ -97,7 +122,7 @@
             <div class="box box-success">
                 <div class="box-header with-border">
                     <i class="fa fa-sitemap"></i>
-                    <h3 class="box-title">客户面板
+                    <h3 class="box-title">电表面板
                         <small>客户所有的电表信息</small>
                     </h3>
                     <div class="box-tools pull-right">
@@ -117,7 +142,7 @@
             <!-- 地图 & BOX PANE -->
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <i class="fa fa-map"></i>
+                    <i class="fa fa-map-marker"></i>
                     <h3 class="box-title">客户分布
                         <small>市区客户分布</small>
                     </h3>

@@ -59,8 +59,8 @@
 
         echartsMapInit();
 
-        $('#tree-expand').click(function () {
-            alert("expand");
+        $('.tree-expand').click(function () {
+            // d3tree.update()
         })
     }
 
@@ -365,10 +365,10 @@
 
             // define the baseSvg, attaching a class for styling and the zoomListener
             var baseSvg = d3.select("#tree-container").append("svg")
-                    .attr("width", viewerWidth)
-                    .attr("height", viewerHeight)
-                    .attr("class", "overlay")
-                    .call(zoomListener);
+                            .attr("width", viewerWidth)
+                            .attr("height", viewerHeight)
+                            .attr("class", "overlay")
+                            .call(zoomListener);
 
             var overCircle = function(d) {
                 selectedNode = d;
@@ -639,7 +639,7 @@
                 $('#dtuRowToday').getNiceScroll().resize();
             }
         });
-        $('.connectedSortable .box-header, .connectedSortable .nav-tabs-custom').css('cursor', 'move');
+        $('.connectedSortable .box-header, .connectedSortable .nav-tabs').css('cursor', 'move');
     }
 
     function dtuCount() {
@@ -679,34 +679,50 @@
         var url = '{{ urlfor "HomeController.GetDtuRowForDay"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
-                var html = [];
-                var maxValue = 0;
-                var dtuOnline = 0;
+                var html = [], html2 = [];
+                var maxValue = 0, dtuOnline = 0, dtuOffline = 0;
+                var dtuNormal = 0, dtuAbnormal = 0;
+
                 $(re.obj).each(function (i, row) {
-                    html.push('<div class="progress-group">');
-                    html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-                    html.push('<i class="fa fa-clock-o"></i>');
-                    html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
-                    html.push('<span class="progress-number"><b>' + row.Rows + '</b>/288</span>');
-                    html.push('<div class="progress sm">');
-                    if(maxValue < row.Rows)
-                        maxValue = row.Rows;
-                    var rate = Math.round((row.Rows / 288) * 10000) / 100;
+                    if(row.Rows == 0){
+                        dtuOffline++;
+                        html2.push('<tr>');
+                        html2.push(' <td>' + dtuOffline  + '</td>  <td>' + row.DTU_no  + '</td> <td>' + row.MeterAddress  + '</td>');
+                        html2.push('</tr>');
+                    }else{
+                        dtuOnline++;
 
-                    if(row.Rows  < (maxValue * 0.60 )) {
-                        html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
-                    } else if(row.Rows < (maxValue * 0.95 )){
-                        html.push('<div class="progress-bar progress-bar-yellow" style="width:' + rate + '%"></div>');
-                    } else {
-                        html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
+                        html.push('<div class="progress-group">');
+                        html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+                        html.push('<i class="fa fa-clock-o"></i>');
+                        html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
+
+                        html.push('<span class="progress-number"><b>' + row.Rows + '</b>/288</span>');
+                        html.push('<div class="progress sm">');
+                        if(maxValue < row.Rows)
+                            maxValue = row.Rows;
+                        var rate = Math.round((row.Rows / 288) * 10000) / 100;
+
+                        if(row.Rows  < (maxValue * 0.60 )) {
+                            html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
+                            dtuAbnormal++;
+                        } else if(row.Rows < (maxValue * 0.95 )){
+                            html.push('<div class="progress-bar progress-bar-yellow" style="width:' + rate + '%"></div>');
+                            dtuAbnormal++;
+                        } else {
+                            html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
+                            dtuNormal++;
+                        }
+                        html.push('</div>');
                     }
-                    html.push('</div>');
-
-                    dtuOnline = i;
                 });
 
-                $("#dtuOnline").html(dtuOnline);
+                var dtuState = '状态(在线:' + dtuOnline + ' 离线:' + dtuOffline + ') 数据(正常:' + dtuNormal + ' 异常:' + dtuAbnormal + ')';
+                $("#dtuState").html(dtuState);
+
                 $("#dtuRowToday").html(html.join(''));
+                $('#offlineTable').find("tbody").html(html2.join());
 
                 $('#dtuRowToday').height(250);
                 $('#dtuRowToday').niceScroll({
