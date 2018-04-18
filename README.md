@@ -26,10 +26,10 @@
 1. 增加了font-awesome 图标选择的功能；
 2. 增加了font-awesome图标显示页面；
 3. 增加了d3.js展示客户信息；
-4. 增加了用户登陆信息；
+4. 增加了用户登陆信息日志显示；
 5. 增加了eCharts和百度地图的展示；
 6. 增加了BoxWidget.prototype.maximize功能；
-7.
+7. 增加了websocket测试实例；
 
 
 # 安装方法
@@ -54,4 +54,5 @@ bee run
 
 # 系统截图
 
-![这里写图片描述](http://img.blog.csdn.net/20171219211607394?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGh0emJqMTI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![登陆页面](https://github.com/yunnet/gdkxdl/blob/master/doc/image/login.png)
+![仪表板](https://github.com/yunnet/gdkxdl/blob/master/doc/image/dashboard.png)
