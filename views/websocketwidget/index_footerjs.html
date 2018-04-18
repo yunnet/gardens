@@ -1,0 +1,62 @@
+<script>
+    var $ul = $('#msg-list');
+    var ws;
+
+    //初始化加载
+    $(function () {
+        pageInit();
+    });
+
+    //初始化页面
+    function pageInit() {
+        var cnt = 0;
+        $('#btnstart').click(function () {
+            var url = 'ws://' + window.location.host + "{{urlfor "WebsocketWidgetController.Get"}}";
+            ws = new WebSocket(url);
+            ws.onopen = function (ev) {
+                writeln("ws is open.(" + url + ")");
+            };
+            ws.onclose = function (ev) {
+                writeln("ws is closed.");
+            };
+            ws.onmessage = function (ev) {
+                cnt++;
+                if(cnt > 30){
+                    cnt = 0;
+                    $ul.find('li').remove();
+                }
+
+                times = datetimetostr(new Date());
+                writeln(times + " -> " + ev.data);
+
+            };
+            ws.onerror = function (ev) {
+                writeln("error: " + ev.data);
+            }
+        });
+
+        $('#btnstop').click(function () {
+            if(!ws){
+                return false;
+            }
+            ws.close();
+            return false;
+        });
+
+        $('#btnsend').click(function () {
+            message  = $('#websocketForm input[name="message"]').val();
+            times = datetimetostr(new Date());
+            writeln(times + " <- " + message);
+            ws.send(message);
+            return false;
+        });
+    }
+
+    function writeln(data) {
+        $('<li>').text(data).appendTo($ul);
+    }
+
+    function datetimetostr(value) {
+        return new Date(value).format("yyyy-MM-dd hh:mm:ss S");
+    }
+</script>
