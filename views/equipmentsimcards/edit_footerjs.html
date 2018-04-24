@@ -22,13 +22,13 @@
         $thisForm.sdvalidate({
             rules: {
                 Sim_no: {
-                    maxlength: 12,
+                    maxlength: 13,
                     required: true
                 }
             },
             messages: {},
             submitHandler: function (form) {
-                var url = '{{ urlfor "EquipmentSimCardsController.Edit"}}'
+                var url = '{{ urlfor "EquipmentSimCardsController.Edit"}}';
                 var data = $thisForm.serialize();
                 $.sdpost(url, data, function (re) {
                     if (re.code === 0) {

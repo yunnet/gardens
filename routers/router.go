@@ -158,6 +158,7 @@ func init() {
 	beego.Router("/home/dturowforday", &controllers.HomeController{}, "*:GetDtuRowForDay")
 	beego.Router("/home/collectrowstoday", &controllers.HomeController{}, "*:GetCollectRowsToday")
 	beego.Router("/home/collectcountofmonth", &controllers.HomeController{}, "*:GetCollectCountOfMonth")
+	beego.Router("/home/customers", &controllers.HomeController{}, "*:GetCustomers")
 
 	beego.Router("/home/404", &controllers.HomeController{}, "*:Page404")
 	beego.Router("/home/error/?:error", &controllers.HomeController{}, "*:Error")

@@ -90,7 +90,25 @@ func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBase
 	data := make([] *CollectBaseInfo, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-	sql := fmt.Sprintf(`SELECT collect_time, dtu_no, meter_address, 
+
+	var total int64
+	sql := fmt.Sprintf(`SELECT count(1) as rows		 
+		FROM collect_base_info 
+       where collect_time >= '%s' and collect_time <= '%s'
+         and dtu_no like '%s%%'
+         and meter_address = %s
+       `,
+		beginTime,
+		endTime,
+		params.DTU_no,
+		params.MeterAddress,
+	)
+	err := o.Raw(sql).QueryRow(&total)
+	if err != nil {
+		return nil, 0
+	}
+
+	sql2 := fmt.Sprintf(`SELECT collect_time, dtu_no, meter_address, 
              a_electricity, b_electricity, c_electricity, 
 			 a_power_factor, b_power_factor, c_power_factor,
 			 total_power_factor, total_p_at_ee, total_r_at_ee, total_ap_a_ee, total_ap_reat_ee,
@@ -111,14 +129,9 @@ func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBase
 		params.DTU_no,
 		params.MeterAddress,
 	)
-	total, err := o.Raw(sql).QueryRows(&data)
-	if err != nil {
-		return nil, 0
-	}
+	sql2 = sql2 + fmt.Sprintf(" LIMIT %d, %d", params.Offset, params.Limit)
 
-	sql = sql + fmt.Sprintf(" LIMIT %d, %d", params.Offset, params.Limit)
-
-	_, err = o.Raw(sql).QueryRows(&data)
+	_, err = o.Raw(sql2).QueryRows(&data)
 	if err != nil {
 		return nil, 0
 	}
@@ -126,7 +139,7 @@ func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBase
 }
 
 func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) [] *CollectBaseInfo {
-	params.Limit = -1
+	params.Limit = 65535
 	params.Sort = "collect_time"
 	params.Order = "asc"
 	data, _ := CollectBaseInfoPageList(params)

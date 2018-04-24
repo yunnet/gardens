@@ -40,6 +40,10 @@ func (this *CollectBaseInfoController) DataGrid() {
 
 func (this *CollectBaseInfoController) DataList() {
 	var params = models.CollectBaseInfoQueryParam{}
+	params.CollectTime = this.Input().Get("CollectTime")
+	params.DTU_no = this.Input().Get("DTU_no")
+	params.MeterAddress = this.Input().Get("MeterAddress")
+
 	data := models.CollectBaseInfoDataList(&params)
 	this.jsonResult(enums.JRCodeSucc, "", data)
 }

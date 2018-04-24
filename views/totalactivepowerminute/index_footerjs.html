@@ -58,12 +58,16 @@
         //从cookie加载查询条件，传入参数为form id
         sdtheme.loadSearchText('searchForm');
 
-        $('.searchForm input[name="DTU_no"]').val('900000000001');
+        if(typeof($("#DTU_no").val()) == 'undefined'){
+            $('.searchForm input[name="DTU_no"]').val('900000000001');
+        }
 
         layui.use('laydate', function () {
             var laydate = layui.laydate;
             laydate.render({
-                elem: '#CollectTime'
+                elem: '#CollectTime',
+                value: new Date().format("yyyy-MM-dd"),
+                max: 0
             });
         });
     }

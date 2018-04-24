@@ -28,13 +28,9 @@
 
 <script src="/static/plugins/chart.js/Chart.js"></script>
 
-
-
 <script>
-    /* Morris.js Charts */
     var line;
     var d3tree;
-    var customerData;
 
     $(function () {
         pageInit();
@@ -52,6 +48,8 @@
         dtuCount();
         meterCount();
         collectRowsToday();
+        getCustomers();
+
         monthCollectorInit();
         collectCountOfMonth();
 
@@ -642,6 +640,7 @@
         $('.connectedSortable .box-header, .connectedSortable .nav-tabs').css('cursor', 'move');
     }
 
+    //网络设备数量
     function dtuCount() {
         var url = '{{ urlfor "HomeController.GetDtuCount"}}';
         $.sdpost(url, {}, function (re) {
@@ -653,6 +652,7 @@
         });
     }
 
+    //电表数量
     function meterCount() {
         var url = '{{ urlfor "HomeController.GetMeterCount"}}';
         $.sdpost(url, {}, function (re) {
@@ -664,6 +664,7 @@
         });
     }
 
+    //今日采集数量
     function collectRowsToday() {
         var url = '{{ urlfor "HomeController.GetCollectRowsToday"}}';
         $.sdpost(url, {}, function (re) {
@@ -675,6 +676,19 @@
         });
     }
 
+    function getCustomers() {
+        var url = '{{ urlfor "HomeController.GetCustomers"}}';
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                $("#customers").html(re.obj);
+            } else {
+                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+
+    //今日设备状态
     function dtuRowTodayInit() {
         var url = '{{ urlfor "HomeController.GetDtuRowForDay"}}';
         $.sdpost(url, {}, function (re) {

@@ -37,7 +37,8 @@ func (this *HomeController) Error() {
 }
 
 func (this *HomeController) Login() {
-	this.Data["pageTitle"] = beego.AppConfig.String("site.name") + " - 登陆"
+	this.Data["pageTitle"] = beego.AppConfig.String("site.app") + beego.AppConfig.String("site.name") + " - 登陆"
+	this.Data["siteVersion"] = beego.AppConfig.String("site.version")
 
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["headcssjs"] = "home/login_headcssjs.html"
@@ -129,6 +130,12 @@ func (this *HomeController) GetMeterCount() {
 	after := time.Now().Unix()
 	utils.LogInfo(fmt.Sprintf("GetMeterCount spend: %d s", after - before))
 
+	this.jsonResult(enums.JRCodeSucc, "", count)
+}
+
+//获取客户数量
+func (this *HomeController)GetCustomers()  {
+	count := models.GetCustomers()
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 

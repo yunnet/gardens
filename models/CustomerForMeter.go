@@ -94,3 +94,15 @@ func GetCustomerForMeter()(string, error){
 	jsondata, _ := json.Marshal(master)
 	return string(jsondata), nil
 }
+
+func GetCustomers()int {
+	var rows int
+	o := orm.NewOrm()
+
+	sql := "SELECT count(1) as rows FROM (SELECT DISTINCT customer_id FROM v_customer_for_meter) as customer"
+	err := o.Raw(sql).QueryRow(&rows)
+	if err != nil {
+		return 0
+	}
+	return rows
+}

@@ -1,7 +1,7 @@
 /**
  * @author: Dennis Hernández
  * @webSite: http://djhvscf.github.io/Blog
- * @version: v1.2.3
+ * @version: v1.2.2
  *
  * @update zhixin wen <wenzhixin2010@gmail.com>
  */
@@ -64,22 +64,24 @@
         }
 
         cookieName = that.options.cookieIdTable + '.' + cookieName;
-
+        //20170921 lht fix :the sourse code didn't use the option of cookieExpire
+        var cookieExpire = calculateExpiration(that.options.cookieExpire);
         switch(that.options.cookieStorage) {
             case 'cookieStorage':
                 document.cookie = [
-                    cookieName, '=', cookieValue,
-                    '; expires=' + calculateExpiration(that.options.cookieExpire),
-                    that.options.cookiePath ? '; path=' + that.options.cookiePath : '',
-                    that.options.cookieDomain ? '; domain=' + that.options.cookieDomain : '',
-                    that.options.cookieSecure ? '; secure' : ''
-                ].join('');
+                        cookieName, '=', cookieValue,
+                        '; expires=' + cookieExpire,
+                        that.options.cookiePath ? '; path=' + that.options.cookiePath : '',
+                        that.options.cookieDomain ? '; domain=' + that.options.cookieDomain : '',
+                        that.options.cookieSecure ? '; secure' : ''
+                    ].join('');
+            break;
             case 'localStorage':
                 localStorage.setItem(cookieName, cookieValue);
-                break;
+            break;
             case 'sessionStorage':
                 sessionStorage.setItem(cookieName, cookieValue);
-                break;
+            break;
             default:
                 return false;
         }
@@ -100,9 +102,7 @@
 
         switch(that.options.cookieStorage) {
             case 'cookieStorage':
-                var value = '; ' + document.cookie;
-                var parts = value.split('; ' + cookieName + '=');
-                return parts.length === 2 ? parts.pop().split(';').shift() : null;
+                return decodeURIComponent(document.cookie.replace(new RegExp('(?:(?:^|.*;)\\s*' + encodeURIComponent(cookieName).replace(/[\-\.\+\*]/g, '\\$&') + '\\s*\\=\\s*([^;]*).*$)|^.*$'), '$1')) || null;
             case 'localStorage':
                 return localStorage.getItem(cookieName);
             case 'sessionStorage':
@@ -114,22 +114,22 @@
 
     var deleteCookie = function (that, tableName, cookieName) {
         cookieName = tableName + '.' + cookieName;
-
+        
         switch(that.options.cookieStorage) {
             case 'cookieStorage':
                 document.cookie = [
-                    encodeURIComponent(cookieName), '=',
-                    '; expires=Thu, 01 Jan 1970 00:00:00 GMT',
-                    that.options.cookiePath ? '; path=' + that.options.cookiePath : '',
-                    that.options.cookieDomain ? '; domain=' + that.options.cookieDomain : '',
-                ].join('');
+                        encodeURIComponent(cookieName), '=',
+                        '; expires=Thu, 01 Jan 1970 00:00:00 GMT',
+                        that.options.cookiePath ? '; path=' + that.options.cookiePath : '',
+                        that.options.cookieDomain ? '; domain=' + that.options.cookieDomain : '',
+                    ].join('');
                 break;
             case 'localStorage':
                 localStorage.removeItem(cookieName);
-                break;
+            break;
             case 'sessionStorage':
                 sessionStorage.removeItem(cookieName);
-                break;
+            break;
 
         }
         return true;
@@ -137,8 +137,9 @@
 
     var calculateExpiration = function(cookieExpire) {
         var time = cookieExpire.replace(/[0-9]*/, ''); //s,mi,h,d,m,y
+        //cookieExpire = cookieExpire.replace(/[A-Za-z]{1,2}}/, ''); //number
+        //20170921 lht fix : the reg is wrong,so is couldn't get the number
         cookieExpire = cookieExpire.replace(/[A-Za-z]{1,2}/, ''); //number
-
         switch (time.toLowerCase()) {
             case 's':
                 cookieExpire = +cookieExpire;
@@ -162,12 +163,8 @@
                 cookieExpire = undefined;
                 break;
         }
-        if (!cookieExpire) {
-            return '';
-        }
-        var d = new Date();
-        d.setTime(d.getTime() + cookieExpire * 1000);
-        return d.toGMTString();
+
+        return cookieExpire === undefined ? '' : '; max-age=' + cookieExpire;
     };
 
     var initCookieFilters = function (bootstrapTable) {
@@ -175,6 +172,7 @@
             var parsedCookieFilters = JSON.parse(getCookie(bootstrapTable, bootstrapTable.options.cookieIdTable, cookieIds.filterControl));
 
             if (!bootstrapTable.options.filterControlValuesLoaded && parsedCookieFilters) {
+                bootstrapTable.options.filterControlValuesLoaded = true;
 
                 var cachedFilters = {},
                     header = getCurrentHeader(bootstrapTable),
@@ -182,10 +180,8 @@
 
                     applyCookieFilters = function (element, filteredCookies) {
                         $(filteredCookies).each(function (i, cookie) {
-                            if (cookie.text !== '') {
-                                $(element).val(cookie.text);
-                                cachedFilters[cookie.field] = cookie.text;
-                            }
+                            $(element).val(cookie.text);
+                            cachedFilters[cookie.field] = cookie.text;
                         });
                     };
 
@@ -199,15 +195,13 @@
                 });
 
                 bootstrapTable.initColumnSearch(cachedFilters);
-                bootstrapTable.options.filterControlValuesLoaded = true;
-                bootstrapTable.initServer();
             }
         }, 250);
     };
 
     $.extend($.fn.bootstrapTable.defaults, {
         cookie: false,
-        cookieExpire: '2h',
+        cookieExpire: '1d',
         cookiePath: null,
         cookieDomain: null,
         cookieSecure: null,
@@ -238,21 +232,25 @@
         _initServer = BootstrapTable.prototype.initServer,
         _onSort = BootstrapTable.prototype.onSort,
         _onPageNumber = BootstrapTable.prototype.onPageNumber,
+        _onPageGo = BootstrapTable.prototype.onPageGo, //20171016 lht 扩展了分页导航下拉时需要
         _onPageListChange = BootstrapTable.prototype.onPageListChange,
+        _onPageFirst = BootstrapTable.prototype.onPageFirst,
         _onPagePre = BootstrapTable.prototype.onPagePre,
         _onPageNext = BootstrapTable.prototype.onPageNext,
+        _onPageLast = BootstrapTable.prototype.onPageLast,
         _toggleColumn = BootstrapTable.prototype.toggleColumn,
         _selectPage = BootstrapTable.prototype.selectPage,
         _onSearch = BootstrapTable.prototype.onSearch;
 
     BootstrapTable.prototype.init = function () {
+        var timeoutId = 0;
         this.options.filterControls = [];
         this.options.filterControlValuesLoaded = false;
 
         this.options.cookiesEnabled = typeof this.options.cookiesEnabled === 'string' ?
             this.options.cookiesEnabled.replace('[', '').replace(']', '')
                 .replace(/ /g, '').toLowerCase().split(',') :
-            this.options.cookiesEnabled;
+                this.options.cookiesEnabled;
 
         if (this.options.filterControl) {
             var that = this;
@@ -280,12 +278,34 @@
     };
 
     BootstrapTable.prototype.initServer = function () {
-        var bootstrapTable = this;
-        if (bootstrapTable.options.cookie && bootstrapTable.options.filterControl && !bootstrapTable.options.filterControlValuesLoaded) {
-            var cookie = JSON.parse(getCookie(bootstrapTable, bootstrapTable.options.cookieIdTable, cookieIds.filterControl));
-            if (cookie)
-                return;
-        }
+        var bootstrapTable = this,
+            selectsWithoutDefaults = [],
+
+            columnHasSelectControl = function (column) {
+                return column.filterControl && column.filterControl === 'select';
+            },
+
+            columnHasDefaultSelectValues = function (column) {
+                return column.filterData && column.filterData !== 'column';
+            },
+
+            cookiesPresent = function() {
+                var cookie = JSON.parse(getCookie(bootstrapTable, bootstrapTable.options.cookieIdTable, cookieIds.filterControl));
+                return bootstrapTable.options.cookie && cookie;
+            };
+
+        selectsWithoutDefaults = $.grep(bootstrapTable.columns, function(column) {
+            return columnHasSelectControl(column) && !columnHasDefaultSelectValues(column);
+        });
+
+        // reset variable to original initServer function, so that future calls to initServer
+        // use the original function from this point on.
+        BootstrapTable.prototype.initServer = _initServer;
+
+        // early return if we don't need to populate any select values with cookie values
+        if (this.options.filterControl && cookiesPresent() && selectsWithoutDefaults.length === 0) {
+            return;
+        }       // call BootstrapTable.prototype.initServer
         _initServer.apply(this, Array.prototype.slice.apply(arguments));
     };
 
@@ -299,11 +319,12 @@
         if (!this.options.cookie) {
             return;
         }
-
+        //20170921 lht  if cookieIdTable === ''
+        if(this.options.cookieIdTable === ''){
+            this.options.cookieIdTable = this.$el.prop('id');
+        }
         if ((this.options.cookieIdTable === '') || (this.options.cookieExpire === '') || (!cookieEnabled())) {
-            console.error("Configuration error. Please review the cookieIdTable, cookieExpire properties, if those properties are ok, then this browser does not support the cookies");
-            this.options.cookie = false; //Make sure that the cookie extension is disabled
-            return;
+            throw new Error("Configuration error. Please review the cookieIdTable, cookieExpire properties, if those properties are ok, then this browser does not support the cookies");
         }
 
         var sortOrderCookie = getCookie(this, this.options.cookieIdTable, cookieIds.sortOrder),
@@ -340,26 +361,38 @@
     BootstrapTable.prototype.onPageNumber = function () {
         _onPageNumber.apply(this, Array.prototype.slice.apply(arguments));
         setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
-        return false;
+    };
+    //20171016 lht 扩展了分页导航下拉时需要
+    BootstrapTable.prototype.onPageGo = function () {
+        _onPageGo.apply(this, Array.prototype.slice.apply(arguments));
+        setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
     };
 
     BootstrapTable.prototype.onPageListChange = function () {
         _onPageListChange.apply(this, Array.prototype.slice.apply(arguments));
         setCookie(this, cookieIds.pageList, this.options.pageSize);
+        //20170921 lht fix ,the max pageNumber will change when onPageListChange,pageNumber in the cookie must be update too
         setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
-        return false;
+    };
+
+    BootstrapTable.prototype.onPageFirst = function () {
+        _onPageFirst.apply(this, Array.prototype.slice.apply(arguments));
+        setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
     };
 
     BootstrapTable.prototype.onPagePre = function () {
         _onPagePre.apply(this, Array.prototype.slice.apply(arguments));
         setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
-        return false;
     };
 
     BootstrapTable.prototype.onPageNext = function () {
         _onPageNext.apply(this, Array.prototype.slice.apply(arguments));
         setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
-        return false;
+    };
+
+    BootstrapTable.prototype.onPageLast = function () {
+        _onPageLast.apply(this, Array.prototype.slice.apply(arguments));
+        setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
     };
 
     BootstrapTable.prototype.toggleColumn = function () {
@@ -386,9 +419,8 @@
         _onSearch.apply(this, target);
 
         if ($(target[0].currentTarget).parent().hasClass('search')) {
-            setCookie(this, cookieIds.searchText, this.searchText);
+          setCookie(this, cookieIds.searchText, this.searchText);
         }
-        setCookie(this, cookieIds.pageNumber, this.options.pageNumber);
     };
 
     BootstrapTable.prototype.getCookies = function () {

@@ -1,7 +1,9 @@
 <div class="login-box">
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <h3 class="login-box-msg">{{.siteName}}</h3>
+        <h3 class="login-box-msg">{{.siteApp}} - {{.siteName}}</h3>
+        <p class="login-box-msg"> version: {{.siteVersion}}</p>
+        <div class="clearfix"></div>
 
         <form id="thisForm">
             <div class="form-group has-feedback">
@@ -43,3 +45,4 @@
     <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
+

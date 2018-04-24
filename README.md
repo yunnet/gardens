@@ -31,6 +31,8 @@
 6. 增加了BoxWidget.prototype.maximize功能；
 7. 增加了websocket测试实例；
 8. 增加了nprogress;
+9. 增加了bootstrapTable控件表头合并列显示方式；
+10. 修改dashborad中增加connectedSortable可移动box；
 
 
 # 安装方法

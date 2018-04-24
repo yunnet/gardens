@@ -22,6 +22,7 @@ func (this *BaseController) Prepare() {
 	//附值
 	this.controllerName, this.actionName = this.GetControllerAndAction()
 
+	this.Data["siteApp"] = beego.AppConfig.String("site.app")
 	this.Data["siteName"] = beego.AppConfig.String("site.name")
 	//从Session里获取数据 设置用户信息
 	this.adapterUserInfo()
