@@ -20,66 +20,82 @@
 <!-- nicescroll -->
 <script src="/static/plugins/jquery.nicescroll/jquery.nicescroll.min.js"></script>
 
-<script src="/static/plugins/raphael/raphael.min.js"></script>
-<script src="/static/plugins/morris.js/morris.min.js"></script>
-
 <script src="/static/plugins/skycons/skycons.js"></script>
 <script src="/static/plugins/jquery-knob/js/jquery.knob.js"></script>
 
 <script src="/static/plugins/chart.js/Chart.js"></script>
 
+<script type="text/javascript" src="/static/plugins/echarts/echarts.min.js"></script>
+<script src="/static/plugins/echarts/theme/macarons.js"></script>
+<!-- 引入百度地图扩展 -->
+<script src="/static/plugins/echarts/extension/bmap/bmap.min.js"></script>
+
 <script>
-    var line;
     var d3tree;
+    var collectCountOfMonthChart = echarts.init(document.getElementById('collectCountOfMonth'));
+    var overviewTodayChart = echarts.init(document.getElementById('overviewTodayChart'), 'macarons');
+    var myChart = echarts.init(document.getElementById('world-map-gdp'));
 
     $(function () {
         pageInit();
     });
 
     function pageInit() {
-        moveContainer();
-        datepickerInit();
-        skyconsInit();
+        loadMoveContainer();
+        loadDatepicker();
+        loadSkycons();
 
-        treeInit();
+        var curdate = new Date();
+        loadOverviewToday(curdate);
 
-        dtuRowTodayInit();
+        loadTree();
 
-        dtuCount();
-        meterCount();
-        collectRowsToday();
-        getCustomers();
+        loadDtuRowToday();
 
-        monthCollectorInit();
-        collectCountOfMonth();
+        loadDtuCount();
+        loadMeterCount();
+        loadCollectRowsToday();
+        loadCustomers();
 
-        pieChartInit();
+        loadMonthCollector();
+        loadCollectCountOfMonth();
 
-        echartsMapInit();
+        loadEchartsMap();
 
-        $('.tree-expand').click(function () {
-            // d3tree.update()
-        })
+        loadOverviewChoice();
+
+        $(window).resize(function () {
+            collectCountOfMonthChart.resize();
+        });
     }
 
-    function echartsMapInit() {
-        var myChart = echarts.init(document.getElementById('world-map-gdp'));
-
+    //加载地图
+    function loadEchartsMap() {
         var data = [
-            {name: '太古汇', value: 152},
-            {name: '执行中学', value: 153},
-            {name: '琶洲国际会展中心', value: 300},
-            {name: '广州绿地中央广场', value: 250},
-            {name: '华南汽车贸易城', value: 169},
-            {name: '广州美术学院', value: 279}
+            {name: '可信电力', value: 0},
+            {name: '东方国际集装箱（广州）有限公司', value: 7},
+            {name: '中水珠江', value: 4},
+            {name: '华南国际名车中心', value: 27},
+            {name: '南华工商学院清远校区', value: 2},
+            {name: '南悦花苑', value: 5},
+            {name: '广州合诚实业有限公司', value: 24},
+            {name: '广州国际采购中心', value: 13},
+            {name: '萝岗绿地广场', value: 20},
+            {name: '中洲中心', value: 5},
+            {name: '优宝科技园', value: 1}
         ];
         var geoCoordMap = {
-            '太古汇':[113.338642,23.139578],
-            '执行中学':[113.306168,23.116248],
-            '琶洲国际会展中心':[113.368753,23.103172],
-            '广州绿地中央广场':[113.437339,23.170597],
-            '华南汽车贸易城':[113.321354,23.079257],
-            '广州美术学院':[113.28493,23.099511]
+            '可信电力':[113.350545,23.123564],
+            '东方国际集装箱（广州）有限公司':[113.578354,22.65429],
+            '中水珠江':[113.338312,23.152797],
+            '华南国际名车中心':[113.321635,23.079626],
+            '南华工商学院清远校区':[113.099542,23.724371],
+            '南悦花苑':[113.265005,23.218402],
+            '广州合诚实业有限公司':[113.551707,23.148001],
+            '广州国际采购中心':[113.377393,23.105734],
+            '萝岗绿地广场':[113.437901,23.170523],
+            '中洲中心':[113.376268,23.103193],
+            '优宝科技园':[113.446613,23.186369]
         };
 
         var convertData = function (data) {
@@ -98,61 +114,29 @@
 
         var option = {
             tooltip : {
-                trigger: 'item'
+                trigger: 'item',
+                formatter: '  {a}<br>{b} <br> {c}'
             },
             bmap: {
-                center: [113.329147,23.115899],
-                zoom: 12,
+                center: [113.329147, 23.115899],
+                zoom: 9,
                 roam: true
             },
             series : [
                 {
-                    name: 'A级客户',
-                    type: 'scatter',
+                    name: '客户',
+                    type: 'effectScatter',
                     coordinateSystem: 'bmap',
                     data: convertData(data),
                     symbolSize: function (val) {
-                        return val[2] / 10;
-                    },
-                    label: {
-                        normal: {
-                            formatter: '{b}',
-                            position: 'right',
-                            show: false
-                        },
-                        emphasis: {
-                            show: true
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: 'orangered'
-                        }
-                    }
-                },
-
-                {
-                    name: 'B级客户',
-                    type: 'effectScatter',
-                    coordinateSystem: 'bmap',
-                    data: convertData(data.sort(function (a, b) {
-                        return b.value - a.value;
-                    }).slice(0, 6)),
-                    symbolSize: function (val) {
-                        return val[2] / 10;
+                        return val[2] < 5 ? 10 : val[2];
                     },
                     showEffectOn: 'render',
                     rippleEffect: {
                         brushType: 'stroke'
                     },
                     hoverAnimation: true,
-                    label: {
-                        normal: {
-                            formatter: '{b}',
-                            position: 'right',
-                            show: true
-                        }
-                    },
+
                     itemStyle: {
                         normal: {
                             color: '#00c0ef',
@@ -165,112 +149,41 @@
             ]
         };
 
-        // 添加百度地图插件
-        // var bmap = myChart.getModel().getComponent('bmap').getBMap();
-        // bmap.addControl(new BMap.ScaleControl());        //比例尺
-        // bmap.addControl(new BMap.MapTypeControl());
-
-        // var bmap = myChart.getModel().getComponent('bmap').getBMap();
-        // bmap.addControl(new BMap.NavigationControl());   //缩放控件
-        // bmap.addControl(new BMap.ScaleControl());        //比例尺
-
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);
+
+        // 添加百度地图插件
+        var bmap = myChart.getModel().getComponent('bmap').getBMap();
+        bmap.addControl(new BMap.ScaleControl());         //比例尺
+        bmap.addControl(new BMap.NavigationControl());    //缩放控件
+        bmap.addControl(new BMap.MapTypeControl());       //地图类型控件
+        bmap.addControl(new BMap.OverviewMapControl());   //缩略地图控件
+
+
+        $("#world-map-gdp").resize(function () {
+            var h = $(".box.maximized-box .box-body").height() - 10;
+            if(h == -10)
+                h = 360;
+            $("#world-map-gdp").height(h);
+            myChart.resize();
+        });
     }
 
-    function pieChartInit() {
-        // -------------
-        // - PIE CHART -
-        // -------------
-        // Get context with jQuery - using jQuery's .get() method.
-        var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-        var pieChart       = new Chart(pieChartCanvas);
-        var PieData        = [
-            {
-                value    : 700,
-                color    : '#f56954',
-                highlight: '#f56954',
-                label    : 'Chrome'
-            },
-            {
-                value    : 500,
-                color    : '#00a65a',
-                highlight: '#00a65a',
-                label    : 'IE'
-            },
-            {
-                value    : 400,
-                color    : '#f39c12',
-                highlight: '#f39c12',
-                label    : 'FireFox'
-            },
-            {
-                value    : 600,
-                color    : '#00c0ef',
-                highlight: '#00c0ef',
-                label    : 'Safari'
-            },
-            {
-                value    : 300,
-                color    : '#3c8dbc',
-                highlight: '#3c8dbc',
-                label    : 'Opera'
-            },
-            {
-                value    : 100,
-                color    : '#d2d6de',
-                highlight: '#d2d6de',
-                label    : 'Navigator'
-            }
-        ];
-        var pieOptions     = {
-            // Boolean - Whether we should show a stroke on each segment
-            segmentShowStroke    : true,
-            // String - The colour of each segment stroke
-            segmentStrokeColor   : '#fff',
-            // Number - The width of each segment stroke
-            segmentStrokeWidth   : 1,
-            // Number - The percentage of the chart that we cut out of the middle
-            percentageInnerCutout: 50, // This is 0 for Pie charts
-            // Number - Amount of animation steps
-            animationSteps       : 100,
-            // String - Animation easing effect
-            animationEasing      : 'easeOutBounce',
-            // Boolean - Whether we animate the rotation of the Doughnut
-            animateRotate        : true,
-            // Boolean - Whether we animate scaling the Doughnut from the centre
-            animateScale         : false,
-            // Boolean - whether to make the chart responsive to window resizing
-            responsive           : true,
-            // Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
-            maintainAspectRatio  : false,
-            // String - A legend template
-            legendTemplate       : '<ul class=\'<%=name.toLowerCase()%>-legend\'><% for (var i=0; i<segments.length; i++){%><li><span style=\'background-color:<%=segments[i].fillColor%>\'></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>',
-            // String - A tooltip template
-            tooltipTemplate      : '<%=value %> <%=label%> users'
-        };
-        // Create pie or douhnut chart
-        // You can switch between pie and douhnut using the method below.
-        pieChart.Doughnut(PieData, pieOptions);
-        // -----------------
-        // - END PIE CHART -
-        // -----------------
-    }
-
-    function monthCollectorInit() {
+    function loadMonthCollector() {
         //jQueryKnob
         $('.knob').knob();
     }
 
-    function skyconsInit(){
-        if( typeof (Skycons) === 'undefined'){ return; }
+    function loadSkycons(){
+        if( typeof (Skycons) === 'undefined'){
+            return;
+        }
+
         var icons = new Skycons({
                     "color": "#73879C"
                 }),
-                list = [
-                        "clear-day", "clear-night", "partly-cloudy-day",
-                        "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
-                        "fog"
+                list = ["clear-day", "clear-night", "partly-cloudy-day","partly-cloudy-night",
+                        "cloudy", "rain", "sleet", "snow", "wind", "fog"
                         ],
                         i;
         for (i = list.length; i--;)
@@ -279,7 +192,7 @@
         icons.play();
     }
 
-    function datepickerInit() {
+    function loadDatepicker() {
         // The Calender
         $('#calendar').datepicker({
             language: 'zh-CN',       //语言
@@ -287,7 +200,7 @@
         });
     }
 
-    function treeInit() {
+    function loadTree() {
         var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
         d3tree = d3.json(url, function(error, re) {
             if(re.code != 0) throw error;
@@ -618,22 +531,24 @@
             var svgGroup = baseSvg.append("g");
 
             // Layout the tree initially and center on the root node.
+            root.x0 = 0;
             update(root);
 
             centerNode(root);
         });
     }
 
-    function moveContainer() {
+    function loadMoveContainer() {
         // Make the dashboard widgets sortable Using jquery UI
         $('.connectedSortable').sortable({
-            placeholder         : 'sort-highlight',
-            connectWith         : '.connectedSortable',
-            handle              : '.box-header, .nav-tabs',
+            placeholder: 'sort-highlight',
+            connectWith: '.connectedSortable',
+            handle: '.box-header, .nav-tabs',
             forcePlaceholderSize: true,
-            zIndex              : 99,
-            update              : function (event, ui) {
-                line.redraw();
+            zIndex: 99,
+            update: function (event, ui) {
+                collectCountOfMonthChart.resize();
+                overviewTodayChart.resize();
                 $('#dtuRowToday').getNiceScroll().resize();
             }
         });
@@ -641,55 +556,55 @@
     }
 
     //网络设备数量
-    function dtuCount() {
+    function loadDtuCount() {
         var url = '{{ urlfor "HomeController.GetDtuCount"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 $("#dtuCount").html(re.obj);
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("网络设备数量数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
 
     //电表数量
-    function meterCount() {
+    function loadMeterCount() {
         var url = '{{ urlfor "HomeController.GetMeterCount"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 $("#meterCount").html(re.obj);
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("电表数量数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
 
     //今日采集数量
-    function collectRowsToday() {
+    function loadCollectRowsToday() {
         var url = '{{ urlfor "HomeController.GetCollectRowsToday"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 $("#rowsToday").html(re.obj);
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("今日采集数量数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
 
-    function getCustomers() {
+    //客户数
+    function loadCustomers() {
         var url = '{{ urlfor "HomeController.GetCustomers"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 $("#customers").html(re.obj);
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("客户数数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
 
-
     //今日设备状态
-    function dtuRowTodayInit() {
+    function loadDtuRowToday() {
         var url = '{{ urlfor "HomeController.GetDtuRowForDay"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
@@ -743,39 +658,284 @@
                     touchbehavior: true // 激活拖拽滚动
                 });
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("今日设备状态数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
 
-    function collectCountOfMonth() {
+    //月统计
+    function loadCollectCountOfMonth() {
         var url = '{{ urlfor "HomeController.GetCollectCountOfMonth"}}';
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
-                var dataobj = eval(re.obj);
-                line = new Morris.Line({
-                    element          : 'line-chart',
-                    resize           : true,
-                    data             : dataobj,
-                    xkey             : 'CollectTime',
-                    ykeys            : ['Rows'],
-                    labels           : ['采集量'],
-                    lineColors       : ['#efefef'],
-                    lineWidth        : 2,             //线条粗细
-                    hideHover        : 'auto',
-                    gridTextColor    : '#fff',        //x,y轴上文字的颜色
-                    gridStrokeWidth  : 0.4,
-                    pointSize        : 4,             //圆圈大小
-                    pointStrokeColors: ['#efefef'],
-                    gridLineColor    : '#efefef',
-                    gridTextFamily   : 'Open Sans',
-                    gridTextSize     : 10,
-                    hoverFillColor   : '#10B9E3',
-                    hoverCallback    : function (index, options, content) {
-                        return content.replace('color: #efefef', 'color: #ff000');
-                    }
-                });
+                var option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        top: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: re.obj.map(function (item) {
+                            return new Date(item.CollectTime).format("yyyy-MM-dd");
+                        }),
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        axisLabel: {
+                            formatter: function (val) {
+                                return val;
+                            }
+                        },
+                        splitLine: {
+                            show: true
+                        }
+                    },
+                    series: [ {
+                        type: 'line',
+                        data: re.obj.map(function (item) {
+                            return item.Rows;
+                        }),
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        },
+                        showSymbol: true
+                    }]
+                };
+                collectCountOfMonthChart.setOption(option);
+            } else {
+                layer.alert("月统计数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }
+
+    //总体概述
+    function loadOverviewToday(choiceDate) {
+        var url = '{{ urlfor "HomeController.GetOverviewToday"}}';
+        var tmp_str = choiceDate.format("yyyy-MM-dd");
+        var params = {choiceDate: tmp_str};
+        $.sdpost(url, params, function (re) {
+            if (re.code === 0) {
+                var totalDayRows = 0, totalRows = 0;
+                $('#overviewTodayProcess').html('');
+
+                $(re.obj).each(function (i, row) {
+                    var html = [];
+                    var rate = (row.Rows / row.DayRows * 100).toFixed(2);
+                    if (row.TypeID == 1){
+                        html.push('<span class="info-box-text">' + row.TypeDesc + '</span>');
+                        html.push('<span class="info-box-number">' + row.Rows + '/' + row.DayRows + '</span>');
+                        html.push('<div class="progress">');
+                        html.push('    <div class="progress-bar" style="width: ' + rate + '%"></div>');
+                        html.push('</div>');
+                        html.push('<span class="progress-description">已采集：' + rate + '% </span>');
+
+                        switch (row.TypeNO) {
+                            case 1000: $('#PMAC600B_Z_SC').html(html.join('')); break;
+                            case 1001: $('#LU_312').html(html.join('')); break;
+                            case 1002: $('#PMAC720').html(html.join('')); break;
+                            case 1004: $('#PD866E').html(html.join('')); break;
+                            case 1006: $('#YD2045C_W').html(html.join('')); break;
+                            case 1007: $('#PMC-D726M').html(html.join('')); break;
+                            case 1009:  $('#RJ-OP485').html(html.join('')); break;
+                            default: break;
+                        }
+                    }else if(row.TypeID == 2){
+                        html.push('<div class="progress-group">');
+                        html.push('  <span class="progress-text"> '+ row.TypeDesc +'</span>');
+                        html.push('  <small class="text-green">已采集：' + rate + '% </small>');
+                        html.push('  <span class="progress-number"><b>' + row.Rows + '</b>/' + row.DayRows + '</span>');
+                        html.push('  <div class="progress sm">');
+                        html.push('    <div class="progress-bar progress-bar-aqua" style="width: '+ rate + '%"></div>');
+                        html.push('    </div>');
+                        html.push('  </div>');
+                        html.push('</div>');
+                        totalDayRows += row.DayRows;
+                        totalRows += row.Rows;
+
+                        $('#overviewTodayProcess').append(html.join(''));
+                    }
+                });
+
+                var html = [];
+                var rate = (totalRows / totalDayRows * 100).toFixed(2);
+                html.push('<div class="progress-group">');
+                html.push('  <span class="progress-text"> 总采集量</span>');
+                html.push('  <small class="text-red">已采集：' + rate + '% </small>');
+                html.push('  <span class="progress-number"><b>' + totalRows + '</b>/' + totalDayRows + '</span>');
+                html.push('  <div class="progress sm">');
+                html.push('    <div class="progress-bar progress-bar-green" style="width: '+ rate + '%"></div>');
+                html.push('    </div>');
+                html.push('  </div>');
+                html.push('</div>');
+                $('#overviewTodayProcess').append(html.join(''));
+
+                var option={
+                    title:{
+                        text: tmp_str,
+                        subtext: '监控状态',
+                        left: 'right'
+                    },
+
+                    tooltip : {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend:{
+                        orient: 'vertical',
+                        x: 'left',
+                        data: re.obj.map(function (item) {
+                            return item.TypeDesc;
+                        })
+                    },
+                    series:[
+                        {
+                            name: '通讯方式',
+                            type: 'pie',
+                            selectedMode: 'single',
+                            radius : [0, 70],
+
+                            // for funnel
+                            x: '20%',
+                            width: '40%',
+                            funnelAlign: 'right',
+                            data: re.obj.map(function (item) {
+                                if(item.TypeID == 2){
+                                    return {value: item.Num, name: item.TypeDesc};
+                                }
+                            })
+                        },{
+                            name:'设备类型',
+                            type:'pie',
+                            selectedMode: 'single',
+                            radius : [100, 140],
+
+                            // for funnel
+                            x: '60%',
+                            width: '35%',
+                            funnelAlign: 'left',
+                            data: re.obj.map(function (item) {
+                                if(item.TypeID == 1){
+                                    return {value: item.Num, name: item.TypeDesc};
+                                }
+                            })
+                        }
+                    ]
+                };
+                overviewTodayChart.setOption(option);
+            } else {
+                layer.alert("总体概述数据获取失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+    //总体概述-日期选择
+    function loadOverviewChoice() {
+        var curdate = new Date();
+        var choiceDate = new Date();
+
+        $('#dateSelect').on('click', 'li', function () {
+            var line = $(this).text();
+            if(line == '前一天'){
+                choiceDate.setDate(choiceDate.getDate() -1);
+                loadOverviewToday(choiceDate);
+            }else if(line == '后一天'){
+                choiceDate.setDate(choiceDate.getDate() + 1);
+                if(choiceDate > curdate){
+                    choiceDate.setDate(choiceDate.getDate() -1);
+                    return;
+                }
+                loadOverviewToday(choiceDate);
+            }else{
+                loadOverviewToday(curdate);
+            }
+        });
+    }
+
+
+    //监听div大小变化
+    (function($, h, c) {
+        var a = $([]),
+                e = $.resize = $.extend($.resize, {}),
+                i,
+                k = "setTimeout",
+                j = "resize",
+                d = j + "-special-event",
+                b = "delay",
+                f = "throttleWindow";
+        e[b] = 250;
+        e[f] = true;
+        $.event.special[j] = {
+            setup: function() {
+                if (!e[f] && this[k]) {
+                    return false;
+                }
+                var l = $(this);
+                a = a.add(l);
+                $.data(this, d, {
+                    w: l.width(),
+                    h: l.height()
+                });
+                if (a.length === 1) {
+                    g();
+                }
+            },
+            teardown: function() {
+                if (!e[f] && this[k]) {
+                    return false;
+                }
+                var l = $(this);
+                a = a.not(l);
+                l.removeData(d);
+                if (!a.length) {
+                    clearTimeout(i);
+                }
+            },
+            add: function(l) {
+                if (!e[f] && this[k]) {
+                    return false;
+                }
+                var n;
+                function m(s, o, p) {
+                    var q = $(this),
+                            r = $.data(this, d);
+                    r.w = o !== c ? o: q.width();
+                    r.h = p !== c ? p: q.height();
+                    n.apply(this, arguments);
+                }
+                if ($.isFunction(l)) {
+                    n = l;
+                    return m;
+                } else {
+                    n = l.handler;
+                    l.handler = m;
+                }
+            }
+        };
+        function g() {
+            i = h[k](function() {
+                        a.each(function() {
+                            var n = $(this),
+                                    m = n.width(),
+                                    l = n.height(),
+                                    o = $.data(this, d);
+                            if (m !== o.w || l !== o.h) {
+                                n.trigger(j, [o.w = m, o.h = l]);
+                            }
+                        });
+                        g();
+                    },
+                    e[b]);
+        }
+    })(jQuery, this);
 </script>

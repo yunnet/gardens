@@ -82,6 +82,11 @@ func (this *EquipmentMeterConfigController) Save() {
 	var err error
 	m := models.EquipmentMeterConfig{}
 
+	//获取form里的值
+	if err = this.ParseForm(&m); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
+	}
+
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
 	m.DTU_no = this.GetString("DTU_no")

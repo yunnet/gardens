@@ -148,6 +148,7 @@ func init() {
 	beego.Router("/usercenter/passwordsave", &controllers.UserCenterController{}, "Post:PasswordSave")
 
 	beego.Router("/home/index", &controllers.HomeController{}, "*:Index")
+	beego.Router("/home/index2", &controllers.HomeController{}, "*:Index2")
 	beego.Router("/home/login", &controllers.HomeController{}, "*:Login")
 	beego.Router("/home/dologin", &controllers.HomeController{}, "Post:DoLogin")
 	beego.Router("/home/logout", &controllers.HomeController{}, "*:Logout")
@@ -159,6 +160,7 @@ func init() {
 	beego.Router("/home/collectrowstoday", &controllers.HomeController{}, "*:GetCollectRowsToday")
 	beego.Router("/home/collectcountofmonth", &controllers.HomeController{}, "*:GetCollectCountOfMonth")
 	beego.Router("/home/customers", &controllers.HomeController{}, "*:GetCustomers")
+	beego.Router("/home/overviewtoday", &controllers.HomeController{}, "*:GetOverviewToday")
 
 	beego.Router("/home/404", &controllers.HomeController{}, "*:Page404")
 	beego.Router("/home/error/?:error", &controllers.HomeController{}, "*:Error")

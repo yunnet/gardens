@@ -51,6 +51,7 @@ func EquipmentTableConfigPageList(params *EquipmentTableConfigQueryParam) ([]*Eq
 
 	query = query.Filter("FieldName__istartswith", params.FieldName)
 	query = query.Filter("FieldDesc__istartswith", params.FieldDesc)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

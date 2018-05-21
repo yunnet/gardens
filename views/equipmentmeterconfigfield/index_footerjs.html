@@ -262,7 +262,7 @@
         if (Id > 0) {
             title = "编辑"
         }
-        title += "DTU"
+        title += "字段映射顺序配置";
 
         var url = '{{ urlfor "EquipmentMeterConfigFieldController.Edit"}}' + '/' + Id;
         layer.open({
@@ -272,7 +272,7 @@
             shade: 0.2,
             maxmin: true,
             shift: 1,
-            area: ['800px', '400px'],
+            area: ['800px', '550px'],
             content: url,
             btn: ['保存', '关闭'],
             yes: function (index, layero) {

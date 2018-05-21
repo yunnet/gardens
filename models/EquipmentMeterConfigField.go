@@ -53,6 +53,7 @@ func EquipmentMeterConfigFieldPageList(params *EquipmentMeterConfigFieldQueryPar
 
 	query = query.Filter("DTU_no__istartswith", params.DTU_no)
 	query = query.Filter("MeterAddress__istartswith", params.MeterAddress)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

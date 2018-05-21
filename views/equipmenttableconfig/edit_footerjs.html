@@ -34,7 +34,7 @@
             },
             messages: {},
             submitHandler: function (form) {
-                var url = '{{ urlfor "EquipmentTableConfigController.Edit"}}'
+                var url = '{{ urlfor "EquipmentTableConfigController.Edit"}}';
                 var data = $thisForm.serialize();
                 $.sdpost(url, data, function (re) {
                     if (re.code === 0) {

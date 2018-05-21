@@ -21,10 +21,23 @@ func (this *HomeController) Index() {
 	//判断是否登录
 	this.checkLogin()
 
+	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
 	this.setTpl()
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["headcssjs"] = "home/index_headcssjs.html"
 	this.LayoutSections["footerjs"] = "home/index_footerjs.html"
+}
+
+func (this *HomeController) Index2() {
+	this.Data["pageTitle"] = "云服务器"
+
+	this.checkLogin()
+
+	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
+	this.setTpl()
+	this.LayoutSections = make(map[string]string)
+	this.LayoutSections["headcssjs"] = "home/index_headcssjs2.html"
+	this.LayoutSections["footerjs"] = "home/index_footerjs2.html"
 }
 
 func (this *HomeController) Page404() {
@@ -155,6 +168,20 @@ func (this *HomeController) GetCollectCountOfMonth() {
 	if data, err := models.GetCollectRowsOfMonth(); err != nil {
 		after := time.Now().Unix()
 		utils.LogInfo(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
+
+		this.jsonResult(enums.JRCodeFailed, "", 0)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", data)
+	}
+}
+
+//获取概述信息
+func (this *HomeController)GetOverviewToday()  {
+	before := time.Now().Unix()
+	choiceDate := this.Input().Get("choiceDate")
+	if data, err := models.GetOverviewToday(choiceDate); err != nil {
+		after := time.Now().Unix()
+		utils.LogInfo(fmt.Sprintf("GetOverviewToday spend: %d s", after - before))
 
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{

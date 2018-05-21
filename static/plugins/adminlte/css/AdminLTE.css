@@ -1567,6 +1567,11 @@ a:focus {
   left: 0;
 }
 
+.box.maximized-box .box-body{
+  height: 92%;
+  /*border: 1px solid #1646ff;*/
+}
+
 .box .nav-stacked > li {
   border-bottom: 1px solid #f4f4f4;
   margin: 0;

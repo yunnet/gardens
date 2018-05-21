@@ -1,8 +1,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        首页
-        <small>仪表盘</small>
+        产品设备
+        <small>控制面板</small>
     </h1>
 </section>
 
@@ -74,6 +74,114 @@
     <!-- Main row -->
     <div class="row">
         <section class="col-lg-12 connectedSortable">
+            <!-- 采集总量 -->
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <i class="fa  fa-pie-chart"></i>
+                    <h3 class="box-title">设备比例<small> 硬件设备的比例，设备类型采集合格比例</small></h3>
+
+                    <div class="box-tools pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-box-tool btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i></button>
+                            <ul class="dropdown-menu" role="menu" id="dateSelect">
+                                <li><a href="#">前一天</a></li>
+                                <li><a href="#">后一天</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">今天</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="chart-responsive">
+                                <div id="overviewTodayChart" style="height: 400px;"></div>
+                            </div>
+                            <!-- ./chart-responsive -->
+                            <div class="box-footer no-padding" id="overviewTodayProcess">
+
+                            </div>
+                        </div>
+
+                        <!-- /.col -->
+                        <div class="col-md-4">
+                            <div class="info-box bg-yellow">
+                                <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
+
+                                <div class="info-box-content" id="PMAC720">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-green">
+                                <span class="info-box-icon"><i class="ion ion-ios-heart-outline"></i></span>
+
+                                <div class="info-box-content" id="YD2045C_W">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-red">
+                                <span class="info-box-icon"><i class="ion ion-ios-cloud-download-outline"></i></span>
+
+                                <div class="info-box-content" id="LU_312">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-aqua">
+                                <span class="info-box-icon"><i class="ion ion-ios-chatbubble-outline"></i></span>
+
+                                <div class="info-box-content" id="PD866E">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-light-blue">
+                                <span class="info-box-icon"><i class="ion ion-flame"></i></span>
+
+                                <div class="info-box-content" id="PMAC600B_Z_SC">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-teal">
+                                <span class="info-box-icon"><i class="ion ion-flag"></i></span>
+
+                                <div class="info-box-content" id="PMC-D726M">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+
+                            <div class="info-box bg-purple">
+                                <span class="info-box-icon"><i class="ion ion-icecream"></i></span>
+
+                                <div class="info-box-content" id="RJ-OP485">
+
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </section>
+
+        <section class="col-lg-8 connectedSortable">
             <!-- today collect -->
             <div class="nav-tabs-custom">
                 <ul class="nav nav-tabs pull-right">
@@ -93,11 +201,11 @@
                         <div class="box-body table-responsive no-padding">
                             <table id="offlineTable" class="table table-hover table-striped">
                                 <thead>
-                                    <tr>
-                                        <th style="width: 80px">序号</th>
-                                        <th>DTU编号</th>
-                                        <th>电表地址</th>
-                                    </tr>
+                                <tr>
+                                    <th style="width: 80px">序号</th>
+                                    <th>DTU编号</th>
+                                    <th>电表地址</th>
+                                </tr>
                                 </thead>
                                 <tbody>
 
@@ -115,14 +223,13 @@
                 <!-- /.tab-content -->
 
             </div>
-        </section>
+            <!-- /.box -->
 
-        <section class="col-lg-8 connectedSortable">
             <!-- tree -->
             <div class="box box-success">
                 <div class="box-header with-border">
                     <i class="fa fa-sitemap"></i>
-                    <h3 class="box-title">电表面板
+                    <h3 class="box-title">安装信息
                         <small>客户所有的电表信息</small>
                     </h3>
                     <div class="box-tools pull-right">
@@ -139,7 +246,7 @@
             </div>
             <!-- /.box -->
 
-            <!-- 地图 & BOX PANE -->
+            <!-- 地图 -->
             <div class="box box-warning">
                 <div class="box-header with-border">
                     <i class="fa fa-map-marker"></i>
@@ -148,171 +255,88 @@
                     </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool custom-expand" data-widget="maximize"><i class="fa fa-expand"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                     </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
-                        <div class="col-md-3 col-sm-4">
-                            <p class="text-center">
-                                <strong>广州市区</strong>
-                            </p>
+                        <div class="col-md-2 col-sm-4">
                             <div class="progress-group">
                                 <span class="progress-text"> 天河区</span>
-                                <span class="progress-number">69</span>
+                                <span class="progress-number">1</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 69%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 10%"></div>
                                 </div>
                             </div>
                             <div class="progress-group">
                                 <span class="progress-text"> 海珠区</span>
-                                <span class="progress-number">56</span>
+                                <span class="progress-number">3</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 56%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 30%"></div>
                                 </div>
                             </div>
                             <div class="progress-group">
                                 <span class="progress-text"> 白云区</span>
-                                <span class="progress-number">16</span>
+                                <span class="progress-number">1</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 16%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 10%"></div>
                                 </div>
                             </div>
                             <div class="progress-group">
                                 <span class="progress-text"> 荔湾区</span>
-                                <span class="progress-number">11</span>
+                                <span class="progress-number">0</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 11%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 0%"></div>
                                 </div>
                             </div>
                             <div class="progress-group">
                                 <span class="progress-text"> 黄埔区</span>
-                                <span class="progress-number">32</span>
+                                <span class="progress-number">3</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 32%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 30%"></div>
                                 </div>
                             </div>
                             <div class="progress-group">
                                 <span class="progress-text"> 花都区</span>
-                                <span class="progress-number">32</span>
+                                <span class="progress-number">0</span>
 
                                 <div class="progress sm">
-                                    <div class="progress-bar progress-bar-aqua" style="width: 32%"></div>
+                                    <div class="progress-bar progress-bar-aqua" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 南沙区</span>
+                                <span class="progress-number">1</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 10%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-group">
+                                <span class="progress-text"> 其它</span>
+                                <span class="progress-number">1</span>
+
+                                <div class="progress sm">
+                                    <div class="progress-bar progress-bar-aqua" style="width: 10%"></div>
                                 </div>
                             </div>
                         </div>
                         <!-- /.col -->
-                        <div class="col-md-9 col-sm-8">
-                            <div class="pad">
-                                <!-- Map will be created here -->
-                                <div id="world-map-gdp" style="height: 325px;width: 100%"></div>
-                            </div>
+                        <div class="col-md-10 col-sm-8">
+                            <div id="world-map-gdp" style="height: 360px; width: 100%"></div>
                         </div>
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
                 </div>
                 <!-- /.box-body -->
-            </div>
-            <!-- /.box -->
-
-            <!-- TABLE: LATEST ORDERS -->
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <i class="fa  fa-houzz"></i>
-                    <h3 class="box-title">Latest Orders</h3>
-
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table no-margin">
-                            <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Item</th>
-                                <th>Status</th>
-                                <th>Popularity</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                                <td>Call of Duty IV</td>
-                                <td><span class="label label-success">Shipped</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                <td>Samsung Smart TV</td>
-                                <td><span class="label label-warning">Pending</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                <td>iPhone 6 Plus</td>
-                                <td><span class="label label-danger">Delivered</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                <td>Samsung Smart TV</td>
-                                <td><span class="label label-info">Processing</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#00c0ef" data-height="20">90,80,-90,70,-61,83,63</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR1848</a></td>
-                                <td>Samsung Smart TV</td>
-                                <td><span class="label label-warning">Pending</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#f39c12" data-height="20">90,80,-90,70,61,-83,68</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR7429</a></td>
-                                <td>iPhone 6 Plus</td>
-                                <td><span class="label label-danger">Delivered</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#f56954" data-height="20">90,-80,90,70,-61,83,63</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><a href="pages/examples/invoice.html">OR9842</a></td>
-                                <td>Call of Duty IV</td>
-                                <td><span class="label label-success">Shipped</span></td>
-                                <td>
-                                    <div class="sparkbar" data-color="#00a65a" data-height="20">90,80,90,-70,61,-83,63</div>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.table-responsive -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer clearfix">
-                    <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-                    <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
-                </div>
-                <!-- /.box-footer -->
             </div>
             <!-- /.box -->
         </section>
@@ -333,60 +357,12 @@
                 </div>
 
                 <div class="box-body border-radius-none">
-                    <div id="line-chart" class="chart" style="height: 250px;"></div>
+                    <div id="collectCountOfMonth" class="chart" style="height: 250px;"></div>
                 </div>
             </div>
             <!-- /.box -->
 
-            <!-- Browser Usage -->
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <i class="fa fa-university"></i>
-                    <h3 class="box-title">Browser Usage</h3>
 
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                    </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="chart-responsive">
-                                <canvas id="pieChart" height="150"></canvas>
-                            </div>
-                            <!-- ./chart-responsive -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-md-4">
-                            <ul class="chart-legend clearfix">
-                                <li><i class="fa fa-circle-o text-red"></i> Chrome</li>
-                                <li><i class="fa fa-circle-o text-green"></i> IE</li>
-                                <li><i class="fa fa-circle-o text-yellow"></i> FireFox</li>
-                                <li><i class="fa fa-circle-o text-aqua"></i> Safari</li>
-                                <li><i class="fa fa-circle-o text-light-blue"></i> Opera</li>
-                                <li><i class="fa fa-circle-o text-gray"></i> Navigator</li>
-                            </ul>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                    <!-- /.row -->
-                </div>
-                <!-- /.box-body -->
-                <div class="box-footer no-padding">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li><a href="#">United States of America
-                            <span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
-                        <li><a href="#">India <span class="pull-right text-green"><i class="fa fa-angle-up"></i> 4%</span></a>
-                        </li>
-                        <li><a href="#">China
-                            <span class="pull-right text-yellow"><i class="fa fa-angle-left"></i> 0%</span></a></li>
-                    </ul>
-                </div>
-                <!-- /.footer -->
-            </div>
-            <!-- /.box -->
 
             <!-- Calendar -->
             <div class="box box-solid bg-green-gradient">

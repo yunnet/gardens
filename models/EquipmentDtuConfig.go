@@ -57,6 +57,7 @@ func EquipmentDtuConfigPageList(params *EquipmentDtuConfigQueryParam) ([]*Equipm
 
 	query = query.Filter("DTU_no__istartswith", params.DTU_no)
 	query = query.Filter("ElectricalRoomCode__istartswith", params.ElectricalRoomCode)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

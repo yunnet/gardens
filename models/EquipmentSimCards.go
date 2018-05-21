@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/astaxie/beego/orm"
 	"time"
-	"fmt"
 )
 
 type EquipmentSimCards struct {
@@ -45,13 +44,9 @@ func EquipmentSimCardsPageList(params *EquipmentSimCardsQueryParam) ([]*Equipmen
 	}
 
 	query = query.Filter("sim_no__istartswith", params.Sim_no)
+	query = query.Filter("tag__istartswith", params.Used)
 
-	if len(params.Used) > 0 {
-		query = query.Filter("Used", params.Used)
-	}
 	total, _ := query.Count()
-
-	fmt.Println("params: ", params)
 
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
 

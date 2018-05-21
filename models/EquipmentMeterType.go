@@ -74,6 +74,8 @@ func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam)([]*Equipment
 		sortorder = "-" + sortorder
 	}
 
+	query = query.Filter("tag__istartswith", params.Used)
+
 	data := make([]*EquipmentMeterType, 0)
 	_, err := query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
 	if(err != nil){

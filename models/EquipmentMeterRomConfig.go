@@ -61,6 +61,7 @@ func EquipmentMeterRomConfigPageList(params *EquipmentMeterRomConfigQueryParam) 
 	}
 
 	query = query.Filter("MeterTypeNO__istartswith", params.MeterTypeNO)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 

@@ -48,6 +48,7 @@ func EquipmentMeterAddrConfigPageList(params *EquipmentMeterAddrConfigQueryParam
 	}
 
 	query = query.Filter("MeterTypeNO__istartswith", params.MeterTypeNO)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

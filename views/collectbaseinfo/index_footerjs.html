@@ -418,6 +418,15 @@
                     return new Date(item.CollectTime).format("hh:mm:ss");
                 });
 
+                // var dateList=[];
+                // var z = new Date(0,0,0);
+                // for(var i=0; i<86400; i++){
+                //     dateList.push(z.format('hh:mm:ss'));
+                //     z.setSeconds(z.getSeconds() + 1)
+                // }
+                //
+                // console.log(dateList);
+
                 var option = {
                     title: {
                         text: '24小时数据',
@@ -453,7 +462,6 @@
                     xAxis: {
                         type: 'category',
                         data: dateList,
-
                         splitLine: {
                             show: false
                         }

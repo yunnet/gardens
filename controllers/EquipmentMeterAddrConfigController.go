@@ -79,7 +79,13 @@ func (this *EquipmentMeterAddrConfigController) Edit() {
 
 //add | update
 func (this *EquipmentMeterAddrConfigController) Save() {
+	var err error
 	m := models.EquipmentMeterAddrConfig{}
+
+	//获取form里的值
+	if err = this.ParseForm(&m); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
+	}
 
 	tmpInt := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(tmpInt)
@@ -98,7 +104,6 @@ func (this *EquipmentMeterAddrConfigController) Save() {
 	m.ChangeUser = this.curUser.RealName
 	m.ChangeDate = time.Now()
 
-	var err error
 	o := orm.NewOrm()
 	if m.Id == 0 {
 		m.CreateUser = this.curUser.RealName

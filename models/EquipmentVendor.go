@@ -44,6 +44,7 @@ func EquipmentVendorPageList(params *EquipmentVendorQueryParam) ([]*EquipmentVen
 
 	query = query.Filter("VendorNO__istartswith", params.VendorNO)
 	query = query.Filter("VendorDesc__istartswith", params.VendorDesc)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

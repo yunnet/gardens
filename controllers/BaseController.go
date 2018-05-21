@@ -69,7 +69,7 @@ func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
 			}
 			// TestController.Get,:last,xie,:first,asta
 			strs := strings.Split(urlfor, ",")
-			if len(strs) > 0 && strs[0] == (ctrlName + "." + ActName) {
+			if len(strs) > 0 && strs[0] == (ctrlName+"."+ActName) {
 				return true
 			}
 		}

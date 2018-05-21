@@ -14,6 +14,15 @@ type DtuRowOfDay struct {
 	Rows         int       `orm:"column(rows)"`
 }
 
+type OverviewToday struct {
+	TypeID   int    `orm:"column(type_id)"`
+	TypeNO   int    `orm:"column(type_no)"`
+	TypeDesc string `orm:"colnum(type_desc)"`
+	Num      int    `orm:"column(num)"`
+	DayRows  int    `orm:"column(day_rows)"`
+	Rows     int    `orm:"column(rows)"`
+}
+
 type CollectCountOfMonth struct {
 	CollectTime string `orm:"column(collect_time)"`
 	Rows        int    `orm:"column(rows)"`
@@ -190,6 +199,22 @@ func GetCollectRowsOfMonth() ([] *CollectCountOfMonth, error) {
 	d, _ := time.ParseDuration("-24h")
 	yesday := time.Now().Add(d).Format("2006-01-02")
 	sql := fmt.Sprintf(`call p_month_rowcount('collect_base_info', '%s')`, yesday)
+
+	_, err := o.Raw(sql).QueryRows(&data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+//获取概述信息
+func GetOverviewToday(choiceDate string) ([] *OverviewToday, error) {
+	data := make([] *OverviewToday, 0)
+	o := orm.NewOrm()
+	o.Using("kxtimingdata")
+
+	//today := time.Now().Format("2006-01-02")
+	sql := fmt.Sprintf(`call p_collect_overview('%s')`, choiceDate)
 
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {

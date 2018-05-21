@@ -48,6 +48,7 @@ func EquipmentGatewayPageList(params *EquipmentGatewayQueryParam) ([]*EquipmentG
 
 	query = query.Filter("GatewayNO__istartswith", params.GatewayNO)
 	query = query.Filter("GatewayDesc__istartswith", params.GatewayDesc)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

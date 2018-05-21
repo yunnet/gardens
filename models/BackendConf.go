@@ -48,6 +48,7 @@ func BackendConfPageList(params *BackendConfQueryParam) ([]*BackendConf, int64) 
 	}
 
 	query = query.Filter("AppName__istartswith", params.AppName)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

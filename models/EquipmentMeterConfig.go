@@ -30,8 +30,10 @@ type EquipmentMeterConfigQueryParam struct {
 	Used         string //为空不查询，有值精确查询
 }
 
+//获取电表数
 func EquipmentMeterConfigCount() int64 {
 	query := orm.NewOrm().QueryTable(EquipmentMeterConfigTBName())
+	query = query.Filter("tag", 0)
 	total, _ := query.Count()
 	return total
 }
@@ -60,6 +62,7 @@ func EquipmentMeterConfigPageList(params *EquipmentMeterConfigQueryParam) ([]*Eq
 
 	query = query.Filter("DTU_no__istartswith", params.DTU_no)
 	query = query.Filter("MeterAddress__istartswith", params.MeterAddress)
+	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)

@@ -28,7 +28,27 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
+                AddressSort:{
+                    required: true,
+                    min: 1
+                },
                 MeterTypeNO: {
+                    required: true
+                },
+                RomAddress:{
+                    required: true
+                },
+                RomName:{
+                    required: true
+                },
+                SegmentNO:{
+                    required: true,
+                    min: 1
+                },
+                Calcfactor:{
+                    required: true
+                },
+                FunctionField:{
                     required: true
                 }
             },
