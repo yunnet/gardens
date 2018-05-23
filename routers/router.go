@@ -86,6 +86,7 @@ func init() {
 	beego.Router("/equipmentsimcards/datalist", &controllers.EquipmentSimCardsController{}, "Post:DataList")
 	beego.Router("/equipmentsimcards/edit/?:id", &controllers.EquipmentSimCardsController{}, "Get,Post:Edit")
 	beego.Router("/equipmentsimcards/delete", &controllers.EquipmentSimCardsController{}, "Post:Delete")
+	beego.Router("/equipmentsimcards/selectpicker", &controllers.EquipmentSimCardsController{}, "Post:SelectPicker")
 
 	//EquipmentTableConfig
 	beego.Router("/equipmenttableconfig/index", &controllers.EquipmentTableConfigController{}, "*:Index")

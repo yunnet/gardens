@@ -51,8 +51,8 @@
 
             submitHandler: function (form) {
                 var url = '{{ urlfor "HomeController.DoLogin"}}';
-                var data = $thisForm.serialize();
-                $.sdpost(url, data, function (re) {
+                var params = $thisForm.serialize();
+                $.sdpost(url, params, function (re) {
                     if (re.code === 0) {                       
                         window.location.href='{{ urlfor "HomeController.Index"}}'
                     } else {

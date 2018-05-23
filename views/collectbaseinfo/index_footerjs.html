@@ -408,11 +408,11 @@
     //echarts
     function collectRowsToday() {
         var url = '{{ urlfor "CollectBaseInfoController.DataList"}}';
-        var param ={CollectTime: $('.searchForm input[name="CollectTime"]').val(),
-                    DTU_no: $('.searchForm input[name="DTU_no"]').val(),
-                    MeterAddress: $('.searchForm input[name="MeterAddress"]').val()
-                };
-        $.sdpost(url, param, function (re) {
+        var params ={CollectTime: $('.searchForm input[name="CollectTime"]').val(),
+                     DTU_no: $('.searchForm input[name="DTU_no"]').val(),
+                     MeterAddress: $('.searchForm input[name="MeterAddress"]').val()
+                     };
+        $.sdpost(url, params, function (re) {
             if (re.code === 0) {
                 var dateList = re.obj.map(function (item) {
                     return new Date(item.CollectTime).format("hh:mm:ss");
@@ -765,7 +765,7 @@
                 totalPateeChart.setOption(option4);
 
             } else {
-                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("collectRowsToday 数据获取失败", {icon: 2, title: '错误'})
             }
         });
     }

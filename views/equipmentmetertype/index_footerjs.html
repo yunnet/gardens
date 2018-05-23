@@ -299,8 +299,8 @@
         layer.confirm('您是否要删除所选的项？', {
             btn: ['是', '否'], icon: 3, title: '请确认'
         }, function () {
-            var dataValues = {ids: ids.join(',')};
-            $.sdpost(url, dataValues, function (re) {
+            var params = {ids: ids.join(',')};
+            $.sdpost(url, params, function (re) {
                 if (re.code === 0) {
                     layer.msg(re.msg, {icon: 1, title: '成功'});
                     refresh();

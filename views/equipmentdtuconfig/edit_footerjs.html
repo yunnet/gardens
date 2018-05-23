@@ -12,12 +12,8 @@
 
     function pageInit(){
        $("#Used").selectpicker('val', '{{.m.Used}}');
-       var url = '{{ urlfor "EquipmentSimCardsController.DataGrid"}}';
+       var url = '{{ urlfor "EquipmentSimCardsController.SelectPicker"}}';
        rms.selectSimNO(url, '{{.m.Sim_no}}');
-
-        if($("#TimeInterval").val() == 0){
-            $('#TimeInterval').val(5);
-        }
 
        //验证
        validateInfo();
@@ -31,13 +27,18 @@
                 DTU_no: {
                     maxlength: 12,
                     required: true
+                },
+                TimeInterval:{
+                    min: 1,
+                    required: true
                 }
             },
             messages: {},
             submitHandler: function (form) {
 				var url ='{{ urlfor "EquipmentDtuConfigController.Edit"}}';
-				var data = $thisForm.serialize();
-				$.sdpost(url, data, function(re){
+				var params = $thisForm.serialize();
+
+				$.sdpost(url, params, function(re){
 					if(re.code === 0){
 						parent.layer.msg(re.msg);
 						parent.refresh(re.obj);

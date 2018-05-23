@@ -197,8 +197,8 @@
         layer.confirm(waring, {
             btn: ['是', '否'], icon: 3, title: '请确认'
         }, function () {
-            var dataValues = {Id: Id};
-            $.sdpost(url, dataValues, function (re) {
+            var params = {Id: Id};
+            $.sdpost(url, params, function (re) {
                 if (re.code == 0) {
                     layer.msg(re.msg, {icon: 1, title: '成功'});
                     refresh();

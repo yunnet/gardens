@@ -6,17 +6,16 @@ import (
 )
 
 type EquipmentDtuConfig struct {
-	Id                 int    `form:"id"`
-	DTU_no             string `orm:"column(dtu_no)"`
-	ElectricalRoomCode string `orm:"column(electrical_room_code)"`
-	Sim_no             string `orm:"column(sim_no)"`
-	TimeInterval       int    `orm:"column(time_interval)"`
-
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"auto_now_add;type(datetime);column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"auto_now;type(datetime);column(changedate)"`
+	Id                 int       `form:"id"`
+	DTU_no             string    `orm:"column(dtu_no)"`
+	ElectricalRoomCode string    `orm:"column(electrical_room_code)"`
+	Sim_no             string    `orm:"column(sim_no)"`
+	TimeInterval       int       `orm:"column(time_interval)"`
+	Used               int       `orm:"column(tag)"`
+	CreateUser         string    `orm:"column(createuser)"`
+	CreateDate         time.Time `orm:"auto_now_add;type(datetime);column(createdate)"`
+	ChangeUser         string    `orm:"column(changeuser)"`
+	ChangeDate         time.Time `orm:"auto_now;type(datetime);column(changedate)"`
 }
 
 type EquipmentDtuConfigQueryParam struct {
@@ -27,7 +26,7 @@ type EquipmentDtuConfigQueryParam struct {
 }
 
 //DTU配置
-func EquipmentDtuConfigTBName() string  {
+func EquipmentDtuConfigTBName() string {
 	return "equipment_dtu_config"
 }
 

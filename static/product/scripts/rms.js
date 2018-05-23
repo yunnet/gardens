@@ -4,25 +4,50 @@ var rms = function () {
         //console.log("*** rms js *** init");
     }
 
+    // Sort   string `json:"sort"`
+    // Order  string `json:"order"`
+    // Offset int64  `json:"offset"`
+    // Limit  int    `json:"limit"`
+    // Sim_no string
+    // Used   string //为空不查询，有值精确查询
+
     function selectSimNO(url, item) {
         var $select = $("#Sim_no");
-        $.ajax({
-            url: url,
-            dataType: "json",
-            success: function (data) {
+        var params = {Used: "1"};
+
+        $.sdpost(url, params, function (re) {
+            if(re.code === 0){
                 var html = [];
-                $.each(data.rows, function (i, row) {
+                $.each(re.obj, function (i, row) {
                     html.push("<option value='"+ row.Sim_no + "'>" + row.Sim_no + "</option>");
                 });
                 $select.html(html.join(''));
                 $select.selectpicker('refresh');
 
                 $select.selectpicker('val', item);
-            },
-            error: function (data) {
-                layer.alert("获取数据失败", {icon: 2, title: '失败'});
+            }else {
+                layer.alert("数据获取失败", {icon: 2, title: '错误'})
             }
         });
+
+        // $.ajax({
+        //     url: url,
+        //     data: params,
+        //     dataType: "json",
+        //     success: function (data) {
+        //         var html = [];
+        //         $.each(data.rows, function (i, row) {
+        //             html.push("<option value='"+ row.Sim_no + "'>" + row.Sim_no + "</option>");
+        //         });
+        //         $select.html(html.join(''));
+        //         $select.selectpicker('refresh');
+        //
+        //         $select.selectpicker('val', item);
+        //     },
+        //     error: function (data) {
+        //         layer.alert("获取数据失败", {icon: 2, title: '失败'});
+        //     }
+        // });
     }
 
     function selectMeterType(url, item) {

@@ -38,8 +38,8 @@ func (this *EquipmentDtuConfigController) Index() {
 func (this *EquipmentDtuConfigController) DataGrid() {
 	var params models.EquipmentDtuConfigQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
-	data, total := models.EquipmentDtuConfigPageList(&params)
 
+	data, total := models.EquipmentDtuConfigPageList(&params)
 	result := make(map[string]interface{})
 	result["total"] = total
 	result["rows"] = data
@@ -69,6 +69,7 @@ func (this *EquipmentDtuConfigController) Edit() {
 		}
 	} else {
 		m.Used = enums.Enabled
+		m.TimeInterval = 5
 	}
 
 	this.Data["m"] = m
@@ -89,9 +90,13 @@ func (this *EquipmentDtuConfigController) Save() {
 
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
+
 	m.DTU_no = this.GetString("DTU_no")
 	m.Sim_no = this.GetString("Sim_no")
 	m.ElectricalRoomCode = this.GetString("ElectricalRoomCode")
+
+	timeInterval := this.Input().Get("TimeInterval")
+	m.TimeInterval, _ = strconv.Atoi(timeInterval)
 
 	m.ChangeUser = this.curUser.RealName
 	m.ChangeDate = time.Now()
@@ -107,7 +112,7 @@ func (this *EquipmentDtuConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "ElectricalRoomCode", "Sim_no", "Used", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "DTU_no", "ElectricalRoomCode", "Sim_no", "TimeInterval", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

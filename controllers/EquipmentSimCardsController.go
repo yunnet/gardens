@@ -53,6 +53,14 @@ func (this *EquipmentSimCardsController) DataGrid() {
 	this.ServeJSON()
 }
 
+//下拉选择列表
+func(this *EquipmentSimCardsController)SelectPicker(){
+	var params = models.EquipmentSimCardsQueryParam{}
+	params.Used = this.Input().Get("Used")
+	data := models.EquipmentSimCardsDataList(&params)
+	this.jsonResult(enums.JRCodeSucc, "", data)
+}
+
 //DataList 列表
 func (this *EquipmentSimCardsController) DataList() {
 	var params = models.EquipmentSimCardsQueryParam{}

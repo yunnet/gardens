@@ -77,16 +77,16 @@
             },
             messages: {
                 Mobile: {
-                    mobile: "请输入正确的手机号",
-                },
+                    mobile: "请输入正确的手机号"
+                }
             },
             submitHandler: function (form) {
-                var url = '{{ urlfor "BackendUserController.Edit"}}'
-                var data = $thisForm.serialize();
-                $.sdpost(url, data, function (re) {
+                var url = '{{ urlfor "BackendUserController.Edit"}}';
+                var params = $thisForm.serialize();
+                $.sdpost(url, params, function (re) {
                     if (re.code === 0) {
-                        parent.layer.msg(re.msg)
-                        parent.refresh(re.obj)
+                        parent.layer.msg(re.msg);
+                        parent.refresh(re.obj);
                         parent.layer.close(index)
                     } else {
                         parent.layer.alert(re.msg, {icon: 2, title: '失败'})

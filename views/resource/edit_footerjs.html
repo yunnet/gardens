@@ -25,7 +25,8 @@
 
     function ParentSelectInit(curPid) {
         var url = '{{urlfor "ResourceController.ParentTreeGrid"}}';
-        $.sdpost(url, {id: $("#Id").val()}, function (re) {
+        var params = {id: $("#Id").val()};
+        $.sdpost(url, params, function (re) {
             if (re.code === 0) {
                 var html = ['<option value="0">- 无 -</option>'];
                 var $select = $("#Parent");
@@ -77,7 +78,8 @@
         } else {
             var retval = false;
             var url = '{{urlfor "ResourceController.CheckUrlFor"}}';
-            $.sdpost(url, {urlfor: urlfor}, function (re) {
+            var params = {urlfor: urlfor};
+            $.sdpost(url, params, function (re) {
                 if (re.code === 0) {
                     $("#LinkUrl").val(re.obj);
                     retval = true;
@@ -124,8 +126,8 @@
             },
             submitHandler: function (form) {
                 var url = '{{ urlfor "ResourceController.Edit"}}';
-                var data = $thisForm.serialize();
-                $.sdpost(url, data, function (re) {
+                var params = $thisForm.serialize();
+                $.sdpost(url, params, function (re) {
                     if (re.code === 0) {
                         parent.layer.msg(re.msg);
                         //刷新，并将所编辑的节点展开

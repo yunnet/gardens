@@ -147,11 +147,12 @@
         this.$fixedBody.css({
             width: this.$fixedHeader.width(),
             height: height,
-            top: top
+            top: top - 1
         }).show();
 
         this.$body.find('> tr').each(function (i) {
-            that.$fixedBody.find('tr:eq(' + i + ')').height($(this).height() - 1);
+            // that.$fixedBody.find('tr:eq(' + i + ')').height($(this).height() - 1);
+            that.$fixedBody.find('tr:eq(' + i + ')').height($(this).height());
         });
 
         // events

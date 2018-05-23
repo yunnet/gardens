@@ -111,8 +111,8 @@
             },
             submitHandler: function (form) {
                 var url = '{{ urlfor "UserCenterController.BasicInfoSave"}}';
-                var data = $thisForm.serialize();
-                $.sdpost(url, data, function (re) {
+                var params = $thisForm.serialize();
+                $.sdpost(url, params, function (re) {
                     if (re.code === 0) {
                         layer.msg(re.msg,{icon:1,title:'成功',time:1000},function(){
                             window.location.reload();
@@ -151,8 +151,8 @@
             },
             submitHandler: function (form) {
                 var url = '{{ urlfor "UserCenterController.PasswordSave"}}';
-                var data = $thisForm.serialize();
-                $.sdpost(url, data, function (re) {
+                var params = $thisForm.serialize();
+                $.sdpost(url, params, function (re) {
                     if (re.code === 0) {
                         layer.msg(re.msg);                        
                     } else {

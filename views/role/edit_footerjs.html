@@ -23,8 +23,8 @@
             messages: {},
             submitHandler: function (form) {
 				var url ='{{ urlfor "RoleController.Edit"}}';
-				var data = $thisForm.serialize();				
-				$.sdpost(url,data,function(re){
+				var params = $thisForm.serialize();
+				$.sdpost(url,params,function(re){
 					if(re.code === 0){
 						parent.layer.msg(re.msg);
 						parent.refresh(re.obj);

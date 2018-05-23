@@ -221,8 +221,8 @@
         layer.confirm('您是否要删除所选的项？', {
             btn: ['是', '否'], icon: 3, title: '请确认'
         }, function () {
-            var dataValues = {ids: ids.join(',')};
-            $.sdpost(url, dataValues, function (re) {
+            var params = {ids: ids.join(',')};
+            $.sdpost(url, params, function (re) {
                 if (re.code === 0) {
                     layer.msg(re.msg, {icon: 1, title: '成功'});
                     refresh();
@@ -236,6 +236,7 @@
     function AllocateFun(Id) {
         var url = '{{ urlfor "ResourceController.Select"}}' + '?desttype=1&destval=' + Id;
         var urlAllocate = '{{ urlfor "RoleController.Allocate"}}';
+
         layer.open({
             type: 2,
             title: '选择资源',
@@ -251,8 +252,8 @@
                 var selectedids = iframeWin.getSelections();
 
                 if (selectedids.length > 0) {
-                    var datas = {id: Id, ids: selectedids.join(',')};
-                    $.sdpost(urlAllocate, datas, function (re) {
+                    var params = {id: Id, ids: selectedids.join(',')};
+                    $.sdpost(urlAllocate, params, function (re) {
                         if (re.code === 0) {
                             refresh(Id);
                             layer.msg(re.msg);

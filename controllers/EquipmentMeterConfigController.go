@@ -69,6 +69,8 @@ func (this *EquipmentMeterConfigController) Edit() {
 		}
 	} else {
 		m.Used = 0
+		m.Ct = 1
+		m.Pt = 1
 	}
 
 	this.Data["m"] = m
