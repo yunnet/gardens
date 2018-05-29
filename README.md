@@ -23,16 +23,17 @@
 6. 高亮显示使用的是笔者自已开发的插件；
 7. 分页列表里搜索条件、搜索面板状态自动保存使用的是笔者自已开发的插件。
 # 增加部分
-1. 增加了font-awesome 图标选择的功能；
+1. 增加了font-awesome图标选择的功能；
 2. 增加了font-awesome图标显示页面；
 3. 增加了d3.js展示客户信息；
 4. 增加了用户登陆信息日志显示；
 5. 增加了eCharts和百度地图的展示；
 6. 增加了BoxWidget.prototype.maximize功能；
 7. 增加了websocket测试实例；
-8. 增加了nprogress;
-9. 增加了bootstrapTable控件表头合并列显示方式；
+8. 增加了nprogress（<a href="https://github.com/rstacruz/nprogress/">更多信息</a>）；
+9. 增加了bootstrapTable控件表头合并列显示方式（<a href="https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/sticky-header/">更多信息</a>）；
 10. 修改dashborad中增加connectedSortable可移动box；
+11. 增加了bootstrap-table列宽手工调整功能（<a href="https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/resizable/">更多信息</a>）；
 
 
 # 安装方法
