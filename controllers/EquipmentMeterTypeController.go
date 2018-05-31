@@ -96,7 +96,6 @@ func (this *EquipmentMeterTypeController) Save() {
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
 
-	m.MeterTypeNO = this.GetString("MeterTypeNO")
 	m.MeterType = this.GetString("MeterType")
 	m.VendorNO = this.GetString("VendorNO")
 	m.PtAddress = this.GetString("PtAddress")
@@ -113,16 +112,38 @@ func (this *EquipmentMeterTypeController) Save() {
 	m.ChangeUser = this.curUser.RealName
 	m.ChangeDate = time.Now()
 
+	o := orm.NewOrm()
 	if m.Id == 0 {
+		if err = o.Begin(); err != nil{
+			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			return
+		}
+
+		if m.MeterTypeNO, err = GetSysValNO("metertypeno"); err != nil{
+			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			o.Rollback()
+			return
+		}
+
 		m.CreateUser = this.curUser.RealName
 		m.CreateDate = time.Now()
 
-		if _, err = models.EquipmentMeterTypeAdd(&m); err == nil {
-			this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
+		if _, err = o.Insert(&m); err == nil {
+			if err = o.Commit(); err != nil{
+				this.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
+			}else{
+				this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
+			}
 		} else {
-			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			if err = o.Rollback(); err != nil{
+				this.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
+			}else{
+				this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			}
 		}
 	} else {
+		m.MeterTypeNO = this.GetString("MeterTypeNO")
+
 		if err = m.Update("MeterTypeNO", "MeterType", "VendorNO", "PtAddress", "CtAddress", "ThreePhase", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {

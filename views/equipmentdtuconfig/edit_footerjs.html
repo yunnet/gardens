@@ -6,14 +6,17 @@
 
 <script>
 	var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-   $(function () {
+    $(function () {
        pageInit();
-   });
+    });
 
     function pageInit(){
        $("#Used").selectpicker('val', '{{.m.Used}}');
        var url = '{{ urlfor "EquipmentSimCardsController.SelectPicker"}}';
-       rms.selectSimNO(url, '{{.m.Sim_no}}');
+       rms.selectSimNO(url, '{{.m.Sim_no}}', '{{.m.Used}}');
+
+       var url2 = '{{ urlfor "EquipmentRoomController.SelectPicker"}}';
+       rms.selectRoomNO(url2, '{{.m.Room_no}}', '{{.m.Used}}');
 
        //验证
        validateInfo();

@@ -17,11 +17,11 @@ type EquipmentDtuConfigController struct {
 
 func (this *EquipmentDtuConfigController) Prepare() {
 	this.BaseController.Prepare()
-	this.checkAuthor("DataGrid", "DataList")
+	this.checkAuthor("DataGrid", "DataList", "SelectPicker")
 }
 
 func (this *EquipmentDtuConfigController) Index() {
-	this.Data["pageTitle"] = "DTU管理"
+	this.Data["pageTitle"] = "网络设备管理"
 	this.Data["showMoreQuery"] = true
 
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
@@ -48,6 +48,14 @@ func (this *EquipmentDtuConfigController) DataGrid() {
 	this.ServeJSON()
 }
 
+//下拉选择列表
+func(this *EquipmentDtuConfigController)SelectPicker(){
+	var params = models.EquipmentDtuConfigQueryParam{}
+	params.Used = this.Input().Get("Used")
+	data := models.EquipmentDtuConfigDataList(&params)
+	this.jsonResult(enums.JRCodeSucc, "", data)
+}
+
 func (this *EquipmentDtuConfigController) DataList() {
 	var params = models.EquipmentDtuConfigQueryParam{}
 	data := models.EquipmentDtuConfigDataList(&params)
@@ -68,7 +76,7 @@ func (this *EquipmentDtuConfigController) Edit() {
 			this.pageError("数据无效，请刷新后重试")
 		}
 	} else {
-		m.Used = enums.Enabled
+		m.Used = enums.Disabled
 		m.TimeInterval = 5
 	}
 
@@ -93,7 +101,7 @@ func (this *EquipmentDtuConfigController) Save() {
 
 	m.DTU_no = this.GetString("DTU_no")
 	m.Sim_no = this.GetString("Sim_no")
-	m.ElectricalRoomCode = this.GetString("ElectricalRoomCode")
+	m.Room_no = this.GetString("Room_no")
 
 	timeInterval := this.Input().Get("TimeInterval")
 	m.TimeInterval, _ = strconv.Atoi(timeInterval)
@@ -112,7 +120,7 @@ func (this *EquipmentDtuConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "ElectricalRoomCode", "Sim_no", "TimeInterval", "Used", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "DTU_no", "Room_no", "Sim_no", "TimeInterval", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

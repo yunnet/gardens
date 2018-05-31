@@ -22,6 +22,7 @@ type RoleController struct {
 func (this *RoleController) Prepare() {
 	//先执行
 	this.BaseController.Prepare()
+
 	//如果一个Controller的多数Action都需要权限控制，则将验证放到Prepare
 	this.checkAuthor("DataGrid", "DataList", "UpdateSeq")
 
@@ -36,12 +37,15 @@ func (this *RoleController) Index() {
 
 	//是否显示更多查询条件的按钮
 	this.Data["showMoreQuery"] = false
+
 	//将页面左边菜单的某项激活
 	this.Data["activeSidebarUrl"] = this.URLFor(this.controllerName + "." + this.actionName)
+
 	this.setTpl()
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["headcssjs"] = "role/index_headcssjs.html"
 	this.LayoutSections["footerjs"] = "role/index_footerjs.html"
+
 	//页面里按钮权限控制
 	this.Data["canEdit"] = this.checkActionAuthor("RoleController", "Edit")
 	this.Data["canDelete"] = this.checkActionAuthor("RoleController", "Delete")
@@ -53,8 +57,10 @@ func (this *RoleController) DataGrid() {
 	//直接反序化获取json格式的requestbody里的值
 	var params models.RoleQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
+
 	//获取数据列表和总数
 	data, total := models.RolePageList(&params)
+
 	//定义返回的数据结构
 	result := make(map[string]interface{})
 	result["total"] = total
@@ -67,8 +73,10 @@ func (this *RoleController) DataGrid() {
 //DataList 角色列表
 func (this *RoleController) DataList() {
 	var params = models.RoleQueryParam{}
+
 	//获取数据列表和总数
 	data := models.RoleDataList(&params)
+
 	//定义返回的数据结构
 	this.jsonResult(enums.JRCodeSucc, "", data)
 }
@@ -78,6 +86,7 @@ func (this *RoleController) Edit() {
 	if this.Ctx.Request.Method == "POST" {
 		this.Save()
 	}
+
 	Id, _ := this.GetInt(":id", 0)
 	m := models.Role{Id: Id}
 	if Id > 0 {
@@ -97,10 +106,12 @@ func (this *RoleController) Edit() {
 func (this *RoleController) Save() {
 	var err error
 	m := models.Role{}
+
 	//获取form里的值
 	if err = this.ParseForm(&m); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
+
 	o := orm.NewOrm()
 	if m.Id == 0 {
 		if _, err = o.Insert(&m); err == nil {
@@ -122,11 +133,13 @@ func (this *RoleController) Save() {
 func (this *RoleController) Delete() {
 	strs := this.GetString("ids")
 	ids := make([]int, 0, len(strs))
+
 	for _, str := range strings.Split(strs, ",") {
 		if id, err := strconv.Atoi(str); err == nil {
 			ids = append(ids, id)
 		}
 	}
+
 	if num, err := models.RoleBatchDelete(ids); err == nil {
 		this.jsonResult(enums.JRCodeSucc, fmt.Sprintf("成功删除 %d 项", num), 0)
 	} else {
@@ -144,10 +157,12 @@ func (this *RoleController) Allocate() {
 	if err := o.Read(&m); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "数据无效，请刷新后重试", "")
 	}
+
 	//删除已关联的历史数据
 	if _, err := o.QueryTable(models.RoleResourceRelTBName()).Filter("role__id", m.Id).Delete(); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "删除历史关系失败", "")
 	}
+
 	var relations []models.RoleResourceRel
 	for _, str := range strings.Split(strs, ",") {
 		if id, err := strconv.Atoi(str); err == nil {
@@ -156,12 +171,14 @@ func (this *RoleController) Allocate() {
 			relations = append(relations, relation)
 		}
 	}
+
 	if len(relations) > 0 {
 		//批量添加
 		if _, err := o.InsertMulti(len(relations), relations); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "保存成功", "")
 		}
 	}
+
 	this.jsonResult(0, "保存失败", "")
 }
 
@@ -171,8 +188,10 @@ func (this *RoleController) UpdateSeq() {
 	if err != nil || oM == nil {
 		this.jsonResult(enums.JRCodeFailed, "选择的数据无效", 0)
 	}
+
 	value, _ := this.GetInt("value", 0)
 	oM.Seq = value
+
 	o := orm.NewOrm()
 	if _, err := o.Update(oM); err == nil {
 		this.jsonResult(enums.JRCodeSucc, "修改成功", oM.Id)

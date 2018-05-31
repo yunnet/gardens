@@ -1,0 +1,80 @@
+<div class="row">
+    <!-- form start -->
+    <form class="form-horizontal" id="thisForm">
+        <input type="hidden" Name="Id" id="Id" value="{{.m.Id}}">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">客户编号</label>
+            <div class="col-sm-8">
+                <input type="text" name="CustomerNO" id="CustomerNO" class="form-control" placeholder="自动生成编号" onfocus="this.select();" value="{{.m.CustomerNO}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">客户名称</label>
+            <div class="col-sm-8">
+                <input type="text" name="CustomerName" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.CustomerName}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">客户全称</label>
+            <div class="col-sm-8">
+                <input type="text" name="CustomerDesc" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.CustomerDesc}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系人</label>
+            <div class="col-sm-8">
+                <input type="text" name="Contacts" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.Contacts}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">联系电话</label>
+            <div class="col-sm-8">
+                <input type="text" name="Phone" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.Phone}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">地址</label>
+            <div class="col-sm-8">
+                <input type="text" name="Address" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.Address}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">区域</label>
+            <div class="col-sm-8">
+                <select name="Zone" id="Zone" class="form-control bs-select">
+                    <option value="天河区">天河区</option>
+                    <option value="海珠区">海珠区</option>
+                    <option value="白云区">白云区</option>
+                    <option value="荔湾区">荔湾区</option>
+                    <option value="黄埔区">黄埔区</option>
+                    <option value="花都区">花都区</option>
+                    <option value="南沙区">南沙区</option>
+                    <option value="其它">其它</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">经度</label>
+            <div class="col-sm-8">
+                <input type="text" name="Longitude" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.Longitude}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">纬度</label>
+            <div class="col-sm-8">
+                <input type="text" name="Latitude" class="form-control" placeholder="" onfocus="this.select();" value="{{.m.Latitude}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">状态</label>
+            <div class="col-sm-8">
+                <select name="Used" id="Used" class="form-control bs-select">
+                    <option value="1">禁用</option>
+                    <option value="0">启用</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>

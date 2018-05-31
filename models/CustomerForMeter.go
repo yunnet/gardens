@@ -99,7 +99,7 @@ func GetCustomers()int {
 	var rows int
 	o := orm.NewOrm()
 
-	sql := "SELECT count(1) as rows FROM (SELECT DISTINCT customer_id FROM v_customer_for_meter) as customer"
+	sql := "SELECT count(1) as rows FROM equipment_customer WHERE tag = 0"
 	err := o.Raw(sql).QueryRow(&rows)
 	if err != nil {
 		return 0

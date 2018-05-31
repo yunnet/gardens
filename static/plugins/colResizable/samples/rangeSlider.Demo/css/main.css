@@ -1,0 +1,58 @@
+body{
+	background-color: white;
+	text-align:center;
+	
+}
+
+
+.center{
+	text-align:left;
+	margin-left: auto;
+	margin-right: auto;	
+	width:575px;
+}
+
+
+
+#range{
+	border:none;
+	height:37px;
+
+}
+
+#slider:before{
+	display:block;
+	background-image: url('../img/rangeBar.png');	
+	background-position:0px 10px;
+	background-repeat: repeat-x;
+	margin-left:9px;
+	width:560px;
+	height:30px;
+	position:relative;
+	position:absolute;
+	content:""
+}
+
+#range td{
+	border:none;
+}
+
+.rangeGrip{
+	width:10px;
+	height:19px;
+	cursor:e-resize;
+	background-image: url('../img/slider.png');
+	z-index:8;
+}
+
+
+.rangeDrag .rangeGrip, .rangeGrip:hover{
+	background-position:right;
+}
+
+#text{
+	color:#034a92;
+	float:right;
+
+}
+

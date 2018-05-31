@@ -6,23 +6,24 @@ import (
 )
 
 type EquipmentDtuConfig struct {
-	Id                 int       `form:"id"`
-	DTU_no             string    `orm:"column(dtu_no)"`
-	ElectricalRoomCode string    `orm:"column(electrical_room_code)"`
-	Sim_no             string    `orm:"column(sim_no)"`
-	TimeInterval       int       `orm:"column(time_interval)"`
-	Used               int       `orm:"column(tag)"`
-	CreateUser         string    `orm:"column(createuser)"`
-	CreateDate         time.Time `orm:"auto_now_add;type(datetime);column(createdate)"`
-	ChangeUser         string    `orm:"column(changeuser)"`
-	ChangeDate         time.Time `orm:"auto_now;type(datetime);column(changedate)"`
+	Id           int       `form:"id"`
+	DTU_no       string    `orm:"column(dtu_no)"`
+	Room_no      string    `orm:"column(room_no)"`
+	Sim_no       string    `orm:"column(sim_no)"`
+	TimeInterval int       `orm:"column(time_interval)"`
+	Used         int       `orm:"column(tag)"`
+	CreateUser   string    `orm:"column(createuser)"`
+	CreateDate   time.Time `orm:"auto_now_add;type(datetime);column(createdate)"`
+	ChangeUser   string    `orm:"column(changeuser)"`
+	ChangeDate   time.Time `orm:"auto_now;type(datetime);column(changedate)"`
 }
 
 type EquipmentDtuConfigQueryParam struct {
 	BaseQueryParam
-	DTU_no             string
-	ElectricalRoomCode string
-	Used               string //为空不查询，有值精确查询
+	DTU_no  string
+	Room_no string
+	Sim_no  string
+	Used    string //为空不查询，有值精确查询
 }
 
 //DTU配置
@@ -54,8 +55,9 @@ func EquipmentDtuConfigPageList(params *EquipmentDtuConfigQueryParam) ([]*Equipm
 		sortorder = "-" + sortorder
 	}
 
-	query = query.Filter("DTU_no__istartswith", params.DTU_no)
-	query = query.Filter("ElectricalRoomCode__istartswith", params.ElectricalRoomCode)
+	query = query.Filter("DTU_no__contains", params.DTU_no)
+	query = query.Filter("Room_no__contains", params.Room_no)
+	query = query.Filter("Sim_no__contains", params.Sim_no)
 	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()

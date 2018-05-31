@@ -69,6 +69,8 @@ func (this *EquipmentMeterAddrConfigController) Edit() {
 		}
 	} else {
 		m.Used = enums.Enabled
+		m.SegmentStartAddr = 1
+		m.SegmentNO = 1
 	}
 
 	this.Data["m"] = m

@@ -6,18 +6,17 @@ import (
 )
 
 type EquipmentTableConfig struct {
-	Id             int    `form:"id"`
-	FieldName      string `orm:"column(field_name)"`
-	FieldDesc      string `orm:"column(field_desc)"`
-	FunctionTable1 string `orm:"column(function_table1)"`
-	FunctionTable2 string `orm:"column(function_table2)"`
-	FunctionTable3 string `orm:"column(function_table3)"`
-
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id             int       `form:"id"`
+	FieldName      string    `orm:"column(field_name)"`
+	FieldDesc      string    `orm:"column(field_desc)"`
+	FunctionTable1 string    `orm:"column(function_table1)"`
+	FunctionTable2 string    `orm:"column(function_table2)"`
+	FunctionTable3 string    `orm:"column(function_table3)"`
+	Used           int       `orm:"column(tag)"`
+	CreateUser     string    `orm:"column(createuser)"`
+	CreateDate     time.Time `orm:"column(createdate)"`
+	ChangeUser     string    `orm:"column(changeuser)"`
+	ChangeDate     time.Time `orm:"column(changedate)"`
 }
 
 type EquipmentTableConfigQueryParam struct {
@@ -27,7 +26,7 @@ type EquipmentTableConfigQueryParam struct {
 	Used      string
 }
 
-func EquipmentTableConfigTBName() string  {
+func EquipmentTableConfigTBName() string {
 	return "equipment_table_config"
 }
 

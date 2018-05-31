@@ -22,6 +22,7 @@
         var url = '{{ urlfor "EquipmentVendorController.DataGrid"}}';
         rms.selectVendorNO(url, '{{.m.VendorNO}}');
 
+        $("#MeterTypeNO").attr("readonly", true);
         $("#Used").selectpicker('val', '{{.m.Used}}');
 
         //验证
@@ -33,9 +34,6 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                MeterTypeNO: {
-                    required: true
-                },
                 MeterType: {
                     required: true
                 },

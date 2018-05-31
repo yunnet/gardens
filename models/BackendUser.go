@@ -40,23 +40,29 @@ func BackendUserTBName() string {
 func BackendUserPageList(params *BackendUserQueryParam) ([]*BackendUser, int64) {
 	query := orm.NewOrm().QueryTable(BackendUserTBName())
 	data := make([]*BackendUser, 0)
+
 	//默认排序
 	sortorder := "Id"
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
 	}
+
 	if params.Order == "desc" {
 		sortorder = "-" + sortorder
 	}
+
 	query = query.Filter("username__istartswith", params.UserNameLike)
 	query = query.Filter("realname__istartswith", params.RealNameLike)
+
 	if len(params.Mobile) > 0 {
 		query = query.Filter("mobile", params.Mobile)
 	}
+
 	if len(params.SearchStatus) > 0 {
 		query = query.Filter("status", params.SearchStatus)
 	}
+
 	total, _ := query.Count()
 	query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
 	return data, total

@@ -17,7 +17,7 @@ type EquipmentVendorController struct {
 
 func (this *EquipmentVendorController) Prepare() {
 	this.BaseController.Prepare()
-	this.checkAuthor("DataGrid", "DataList")
+	this.checkAuthor("DataGrid", "DataList", "SelectPicker")
 }
 
 func (this *EquipmentVendorController) Index() {
@@ -46,6 +46,14 @@ func (this *EquipmentVendorController) DataGrid() {
 
 	this.Data["json"] = result
 	this.ServeJSON()
+}
+
+//下拉选择列表
+func(this *EquipmentVendorController)SelectPicker(){
+	var params = models.EquipmentVendorQueryParam{}
+	params.Used = this.Input().Get("Used")
+	data := models.EquipmentVendorDataList(&params)
+	this.jsonResult(enums.JRCodeSucc, "", data)
 }
 
 func (this *EquipmentVendorController) DataList() {
@@ -89,23 +97,41 @@ func (this *EquipmentVendorController) Save() {
 
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
-	m.VendorNO = this.GetString("VendorNO")
 	m.VendorDesc = this.GetString("VendorDesc")
+	m.ChangeUser = this.curUser.RealName
+	m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
+		if err = o.Begin(); err != nil{
+			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			return
+		}
+
+		if m.VendorNO, err = GetSysValNO("vendorno"); err != nil{
+			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			o.Rollback()
+			return
+		}
 		m.CreateUser = this.curUser.RealName
 		m.CreateDate = time.Now()
 
 		if _, err = o.Insert(&m); err == nil {
-			this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
+			if err = o.Commit(); err != nil{
+				this.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
+				o.Rollback()
+			}else{
+				this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
+			}
 		} else {
-			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			if err = o.Rollback(); err != nil{
+				this.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
+			}else{
+				this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
+			}
 		}
 	} else {
-		m.ChangeUser = this.curUser.RealName
-		m.ChangeDate = time.Now()
-
+		m.VendorNO = this.GetString("VendorNO")
 		if _, err = o.Update(&m, "VendorNO", "VendorDesc", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {

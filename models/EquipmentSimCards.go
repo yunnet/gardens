@@ -6,13 +6,20 @@ import (
 )
 
 type EquipmentSimCards struct {
-	Id         int       `form:"id"`
-	Sim_no     string    `orm:"column(sim_no)"`
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id               int64     `form:"id"`
+	Sim_no           string    `orm:"column(sim_no)"`
+	Iccid            string    `orm:"column(ICCID)"`
+	TotalTraffic     float64   `orm:"digits(12);decimals(2);column(totaltraffic)"`
+	UseTraffic       float64   `orm:"digits(12);decimals(2);column(usetraffic)"`
+	RemainTraffic    float64   `orm:"digits(12);decimals(2);column(remaintraffic)"`
+	TrafficSyncTime  time.Time `orm:"column(trafficsynctime)"`
+	PackageStartTime time.Time `orm:"column(packagestarttime)"`
+	PackageStopTime  time.Time `orm:"column(packagestoptime)"`
+	Used             int       `orm:"column(tag)"`
+	CreateUser       string    `orm:"column(createuser)"`
+	CreateDate       time.Time `orm:"column(createdate)"`
+	ChangeUser       string    `orm:"column(changeuser)"`
+	ChangeDate       time.Time `orm:"column(changedate)"`
 }
 
 type EquipmentSimCardsQueryParam struct {
@@ -43,7 +50,7 @@ func EquipmentSimCardsPageList(params *EquipmentSimCardsQueryParam) ([]*Equipmen
 		sortorder = "-" + sortorder
 	}
 
-	query = query.Filter("sim_no__istartswith", params.Sim_no)
+	query = query.Filter("sim_no__contains", params.Sim_no)
 	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()
@@ -67,7 +74,7 @@ func EquipmentSimCardsBatchDelete(ids []int) (int64, error) {
 	return num, err
 }
 
-func EquipmentSimCardsOne(id int) (*EquipmentSimCards, error) {
+func EquipmentSimCardsOne(id int64) (*EquipmentSimCards, error) {
 	o := orm.NewOrm()
 	m := EquipmentSimCards{Id: id}
 	err := o.Read(&m)
@@ -76,4 +83,3 @@ func EquipmentSimCardsOne(id int) (*EquipmentSimCards, error) {
 	}
 	return &m, nil
 }
-

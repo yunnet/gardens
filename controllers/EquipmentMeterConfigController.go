@@ -71,6 +71,7 @@ func (this *EquipmentMeterConfigController) Edit() {
 		m.Used = 0
 		m.Ct = 1
 		m.Pt = 1
+		m.MeterAddress = 1
 	}
 
 	this.Data["m"] = m

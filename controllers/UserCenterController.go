@@ -29,6 +29,7 @@ func (this *UserCenterController) Profile() {
 	}
 	this.Data["hasAvatar"] = len(m.Avatar) > 0
 	utils.LogDebug(m.Avatar)
+
 	this.Data["m"] = m
 	this.setTpl()
 
@@ -54,6 +55,11 @@ func (this *UserCenterController) BasicInfoSave() {
 	oM.Mobile = m.Mobile
 	oM.Email = m.Email
 	oM.Avatar = this.GetString("ImageUrl")
+	if len(oM.Avatar) == 0{
+		oM.Avatar = "/static/upload/tigger.png"
+	}
+
+
 	o := orm.NewOrm()
 	if _, err := o.Update(oM); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

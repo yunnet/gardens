@@ -52,14 +52,11 @@
                 <div class="box-body">
                     <div class="btn-group" id="toolbar">
                         {{ if .canEdit}}
-                        <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)">
-                            <i class="fa fa-plus"></i> 添加</button>    
+                            <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)"><i class="fa fa-plus"></i> 添加</button>
                         {{end}}
 
                         {{ if .canDelete}}                            
-                        <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()">
-                            <i class="fa fa-trash"></i> 删除
-                        </button>
+                            <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()"><i class="fa fa-trash"></i> 删除</button>
                         {{end}}  
                     </div>
 

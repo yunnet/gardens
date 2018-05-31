@@ -1,0 +1,95 @@
+body{
+	background-color: white;
+	text-align:center;
+	
+}
+
+
+.center{
+	text-align:left;
+	margin-left: auto;
+	margin-right: auto;	
+	width:575px;
+}
+
+
+
+#range{
+	border:none;
+	height:15px;
+	background-image: url('../img/range.png');	
+}
+
+#selection{
+	background-image: url('../img/range.png');
+	background-position: 0px -15px;
+	padding:0px;
+	margin:0px;
+	vertical-align:text-top;
+}
+
+
+#selection span{
+	width:100%;
+	height:15px;
+	position:relative;
+	display:block;
+	content:"";
+}
+
+#selection span:after{
+	background-image: url('../img/range.png');
+	background-position: 0px -30px;
+	position:absolute;
+	left:0px;
+	top:0px;
+	display:block;
+	content:"";
+	height:15px;
+	width:22px;
+	display:block;
+	content:"";
+}
+
+#selection span:before{
+	background-image: url('../img/range.png');
+	background-position: 0px -45px;
+	position:absolute;
+	right:0px;
+	top:0px;
+	display:block;
+	content:"";
+	height:15px;
+	width:22px;
+	display:block;
+	content:"";
+}
+
+
+#range td{
+	border:none;
+}
+
+.rangeGrip{
+	width:14px;
+	height:21px;
+	cursor:e-resize;
+	background-image: url('../img/range.png');
+	background-position: 0px -60px;
+	position:absolute;
+	left:-3px;
+	top:-3px;
+	z-index:8;
+}
+
+
+.rangeDrag .rangeGrip, .rangeGrip:hover{
+	background-position: -14px -60px;
+}
+
+#text{
+	color:#034a92;
+	float:right;
+
+}
+

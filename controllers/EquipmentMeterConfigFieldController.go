@@ -69,6 +69,7 @@ func (this *EquipmentMeterConfigFieldController) Edit() {
 		}
 	} else {
 		m.Used = 0
+		m.MeterAddress = 1
 	}
 
 	this.Data["m"] = m

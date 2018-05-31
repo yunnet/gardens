@@ -69,6 +69,7 @@ func (this *EquipmentMeterRomConfigController) Edit() {
 		}
 	} else {
 		m.Used = enums.Enabled
+		m.SegmentNO = 1
 	}
 
 	this.Data["m"] = m
@@ -146,7 +147,11 @@ func (this *EquipmentMeterRomConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "ElectricalRoomCode", "Used", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "DTU_no", "MeterTypeNO", "AddressSort", "RomAddress",
+			                           "RomName", "Units", "DataType",
+			                           "SegmentNO", "Offset", "Needpt", "Needct", "Calcfactor", "Msbbit", "Bytelength",
+			                           "FunctionTable1", "FunctionTable2", "FunctionTable3", "FunctionField",
+			                           "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

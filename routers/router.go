@@ -7,6 +7,29 @@ import (
 )
 
 func init() {
+	//EquipmentRoom
+	beego.Router("/equipmentroom/index", &controllers.EquipmentRoomController{}, "*:Index")
+	beego.Router("/equipmentroom/datagrid", &controllers.EquipmentRoomController{}, "Get,Post:DataGrid")
+	beego.Router("/equipmentroom/datalist", &controllers.EquipmentRoomController{}, "Post:DataList")
+	beego.Router("/equipmentroom/edit/?:id", &controllers.EquipmentRoomController{}, "Get,Post:Edit")
+	beego.Router("/equipmentroom/delete", &controllers.EquipmentRoomController{}, "Post:Delete")
+	beego.Router("/equipmentroom/selectpicker", &controllers.EquipmentRoomController{}, "Post:SelectPicker")
+
+	//SystemVal
+	beego.Router("/systemval/index", &controllers.SystemValController{}, "*:Index")
+	beego.Router("/systemval/datagrid", &controllers.SystemValController{}, "Get,Post:DataGrid")
+	beego.Router("/systemval/datalist", &controllers.SystemValController{}, "Post:DataList")
+	beego.Router("/systemval/edit/?:id", &controllers.SystemValController{}, "Get,Post:Edit")
+	beego.Router("/systemval/delete", &controllers.SystemValController{}, "Post:Delete")
+
+	//EquipmentCustomer
+	beego.Router("/equipmentcustomer/index", &controllers.EquipmentCustomerController{}, "*:Index")
+	beego.Router("/equipmentcustomer/datagrid", &controllers.EquipmentCustomerController{}, "Get,Post:DataGrid")
+	beego.Router("/equipmentcustomer/datalist", &controllers.EquipmentCustomerController{}, "Post:DataList")
+	beego.Router("/equipmentcustomer/edit/?:id", &controllers.EquipmentCustomerController{}, "Get,Post:Edit")
+	beego.Router("/equipmentcustomer/delete", &controllers.EquipmentCustomerController{}, "Post:Delete")
+	beego.Router("/equipmentcustomer/selectpicker", &controllers.EquipmentCustomerController{}, "Post:SelectPicker")
+
 	//websocket
 	beego.Router("/websocketwidget/index", &controllers.WebsocketWidgetController{}, "*:Index")
 	beego.Router("/websocketwidget/ws", &controllers.WebsocketWidgetController{}, "Get:Get")
@@ -43,6 +66,7 @@ func init() {
 	beego.Router("/equipmentgateway/datalist", &controllers.EquipmentGatewayController{}, "Post:DataList")
 	beego.Router("/equipmentgateway/edit/?:id", &controllers.EquipmentGatewayController{}, "Get,Post:Edit")
 	beego.Router("/equipmentgateway/delete", &controllers.EquipmentGatewayController{}, "Post:Delete")
+	beego.Router("/equipmentgateway/selectpicker", &controllers.EquipmentGatewayController{}, "Post:SelectPicker")
 
 	//EquipmentMeterAddrConfig
 	beego.Router("/equipmentmeteraddrconfig/index", &controllers.EquipmentMeterAddrConfigController{}, "*:Index")
@@ -87,6 +111,7 @@ func init() {
 	beego.Router("/equipmentsimcards/edit/?:id", &controllers.EquipmentSimCardsController{}, "Get,Post:Edit")
 	beego.Router("/equipmentsimcards/delete", &controllers.EquipmentSimCardsController{}, "Post:Delete")
 	beego.Router("/equipmentsimcards/selectpicker", &controllers.EquipmentSimCardsController{}, "Post:SelectPicker")
+	beego.Router("/equipmentsimcards/trafficsync", &controllers.EquipmentSimCardsController{}, "Post:TrafficSync")
 
 	//EquipmentTableConfig
 	beego.Router("/equipmenttableconfig/index", &controllers.EquipmentTableConfigController{}, "*:Index")

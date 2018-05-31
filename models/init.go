@@ -14,6 +14,7 @@ func init() {
 		              new(RoleBackendUserRel),
 
 		              new(BackendConf),
+		              new(SystemVal),
 
 		              new(EquipmentDtuConfig),
 		              new(EquipmentGateway),
@@ -25,6 +26,8 @@ func init() {
 		              new(EquipmentSimCards),
 		              new(EquipmentTableConfig),
 		              new(EquipmentVendor),
+		              new(EquipmentCustomer),
+		              new(EquipmentRoom),
 
 		              )
 }

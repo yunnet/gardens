@@ -11,6 +11,7 @@
     });
 
     function pageInit() {
+        $("#GatewayNO").attr("readonly", true);
         $("#Used").selectpicker('val', '{{.m.Used}}');
         //验证
         validateInfo();
@@ -21,9 +22,6 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                GatewayNO: {
-                    required: true
-                },
                 GatewayDesc:{
                     required: true
                 }

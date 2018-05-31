@@ -34,15 +34,17 @@ func (this *BaseController) checkLogin() {
 	if this.curUser.Id == 0 {
 		//登录页面地址
 		urlstr := this.URLFor("HomeController.Login") + "?url="
+
 		//登录成功后返回的址为当前
 		returnURL := this.Ctx.Request.URL.Path
+
 		//如果ajax请求则返回相应的错码和跳转的地址
 		if this.Ctx.Input.IsAjax() {
 			//由于是ajax请求，因此地址是header里的Referer
 			returnURL := this.Ctx.Input.Refer()
-			this.jsonResult(enums.JRCode302, "请登录", urlstr+returnURL)
+			this.jsonResult(enums.JRCode302, "请登录", urlstr + returnURL)
 		}
-		this.Redirect(urlstr+returnURL, 302)
+		this.Redirect(urlstr + returnURL, 302)
 		this.StopRun()
 	}
 }
@@ -95,6 +97,7 @@ func (this *BaseController) checkAuthor(ignores ...string) {
 	hasAuthor := this.checkActionAuthor(this.controllerName, this.actionName)
 	if !hasAuthor {
 		utils.LogDebug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", this.controllerName, this.actionName, this.curUser.Id))
+
 		//如果没有权限
 		if !hasAuthor {
 			if this.Ctx.Input.IsAjax() {

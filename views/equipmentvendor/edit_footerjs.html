@@ -11,7 +11,9 @@
    });
 
     function pageInit(){
-       $("#Used").selectpicker('val', '{{.m.Used}}');
+        $("#VendorNO").attr("readonly", true);
+        $("#Used").selectpicker('val', '{{.m.Used}}');
+
         //验证
         validateInfo();
     }
@@ -21,9 +23,6 @@
         var $thisForm = $('#thisForm');
         $thisForm.sdvalidate({
             rules: {
-                VendorNO: {
-                    required: true
-                },
                 VendorDesc:{
                     required: true
                 }

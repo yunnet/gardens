@@ -30,6 +30,15 @@ var sdtheme = function () {
         return '<span title="' + str + '">' + showstr(str, replace) + '</span>';
     };
 
+    //格式化两位小数
+    formatterDecimalByspan = function(value, row, index){
+        if(value !== null || value !== 0){
+            return value.toFixed(2);
+        }else{
+            return 0;
+        }
+    };
+
     //格式化日期 yyyy-MM-dd hh:mm:ss
     formatterDateBySpan = function (value, row, index){
         if(value !== null){
@@ -290,6 +299,9 @@ var sdtheme = function () {
 
         //格式化日期 yyyy-MM-dd hh:mm:ss
         formatterDateBySpan: formatterDateBySpan,
+
+        //格式化两位小数
+        formatterDecimalByspan: formatterDecimalByspan,
 
         //显示启用或者禁用
         showEnable: showEnable,

@@ -11,9 +11,9 @@ type EquipmentMeterConfig struct {
 	MeterAddress   int       `orm:"column(meter_address)"`
 	MeterTypeNO    string    `orm:"column(meter_type_no)"`
 	GatewayNO      string    `orm:"column(gateway_no)"`
-	GatewayQzone   int       `orm:"column(gateway_qzone)"`
-	GatewayAddress int       `orm:"column(gateway_address)"`
-	GatewaySite    int       `orm:"column(gateway_site)"`
+	GatewayQzone   int       `orm:"column(gateway_qzone); null"`
+	GatewayAddress int       `orm:"column(gateway_address); null"`
+	GatewaySite    int       `orm:"column(gateway_site); null"`
 	Pt             int       `orm:"column(pt)"`
 	Ct             int       `orm:"column(ct)"`
 	Used           int       `orm:"column(tag)"`
@@ -60,7 +60,7 @@ func EquipmentMeterConfigPageList(params *EquipmentMeterConfigQueryParam) ([]*Eq
 		sortorder = "-" + sortorder
 	}
 
-	query = query.Filter("DTU_no__istartswith", params.DTU_no)
+	query = query.Filter("DTU_no__contains", params.DTU_no)
 	query = query.Filter("MeterAddress__istartswith", params.MeterAddress)
 	query = query.Filter("tag__istartswith", params.Used)
 

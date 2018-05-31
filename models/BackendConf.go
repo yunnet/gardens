@@ -6,12 +6,11 @@ import (
 )
 
 type BackendConf struct {
-	Id         int    `form:"id"`
-	AppName    string `orm:"column(appname)"`
-	AppVersion string `orm:"column(appversion)"`
-	Deploy     string `orm:"column(deploy)"`
-	ConfigText string `orm:"column(configtext)"`
-
+	Id         int       `form:"id"`
+	AppName    string    `orm:"column(appname)"`
+	AppVersion string    `orm:"column(appversion)"`
+	Deploy     string    `orm:"column(deploy)"`
+	ConfigText string    `orm:"column(configtext)"`
 	Used       int       `orm:"column(tag)"`
 	CreateUser string    `orm:"column(createuser)"`
 	CreateDate time.Time `orm:"column(createdate)"`
@@ -25,7 +24,7 @@ type BackendConfQueryParam struct {
 	Used    string //为空不查询，有值精确查询
 }
 
-func BackendConfTBName() string  {
+func BackendConfTBName() string {
 	return "sys_backend_conf"
 }
 

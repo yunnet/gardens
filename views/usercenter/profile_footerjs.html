@@ -16,8 +16,10 @@
     function pageInit() {
         //图片上传初始化
         updloadCtrolInit();
+
         //基本信息表单验证
         validatebasicInfo();
+
         //密码表单验证
         validatepwdInfo();
     }
@@ -28,8 +30,10 @@
         $(".fileinput").on('change.bs.fileinput', function () {
             var $this = $(this);
             var fileinput = $("input[type='file']", this);
+
             // file 控件的id
             var inputId = fileinput.attr('id');
+
             //获取隐藏用于保存图片地址的input
             var hiddeninput = $("#" + inputId.replace('input', ''));
             $.ajaxFileUpload({
@@ -71,11 +75,13 @@
             //hiddeninput.valid();
         });
     }
+
     //正则表达式验证
     jQuery.validator.methods.mobile = function (value, element, param) {
         //如果为空，直接过
         if (value.length == 0)
             return true;
+
         if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$/.test(value)) {
             return true;
         } else {
@@ -163,6 +169,4 @@
             }
         });
     }
-
-  
 </script>

@@ -91,6 +91,8 @@ func (this *EquipmentTableConfigController) Save() {
 	m.Id, _ = strconv.Atoi(id)
 	m.FieldName = this.GetString("FieldName")
 	m.FieldDesc = this.GetString("FieldDesc")
+	m.ChangeUser = this.curUser.RealName
+	m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
@@ -103,9 +105,6 @@ func (this *EquipmentTableConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		m.ChangeUser = this.curUser.RealName
-		m.ChangeDate = time.Now()
-
 		if _, err = o.Update(&m, "FieldName", "FieldDesc", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {

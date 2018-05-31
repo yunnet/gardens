@@ -22,7 +22,8 @@
                 <div class="box box-solid collapsed-box">
                     <div class="box-header with-border">                     
                         <input type="text" name="DTU_no" class="form-control pull-left input-wd-md" placeholder="DTU编号">
-                        <input type="text" name="ElectricalRoomCode" class="form-control pull-left input-wd-md" placeholder="配电房编号">
+                        <input type="text" name="Room_no" class="form-control pull-left input-wd-md" placeholder="配电房编号">
+                        <input type="text" name="Sim_no" class="form-control pull-left input-wd-md" placeholder="Sim卡号">
                         <div class="btn-group">
                             <button type="button" class="btn btn-warning" id="btnSearch"><i class="fa fa-search"></i> 搜索</button>
                             <button type="button" class="btn btn-default" id="btnClearSearch"><i class="fa fa-eraser"></i> 清除</button>
@@ -53,14 +54,11 @@
                 <div class="box-body">
                     <div class="btn-group" id="toolbar">
                         {{ if .canEdit}}
-                        <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)">
-                            <i class="fa fa-plus"></i> 添加</button>    
+                            <button class="btn btn-info" href="javascript:;" onclick="EditFun(0)"><i class="fa fa-plus"></i> 添加</button>
                         {{end}}
 
                         {{ if .canDelete}}                            
-                        <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()">
-                            <i class="fa fa-trash"></i> 删除
-                        </button>
+                            <button class="btn btn-danger table-btn-check-enable" disabled onclick="DeleteFun()"><i class="fa fa-trash"></i> 删除</button>
                         {{end}}  
                     </div>
 

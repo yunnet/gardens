@@ -6,36 +6,34 @@ import (
 )
 
 type EquipmentMeterConfigField struct {
-	Id           int    `form:"id"`
-	DTU_no       string `orm:"column(dtu_no)"`
-	MeterAddress int    `orm:"column(meter_address)"`
-	MeterTypeNO  string `orm:"column(meter_type_no)"`
-	GatewayNO    string `orm:"column(gateway_no)"`
-	DsAddr       int    `orm:"column(ds_addr)"`
-	FieldName    string `orm:"column(field_name)"`
-
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id           int       `form:"id"`
+	DTU_no       string    `orm:"column(dtu_no)"`
+	MeterAddress int       `orm:"column(meter_address)"`
+	MeterTypeNO  string    `orm:"column(meter_type_no)"`
+	GatewayNO    string    `orm:"column(gateway_no)"`
+	DsAddr       int       `orm:"column(ds_addr)"`
+	FieldName    string    `orm:"column(field_name)"`
+	Used         int       `orm:"column(tag)"`
+	CreateUser   string    `orm:"column(createuser)"`
+	CreateDate   time.Time `orm:"column(createdate)"`
+	ChangeUser   string    `orm:"column(changeuser)"`
+	ChangeDate   time.Time `orm:"column(changedate)"`
 }
 
 type EquipmentMeterConfigFieldQueryParam struct {
 	BaseQueryParam
-	DTU_no string
+	DTU_no       string
 	MeterAddress string
-	Used   string //为空不查询，有值精确查询
+	Used         string //为空不查询，有值精确查询
 }
 
-func EquipmentMeterConfigFieldTBName() string  {
+func EquipmentMeterConfigFieldTBName() string {
 	return "equipment_meter_config_field"
 }
 
 func (this *EquipmentMeterConfigField) TableName() string {
 	return EquipmentMeterConfigFieldTBName()
 }
-
 
 func EquipmentMeterConfigFieldPageList(params *EquipmentMeterConfigFieldQueryParam) ([]*EquipmentMeterConfigField, int64) {
 	query := orm.NewOrm().QueryTable(EquipmentMeterConfigFieldTBName())
@@ -51,7 +49,7 @@ func EquipmentMeterConfigFieldPageList(params *EquipmentMeterConfigFieldQueryPar
 		sortorder = "-" + sortorder
 	}
 
-	query = query.Filter("DTU_no__istartswith", params.DTU_no)
+	query = query.Filter("DTU_no__contains", params.DTU_no)
 	query = query.Filter("MeterAddress__istartswith", params.MeterAddress)
 	query = query.Filter("tag__istartswith", params.Used)
 

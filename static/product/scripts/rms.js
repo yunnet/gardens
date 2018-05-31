@@ -4,16 +4,49 @@ var rms = function () {
         //console.log("*** rms js *** init");
     }
 
-    // Sort   string `json:"sort"`
-    // Order  string `json:"order"`
-    // Offset int64  `json:"offset"`
-    // Limit  int    `json:"limit"`
-    // Sim_no string
-    // Used   string //为空不查询，有值精确查询
+    function selectRoomNO(url, item, used) {
+        var $select = $("#Room_no");
+        var params = {Used: used};
 
-    function selectSimNO(url, item) {
+        $.sdpost(url, params, function (re) {
+            if(re.code === 0){
+                var html = [];
+                $.each(re.obj, function (i, row) {
+                    html.push("<option value='"+ row.RoomNO + "'>" + row.RoomNO + "." + row.RoomName + "</option>");
+                });
+                $select.html(html.join(''));
+                $select.selectpicker('refresh');
+
+                $select.selectpicker('val', item);
+            }else {
+                layer.alert("获取电房数据失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+    function selectCustomerNO(url, item, used) {
+        var $select = $("#CustomerNO");
+        var params = {Used: used};
+
+        $.sdpost(url, params, function (re) {
+            if(re.code === 0){
+                var html = [];
+                $.each(re.obj, function (i, row) {
+                    html.push("<option value='"+ row.CustomerNO + "'>" + row.CustomerNO + "." + row.CustomerName + "</option>");
+                });
+                $select.html(html.join(''));
+                $select.selectpicker('refresh');
+
+                $select.selectpicker('val', item);
+            }else {
+                layer.alert("数据获取失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+    function selectSimNO(url, item, used) {
         var $select = $("#Sim_no");
-        var params = {Used: "1"};
+        var params = {Used: used};
 
         $.sdpost(url, params, function (re) {
             if(re.code === 0){
@@ -298,6 +331,12 @@ var rms = function () {
 
     return {
         init: init,
+
+        //电房选择框下拉
+        selectRoomNO: selectRoomNO,
+
+        //客户选择框下拉
+        selectCustomerNO: selectCustomerNO,
 
         //sim卡号选择框下拉
         selectSimNO: selectSimNO,
