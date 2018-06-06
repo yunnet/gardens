@@ -47,6 +47,18 @@ var sdtheme = function () {
         }
         return "";
     };
+
+    //日期格式化：yyyy-MM-dd
+    function formatDate(date) {
+        return new Date(date).format('yyyy-MM-dd');
+    }
+
+    //日期格式化：yyyy-MM-dd hh:mm:ss
+    function formatDateTime(date) {
+        return new Date(date).format('yyyy-MM-dd hh:mm:ss');
+    }
+
+    //Date属性format
     Date.prototype.format = function (format) {
         var args = {
             "M+": this.getMonth() + 1,
@@ -69,6 +81,7 @@ var sdtheme = function () {
         return format;
     };
 
+    //状态：-1.删除 0.禁用 1.启用
     showEnable = function (val) {
         if (val === 1 || val === "1") {
             return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
@@ -81,6 +94,7 @@ var sdtheme = function () {
         }
     };
 
+    //状态： 0.启用 1.禁用
     showTwoState = function (val) {
         if (val === 0 || val === "0") {
             return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
@@ -91,6 +105,7 @@ var sdtheme = function () {
         }
     };
 
+    //状态： 0.否 1.是
     showYes = function (val) {
         if (val === 1 || val === "1" || val === true) {
             return '<label class="label label-primary label-sm"><i class="fa fa-check"></i> 是</label>';
@@ -287,6 +302,10 @@ var sdtheme = function () {
     return {
         //初始化
         init: init,
+
+        //日期格式化
+        formatDate: formatDate,
+        formatDateTime: formatDateTime,
 
         //控件美化
         uniform: uniform,

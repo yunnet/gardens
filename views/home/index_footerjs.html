@@ -45,132 +45,36 @@
         loadDatepicker();
         loadSkycons();
 
-        var curdate = new Date();
-        loadOverviewToday(curdate);
+        loadCollectCountOfMonth();
+        loadOverviewToday(new Date());
+        loadOverviewChoice();
 
         loadTree();
-
         loadDtuRowToday();
-
         loadDtuCount();
-        loadMeterCount();
-        loadCollectRowsToday();
-        loadCustomers();
-
         loadMonthCollector();
-        loadCollectCountOfMonth();
-
         loadEchartsMap();
-
-        loadOverviewChoice();
 
         $(window).resize(function () {
             collectCountOfMonthChart.resize();
         });
     }
 
-    //加载地图
-    function loadEchartsMap() {
-        var data = [
-            {name: '可信电力', value: 0},
-            {name: '东方国际集装箱（广州）有限公司', value: 7},
-            {name: '中水珠江', value: 4},
-            {name: '华南国际名车中心', value: 27},
-            {name: '南华工商学院清远校区', value: 2},
-            {name: '南悦花苑', value: 5},
-            {name: '广州合诚实业有限公司', value: 24},
-            {name: '广州国际采购中心', value: 13},
-            {name: '萝岗绿地广场', value: 20},
-            {name: '中洲中心', value: 5},
-            {name: '中洲交易中心', value: 6},
-            {name: '斯诺浦汽车部件(广州)有限公司', value: 2},
-            {name: '优宝科技园', value: 1}
-        ];
-        var geoCoordMap = {
-            '可信电力':[113.350545,23.123564],
-            '东方国际集装箱（广州）有限公司':[113.578354,22.65429],
-            '中水珠江':[113.338312,23.152797],
-            '华南国际名车中心':[113.321635,23.079626],
-            '南华工商学院清远校区':[113.099542,23.724371],
-            '南悦花苑':[113.265005,23.218402],
-            '广州合诚实业有限公司':[113.551707,23.148001],
-            '广州国际采购中心':[113.377393,23.105734],
-            '萝岗绿地广场':[113.437901,23.170523],
-            '中洲中心':[113.376268,23.103193],
-            '中洲交易中心':[113.378743,23.102501],
-            '斯诺浦汽车部件(广州)有限公司':[113.504177,23.397516],
-            '优宝科技园':[113.446613,23.186369]
-        };
-
-        var convertData = function (data) {
-            var res = [];
-            for (var i = 0; i < data.length; i++) {
-                var geoCoord = geoCoordMap[data[i].name];
-                if (geoCoord) {
-                    res.push({
-                        name: data[i].name,
-                        value: geoCoord.concat(data[i].value)
-                    });
-                }
+    function loadMoveContainer() {
+        // Make the dashboard widgets sortable Using jquery UI
+        $('.connectedSortable').sortable({
+            placeholder: 'sort-highlight',
+            connectWith: '.connectedSortable',
+            handle: '.box-header, .nav-tabs',
+            forcePlaceholderSize: true,
+            zIndex: 99,
+            update: function (event, ui) {
+                collectCountOfMonthChart.resize();
+                overviewTodayChart.resize();
+                $('#dtuRowToday').getNiceScroll().resize();
             }
-            return res;
-        };
-
-        var option = {
-            tooltip : {
-                trigger: 'item',
-                formatter: '  {a}<br>{b} <br> {c}'
-            },
-            bmap: {
-                center: [113.329147, 23.115899],
-                zoom: 9,
-                roam: true
-            },
-            series : [
-                {
-                    name: '客户',
-                    type: 'effectScatter',
-                    coordinateSystem: 'bmap',
-                    data: convertData(data),
-                    symbolSize: function (val) {
-                        return val[2] < 5 ? 10 : val[2];
-                    },
-                    showEffectOn: 'render',
-                    rippleEffect: {
-                        brushType: 'stroke'
-                    },
-                    hoverAnimation: true,
-
-                    itemStyle: {
-                        normal: {
-                            color: '#00c0ef',
-                            shadowBlur: 10,
-                            shadowColor: '#0ff'
-                        }
-                    },
-                    zlevel: 1
-                }
-            ]
-        };
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-
-        // 添加百度地图插件
-        var bmap = myChart.getModel().getComponent('bmap').getBMap();
-        bmap.addControl(new BMap.ScaleControl());         //比例尺
-        bmap.addControl(new BMap.NavigationControl());    //缩放控件
-        bmap.addControl(new BMap.MapTypeControl());       //地图类型控件
-        bmap.addControl(new BMap.OverviewMapControl());   //缩略地图控件
-
-
-        $("#world-map-gdp").resize(function () {
-            var h = $(".box.maximized-box .box-body").height() - 10;
-            if(h == -10)
-                h = 360;
-            $("#world-map-gdp").height(h);
-            myChart.resize();
         });
+        $('.connectedSortable .box-header, .connectedSortable .nav-tabs').css('cursor', 'move');
     }
 
     function loadMonthCollector() {
@@ -187,9 +91,9 @@
                     "color": "#73879C"
                 }),
                 list = ["clear-day", "clear-night", "partly-cloudy-day","partly-cloudy-night",
-                        "cloudy", "rain", "sleet", "snow", "wind", "fog"
-                        ],
-                        i;
+                    "cloudy", "rain", "sleet", "snow", "wind", "fog"
+                ],
+                i;
         for (i = list.length; i--;)
             icons.set(list[i], list[i]);
 
@@ -204,6 +108,186 @@
         });
     }
 
+    //加载地图
+    function loadEchartsMap() {
+        var url = '{{ urlfor "HomeController.GetCustomerZone"}}';
+
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                var hq_png = "/static/sdtheme/img/tiger.png";
+                var hq_name = '可信电力';
+                var hq_ll = [113.350545,23.123564];
+                var h_data = [
+                    {name: hq_name, value: hq_ll, symbol: 'image://' + hq_png, "symbolSize": 40, "itemStyle":{"normal":{"color":"#F58158"}}}
+                ];
+
+                var d_data = [];
+                var moveLines = [];
+                var ary = new Array('天河区', '海珠区', '白云区', '荔湾区', '黄埔区', '花都区', '南沙区', '其它');
+                var ary2 = new Array(8);
+                for(i=0; i<ary2.length; i++){
+                    ary2[i] = 0;
+                }
+
+                var total = 0;
+                $(re.obj).each(function (i, row) {
+                    var obj = {name: row.CustomerName, value:[row.Longitude , row.Latitude , row.Num]};
+                    d_data.push(obj);
+                    var obj2 = {fromName: row.CustomerName, toName: hq_name, coords:[[row.Longitude, row.Latitude], hq_ll]};
+                    moveLines.push(obj2);
+
+                    switch (row.Zone.trim()){
+                        case '天河区': ary2[0]++; break;
+                        case '海珠区': ary2[1]++; break;
+                        case '白云区': ary2[2]++; break;
+                        case '荔湾区': ary2[3]++; break;
+                        case '黄埔区': ary2[4]++; break;
+                        case '花都区': ary2[5]++; break;
+                        case '南沙区': ary2[6]++; break;
+                        case '其它'  : ary2[7]++; break;
+                        default: break;
+                    }
+                    total++;
+                });
+
+                var html = [];
+                for(i=0; i<ary.length; i++){
+                    var num = ary2[i];
+                    var rate = num / total * 100;
+                    html.push('<div class="progress-group">');
+                    html.push('<span class="progress-text"> ' + ary[i] + '</span>');
+                    html.push('<span class="progress-number">'+ num +'</span>');
+                    html.push('<div class="progress sm">');
+                    html.push('<div class="progress-bar progress-bar-aqua" style="width: '+ rate + '%"></div>');
+                    html.push('</div>');
+                    html.push('</div>');
+                }
+                $('#customerZone').html(html.join(''));
+                $('#customers').html(total);
+
+                var option = {
+                    tooltip : {
+                        trigger: 'item',
+                        // formatter: '  {a}<br>{b}<br> {c}'
+                        formatter: function (params) {
+                            var res = '';
+                            if(params['seriesType'] == 'effectScatter'){
+                                res = params['seriesName'] + '<br>' + params['name'] + '<br>' + '电表数量：' + params['value'][2];
+                            }else if(params['seriesType'] == 'lines'){
+                                res = params.data['fromName'];
+                            }
+                            return res;
+                        }
+                    },
+
+                    bmap: {
+                        center: [113.329147, 23.115899],   // 中心位置坐标
+                        zoom: 11,                          // 地图缩放比例
+                        roam: true                        // 开启用户缩放
+                    },
+                    series : [
+                        {
+                            name: '总部',
+                            type: 'scatter',
+                            coordinateSystem: 'bmap',
+                            zlevel: 2,
+                            rippleEffect: {
+                                brushType: 'stroke',
+                                period:7,
+                                scale:26
+                            },
+                            label: {
+                                normal: {
+                                    show: true,
+                                    position: 'top',
+                                    formatter: '{b}',
+                                    color: '#ff0000'
+                                }
+                            },
+                            symbolSize: 2,
+                            showEffectOn: 'render',
+                            itemStyle: {
+                                normal: {
+                                    color: '#46bee9'
+                                }
+                            },
+                            data: h_data
+                        },
+
+                        {
+                            name: '客户',
+                            type: 'effectScatter',
+                            coordinateSystem: 'bmap',
+                            data: d_data,
+                            symbolSize: function (val) {
+                                return val[2] < 5 ? 10 : val[2];
+                            },
+                            showEffectOn: 'render',
+                            rippleEffect: {
+                                brushType: 'stroke'
+                            },
+                            hoverAnimation: true,
+
+                            itemStyle: {
+                                normal: {
+                                    color: '#00c0ef',
+                                    shadowBlur: 10,
+                                    shadowColor: '#0ff'
+                                }
+                            },
+                            zlevel: 1
+                        },
+
+                        {
+                            name: '线路',
+                            type: 'lines',
+                            coordinateSystem: 'bmap',
+                            zlevel: 2,
+                            large: true,
+                            effect: {
+                                show: true,
+                                constantSpeed: 30,
+                                symbol: 'arrow',//ECharts 提供的标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+                                symbolSize: 6,
+                                trailLength: 0
+                            },
+                            lineStyle: {
+                                normal: {
+                                    color: '#0ff',
+                                    width: 2,
+                                    opacity: 0.6,
+                                    curveness: 0.1
+                                }
+                            },
+                            data: moveLines
+                        }
+                    ]
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
+
+                // 添加百度地图插件
+                var bmap = myChart.getModel().getComponent('bmap').getBMap();
+                bmap.addControl(new BMap.ScaleControl());         //比例尺
+                bmap.addControl(new BMap.NavigationControl());    //缩放控件
+                bmap.addControl(new BMap.MapTypeControl());       //地图类型控件
+                bmap.addControl(new BMap.OverviewMapControl());   //缩略地图控件
+
+                $("#world-map-gdp").resize(function () {
+                    var h = $(".box.maximized-box .box-body").height() - 10;
+                    if(h == -10)
+                        h = 360;
+                    $("#world-map-gdp").height(h);
+                    myChart.resize();
+                });
+            } else {
+                layer.alert("加载地图失败", {icon: 2, title: '错误'})
+            }
+        });
+    }
+
+    //设备安装信息
     function loadTree() {
         var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
         d3tree = d3.json(url, function(error, re) {
@@ -542,23 +626,6 @@
         });
     }
 
-    function loadMoveContainer() {
-        // Make the dashboard widgets sortable Using jquery UI
-        $('.connectedSortable').sortable({
-            placeholder: 'sort-highlight',
-            connectWith: '.connectedSortable',
-            handle: '.box-header, .nav-tabs',
-            forcePlaceholderSize: true,
-            zIndex: 99,
-            update: function (event, ui) {
-                collectCountOfMonthChart.resize();
-                overviewTodayChart.resize();
-                $('#dtuRowToday').getNiceScroll().resize();
-            }
-        });
-        $('.connectedSortable .box-header, .connectedSortable .nav-tabs').css('cursor', 'move');
-    }
-
     //网络设备数量
     function loadDtuCount() {
         var url = '{{ urlfor "HomeController.GetDtuCount"}}';
@@ -571,40 +638,9 @@
         });
     }
 
-    //电表数量
-    function loadMeterCount() {
-        var url = '{{ urlfor "HomeController.GetMeterCount"}}';
-        $.sdpost(url, {}, function (re) {
-            if (re.code === 0) {
-                $("#meterCount").html(re.obj);
-            } else {
-                layer.alert("电表数量数据获取失败", {icon: 2, title: '错误'})
-            }
-        });
-    }
-
-    //今日采集数量
-    function loadCollectRowsToday() {
-        var url = '{{ urlfor "HomeController.GetCollectRowsToday"}}';
-        $.sdpost(url, {}, function (re) {
-            if (re.code === 0) {
-                $("#rowsToday").html(re.obj);
-            } else {
-                layer.alert("今日采集数量数据获取失败", {icon: 2, title: '错误'})
-            }
-        });
-    }
-
-    //客户数
-    function loadCustomers() {
-        var url = '{{ urlfor "HomeController.GetCustomers"}}';
-        $.sdpost(url, {}, function (re) {
-            if (re.code === 0) {
-                $("#customers").html(re.obj);
-            } else {
-                layer.alert("客户数数据获取失败", {icon: 2, title: '错误'})
-            }
-        });
+    function getNowRows() {
+        var datetime = new Date();
+        return Math.round((datetime.getHours() * 60 + datetime.getMinutes()) / 5);
     }
 
     //今日设备状态
@@ -613,12 +649,13 @@
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 var html = [], html2 = [];
-                var maxValue = 0, dtuOnline = 0, dtuOffline = 0;
+                var dtuOnline = 0, dtuOffline = 0;
                 var dtuNormal = 0, dtuAbnormal = 0;
 
                 $(re.obj).each(function (i, row) {
                     if(row.Rows == 0){
                         dtuOffline++;
+
                         html2.push('<tr>');
                         html2.push(' <td>' + dtuOffline  + '</td>  <td>' + row.DTU_no  + '</td> <td>' + row.MeterAddress  + '</td>');
                         html2.push('</tr>');
@@ -627,16 +664,13 @@
 
                         html.push('<div class="progress-group">');
                         html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
-
                         html.push('<i class="fa fa-clock-o"></i>');
                         html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
-
                         html.push('<span class="progress-number"><b>' + row.Rows + '</b>/288</span>');
                         html.push('<div class="progress sm">');
-                        if(maxValue < row.Rows)
-                            maxValue = row.Rows;
-                        var rate = Math.round((row.Rows / 288) * 10000) / 100;
 
+                        var rate = Math.round((row.Rows / 288) * 10000) / 100;
+                        var maxValue = getNowRows();
                         if(row.Rows  < (maxValue * 0.60 )) {
                             html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
                             dtuAbnormal++;
@@ -647,14 +681,16 @@
                             html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
                             dtuNormal++;
                         }
+
                         html.push('</div>');
                     }
                 });
 
                 var dtuState = '状态(在线:' + dtuOnline + ' 离线:' + dtuOffline + ') 数据(正常:' + dtuNormal + ' 异常:' + dtuAbnormal + ')';
-                $("#dtuState").html(dtuState);
+                $('#dtuState').html(dtuState);
 
-                $("#dtuRowToday").html(html.join(''));
+                $('#meterCount').html(dtuOnline + dtuOffline);
+                $('#dtuRowToday').html(html.join(''));
                 $('#offlineTable').find("tbody").html(html2.join());
 
                 $('#dtuRowToday').height(250);
@@ -662,9 +698,15 @@
                     touchbehavior: true // 激活拖拽滚动
                 });
             } else {
-                layer.alert("今日设备状态数据获取失败", {icon: 2, title: '错误'})
+                layer.alert("今日设备状态获取失败", {icon: 2, title: '错误'})
             }
         });
+    }
+
+    function getLastMonth() {
+        var cur = new Date();
+        var datetime = cur.setDate(cur.getDate() - 30);
+        return sdtheme.formatDate(datetime);
     }
 
     //月统计
@@ -676,6 +718,10 @@
                     tooltip: {
                         trigger: 'axis'
                     },
+                    dataZoom: [
+                        {startValue: getLastMonth()},
+                        {type: 'inside'}
+                    ],
                     grid: {
                         left: '3%',
                         right: '4%',
@@ -751,7 +797,7 @@
                             case 1004: $('#PD866E').html(html.join('')); break;
                             case 1006: $('#YD2045C_W').html(html.join('')); break;
                             case 1007: $('#PMC-D726M').html(html.join('')); break;
-                            case 1009:  $('#RJ-OP485').html(html.join('')); break;
+                            case 1009: $('#RJ-OP485').html(html.join('')); break;
                             default: break;
                         }
                     }else if(row.TypeID == 2){
@@ -771,8 +817,8 @@
                     }
                 });
 
-                var html = [];
                 var rate = (totalRows / totalDayRows * 100).toFixed(2);
+                var html = [];
                 html.push('<div class="progress-group">');
                 html.push('  <span class="progress-text"> 总采集量</span>');
                 html.push('  <small class="text-red">已采集：' + rate + '% </small>');
@@ -782,6 +828,8 @@
                 html.push('    </div>');
                 html.push('  </div>');
                 html.push('</div>');
+
+                $('#rowsToday').html(totalRows);
                 $('#overviewTodayProcess').append(html.join(''));
 
                 var option={

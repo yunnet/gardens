@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 	"github.com/astaxie/beego/orm"
+	"fmt"
 )
 
 type EquipmentCustomer struct {
@@ -30,7 +31,16 @@ type EquipmentCustomerQueryParam struct {
 	Used         string
 }
 
-func EquipmentCustomerTBName() string  {
+type CustomerZone struct {
+	CustomerNO   string  `orm:"column(customer_no)"`
+	CustomerName string  `orm:"column(customer_name)"`
+	Zone         string  `orm:"column(zone)"`
+	Longitude    float64 `orm:"digits(12);decimals(6);column(longitude)"`
+	Latitude     float64 `orm:"digits(12);decimals(6);column(latitude)"`
+	Num          int     `orm:"column(num)"`
+}
+
+func EquipmentCustomerTBName() string {
 	return "equipment_customer"
 }
 
@@ -84,4 +94,17 @@ func EquipmentCustomerOne(id int) (*EquipmentCustomer, error) {
 
 func (this *EquipmentCustomer) TableName() string {
 	return EquipmentCustomerTBName()
+}
+
+//取月采集数量
+func GetCustomerZone() ([] *CustomerZone, error) {
+	data := make([] *CustomerZone, 0)
+
+	o := orm.NewOrm()
+	sql := fmt.Sprintf(`SELECT customer_no, customer_name, zone, longitude, latitude, count(customer_no) as num FROM v_customer_room_meter GROUP BY customer_no`)
+	_, err := o.Raw(sql).QueryRows(&data)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }

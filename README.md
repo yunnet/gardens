@@ -22,6 +22,7 @@
 5. 下拉框使用Bootstrap-select（<a href="http://silviomoreto.github.io/bootstrap-select/">更多信息</a>）；
 6. 高亮显示使用的是笔者自已开发的插件；
 7. 分页列表里搜索条件、搜索面板状态自动保存使用的是笔者自已开发的插件。
+
 # 增加部分
 1. 增加了font-awesome图标选择的功能；
 2. 增加了font-awesome图标显示页面；
@@ -34,7 +35,8 @@
 9. 增加了bootstrapTable控件表头合并列显示方式（<a href="https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/sticky-header/">更多信息</a>）；
 10. 修改dashborad中增加connectedSortable可移动box；
 11. 增加了bootstrap-table列宽手工调整功能（<a href="https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/resizable/">更多信息</a>）；
-
+12. 对百度地图做了动态线功能
+13. 对eCharts拆线图增加了扩大缩小比例尺
 
 # 安装方法
 

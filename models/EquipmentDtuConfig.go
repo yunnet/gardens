@@ -37,6 +37,7 @@ func (this *EquipmentDtuConfig) TableName() string {
 
 func EquipmentDtuConfigCount() int64 {
 	query := orm.NewOrm().QueryTable(EquipmentDtuConfigTBName())
+	query = query.Filter("tag", 0)
 	total, _ := query.Count()
 	return total
 }

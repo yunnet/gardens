@@ -115,6 +115,8 @@ func (this *EquipmentMeterConfigController) Save() {
 	tmpInt = this.Input().Get("Ct")
 	m.Ct, _ = strconv.Atoi(tmpInt)
 
+	m.LoopName = this.GetString("LoopName")
+
 	m.ChangeUser = this.curUser.RealName
 	m.ChangeDate = time.Now()
 
@@ -129,7 +131,7 @@ func (this *EquipmentMeterConfigController) Save() {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "MeterAddress", "MeterTypeNO", "GatewayNO", "GatewayQzone", "GatewayAddress", "GatewaySite", "Pt", "Ct", "Used", "ChangeUser", "ChangeDate"); err == nil {
+		if _, err = o.Update(&m, "DTU_no", "MeterAddress", "MeterTypeNO", "GatewayNO", "GatewayQzone", "GatewayAddress", "GatewaySite", "Pt", "Ct", "LoopName", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

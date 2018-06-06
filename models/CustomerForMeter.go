@@ -8,12 +8,11 @@ import (
 
 type (
 	CustomerForMeter struct {
-		CustomerID        string `orm:"column(customer_id)"`
-		CustomerName      string `orm:"column(customer_name)"`
-		DTU_no            string `orm:"column(dtu_no)"`
-		MeterAddress      int    `orm:"column(meter_address)"`
-		MeterTypeNO       string `orm:"column(meter_type_no)"`
-		CollectConfigName string `orm:"column(collect_config_name)"`
+		CustomerName string `orm:"column(customer_name)"`
+		DTU_no       string `orm:"column(dtu_no)"`
+		MeterAddress int    `orm:"column(meter_address)"`
+		MeterTypeNO  string `orm:"column(meter_type_no)"`
+		LoopName     string `orm:"column(loop_name)"`
 	}
 
 	RootItem struct {
@@ -39,14 +38,14 @@ type (
 
 func CustomerForMeterDataList() ([] *CustomerForMeter, error) {
 	data := make([] *CustomerForMeter, 0)
-	sql := "SELECT customer_id, customer_name,dtu_no, meter_address, meter_type_no, collect_config_name FROM v_customer_for_meter"
+	sql := "SELECT customer_name, dtu_no, meter_address, meter_type, loop_name  FROM v_customer_room_meter"
 	if _, err := orm.NewOrm().Raw(sql).QueryRows(&data); err != nil {
 		return nil, err
 	}
 	return data, nil
 }
 
-func GetCustomerForMeter()(string, error){
+func GetCustomerForMeter() (string, error) {
 	data, err := CustomerForMeterDataList()
 	if err != nil {
 		return "", err
@@ -59,7 +58,7 @@ func GetCustomerForMeter()(string, error){
 	master = &RootItem{Name: "电可托"}
 
 	for _, row := range data {
-		meter := MeterItem{strconv.Itoa(row.MeterAddress), row.CollectConfigName}
+		meter := MeterItem{strconv.Itoa(row.MeterAddress), row.LoopName}
 
 		var dtu_cur *DtuItem
 		var company_cur *CompanyItem
@@ -95,14 +94,3 @@ func GetCustomerForMeter()(string, error){
 	return string(jsondata), nil
 }
 
-func GetCustomers()int {
-	var rows int
-	o := orm.NewOrm()
-
-	sql := "SELECT count(1) as rows FROM equipment_customer WHERE tag = 0"
-	err := o.Raw(sql).QueryRow(&rows)
-	if err != nil {
-		return 0
-	}
-	return rows
-}

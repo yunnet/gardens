@@ -100,7 +100,7 @@ func (this *HomeController) DoLogin() {
 	}
 }
 
-//采集进度查询
+//今日采集进度查询
 func (this *HomeController) GetDtuRowForDay() {
 	before := time.Now().Unix()
 	if data, err := models.GetDtuRowsTodayList(); err != nil{
@@ -146,29 +146,12 @@ func (this *HomeController) GetMeterCount() {
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
 
-//获取客户数量
-func (this *HomeController)GetCustomers()  {
-	count := models.GetCustomers()
-	this.jsonResult(enums.JRCodeSucc, "", count)
-}
-
-//取今日采集数量
-func (this *HomeController) GetCollectRowsToday() {
-	before := time.Now().Unix()
-	count := models.GetCollectRowsToday()
-	after := time.Now().Unix()
-	utils.LogInfo(fmt.Sprintf("GetCollectRowsToday spend: %d s", after - before))
-
-	this.jsonResult(enums.JRCodeSucc, "", count)
-}
-
 //取月采集数量
 func (this *HomeController) GetCollectCountOfMonth() {
 	before := time.Now().Unix()
 	if data, err := models.GetCollectRowsOfMonth(); err != nil {
 		after := time.Now().Unix()
 		utils.LogInfo(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
-
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
@@ -182,7 +165,18 @@ func (this *HomeController)GetOverviewToday()  {
 	if data, err := models.GetOverviewToday(choiceDate); err != nil {
 		after := time.Now().Unix()
 		utils.LogInfo(fmt.Sprintf("GetOverviewToday spend: %d s", after - before))
+		this.jsonResult(enums.JRCodeFailed, "", 0)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", data)
+	}
+}
 
+//获取客户分布
+func (this *HomeController) GetCustomerZone()  {
+	before := time.Now().Unix()
+	if data, err := models.GetCustomerZone(); err != nil {
+		after := time.Now().Unix()
+		utils.LogInfo(fmt.Sprintf("GetCustomerZone spend: %d s", after - before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)

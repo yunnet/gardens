@@ -14,6 +14,7 @@ type EquipmentMeterConfig struct {
 	GatewayQzone   int       `orm:"column(gateway_qzone); null"`
 	GatewayAddress int       `orm:"column(gateway_address); null"`
 	GatewaySite    int       `orm:"column(gateway_site); null"`
+	LoopName       string   `orm:"column(loop_name)"`
 	Pt             int       `orm:"column(pt)"`
 	Ct             int       `orm:"column(ct)"`
 	Used           int       `orm:"column(tag)"`
