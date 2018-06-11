@@ -68,6 +68,8 @@ func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam)([]*Equipment
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {
@@ -90,6 +92,8 @@ func EquipmentMeterTypePageList(params *EquipmentMeterTypeQueryParam) ([]*Equipm
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {
@@ -100,18 +104,18 @@ func EquipmentMeterTypePageList(params *EquipmentMeterTypeQueryParam) ([]*Equipm
 	lists := make([]*EquipmentMeterTypeGrid, 0)
 
 	sql := fmt.Sprintf(`SELECT mt.id, 
-									    mt.meter_type_no meter_type_n_o, 
+									    mt.meter_type_no as meter_type_n_o, 
 									    mt.meter_type, 
-									    mt.vendor_no vendor_n_o, 
+									    mt.vendor_no as vendor_n_o, 
 									    ev.vendor_desc, 
 									    mt.pt_address, 
 									    mt.ct_address, 
 									    mt.three_phase, 
 									    mt.tag used, 
-									    mt.createuser create_user, 
-									    mt.createdate create_date, 
-									    mt.changeuser change_user, 
-									    mt.changedate change_date
+									    mt.createuser as create_user, 
+									    mt.createdate as create_date, 
+									    mt.changeuser as change_user, 
+									    mt.changedate as change_date
 								   FROM equipment_meter_type AS mt 
 								   LEFT JOIN equipment_vendor AS ev ON mt.vendor_no = ev.vendor_no 
                                   WHERE mt.meter_type_no LIKE '%s%%'

@@ -24,6 +24,10 @@ type EquipmentMeterAddrConfigQueryParam struct {
 	Used        string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentMeterAddrConfig))
+}
+
 func EquipmentMeterAddrConfigTBName() string {
 	return "equipment_meter_addr_config"
 }
@@ -40,6 +44,16 @@ func EquipmentMeterAddrConfigPageList(params *EquipmentMeterAddrConfigQueryParam
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "MeterTypeNO":
+		sortorder = "meter_type_no"
+	case "SegmentStartAddr":
+		sortorder = "segment_start_addr"
+	case "SegmentLen":
+		sortorder = "segment_len"
+	case "SegmentNO":
+		sortorder = "segment_no"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

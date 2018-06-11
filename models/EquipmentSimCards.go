@@ -28,6 +28,10 @@ type EquipmentSimCardsQueryParam struct {
 	Used   string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentSimCards))
+}
+
 func EquipmentSimCardsTBName() string {
 	return "equipment_simcards"
 }
@@ -44,6 +48,18 @@ func EquipmentSimCardsPageList(params *EquipmentSimCardsQueryParam) ([]*Equipmen
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Sim_no":
+		sortorder = "sim_no"
+	case "Iccid":
+		sortorder = "ICCID"
+	case "TotalTraffic":
+		sortorder = "totaltraffic"
+	case "UseTraffic":
+		sortorder = "usetraffic"
+	case "RemainTraffic":
+		sortorder = "remaintraffic"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

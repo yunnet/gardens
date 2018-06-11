@@ -24,6 +24,10 @@ type EquipmentRoomQueryParam struct {
 	Used     string
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentRoom))
+}
+
 func EquipmentRoomTBName() string {
 	return "equipment_room"
 }
@@ -40,6 +44,14 @@ func EquipmentRoomPageList(params *EquipmentRoomQueryParam) ([]*EquipmentRoom, i
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "RoomNO":
+		sortorder = "room_no"
+	case "RoomName":
+		sortorder = "room_name"
+	case "CustomerNO":
+		sortorder = "CustomerNO"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

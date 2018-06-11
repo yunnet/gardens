@@ -98,8 +98,10 @@ var sdtheme = function () {
     showTwoState = function (val) {
         if (val === 0 || val === "0") {
             return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 启用</label>';
+            // return '<i class="fa fa-toggle-on text-primary fa-2x"></i>';
         } else if (val === 1 || val === "1")
             return '<label class="label label-danger label-sm"><i class="fa fa-ban"></i> 禁用</label>';
+            // return '<i class="fa fa-toggle-off text-danger fa-2x"></i>';
         else {
             return "";
         }
@@ -108,9 +110,11 @@ var sdtheme = function () {
     //状态： 0.否 1.是
     showYes = function (val) {
         if (val === 1 || val === "1" || val === true) {
-            return '<label class="label label-primary label-sm"><i class="fa fa-check"></i> 是</label>';
+            // return '<label class="label label-primary label-sm"><i class="fa fa-check"></i> 是</label>';
+            return '<i class="fa fa-toggle-on text-success fa-2x"></i>';
         } else if (val === 0 || val === "0" || val === false) {
-            return '<label class="label label-danger label-sm"><i class="fa fa-close"></i> 否</label>';
+            // return '<label class="label label-danger label-sm"><i class="fa fa-close"></i> 否</label>';
+            return '<i class="fa fa-toggle-on fa-flip-horizontal text-gray fa-2x"></i>';
         } else {
             return "";
         }

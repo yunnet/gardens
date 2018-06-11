@@ -107,6 +107,7 @@ func (this *EquipmentMeterTypeController) Save() {
 	} else {
 		m.ThreePhase = 0
 	}
+
 	m.Used, _ = this.GetInt("Used")
 
 	m.ChangeUser = this.curUser.RealName

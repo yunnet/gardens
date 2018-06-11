@@ -31,6 +31,10 @@ type EquipmentCustomerQueryParam struct {
 	Used         string
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentCustomer))
+}
+
 type CustomerZone struct {
 	CustomerNO   string  `orm:"column(customer_no)"`
 	CustomerName string  `orm:"column(customer_name)"`
@@ -52,6 +56,26 @@ func EquipmentCustomerPageList(params *EquipmentCustomerQueryParam) ([]*Equipmen
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "CustomerNO":
+		sortorder = "customer_no"
+	case "CustomerName":
+		sortorder = "customer_name"
+	case "CustomerDesc":
+		sortorder = "customer_desc"
+	case "Contacts":
+		sortorder = "customer_desc"
+	case "Phone":
+		sortorder = "phone"
+	case "Address":
+		sortorder = "address"
+	case "Zone":
+		sortorder = "zone"
+	case "Longitude":
+		sortorder = "longitude"
+	case "Latitude":
+		sortorder = "latitude"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

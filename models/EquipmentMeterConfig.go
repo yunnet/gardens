@@ -31,6 +31,10 @@ type EquipmentMeterConfigQueryParam struct {
 	Used         string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentMeterConfig))
+}
+
 //获取电表数
 func EquipmentMeterConfigCount() int64 {
 	query := orm.NewOrm().QueryTable(EquipmentMeterConfigTBName())
@@ -55,6 +59,23 @@ func EquipmentMeterConfigPageList(params *EquipmentMeterConfigQueryParam) ([]*Eq
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "DTU_no":
+		sortorder = "dtu_no"
+	case "MeterAddress":
+		sortorder = "meter_address"
+	case "MeterTypeNO":
+		sortorder = "meter_type_no"
+	case "GatewayNO":
+		sortorder = "gateway_no"
+	case "GatewayQzone":
+		sortorder = "gateway_qzone"
+	case "GatewayAddress":
+		sortorder = "gateway_address"
+	case "GatewaySite":
+		sortorder = "gateway_site"
+
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

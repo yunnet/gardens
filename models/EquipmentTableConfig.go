@@ -26,6 +26,10 @@ type EquipmentTableConfigQueryParam struct {
 	Used      string
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentTableConfig))
+}
+
 func EquipmentTableConfigTBName() string {
 	return "equipment_table_config"
 }
@@ -42,6 +46,18 @@ func EquipmentTableConfigPageList(params *EquipmentTableConfigQueryParam) ([]*Eq
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "FieldName":
+		sortorder = "field_name"
+	case "FieldDesc":
+		sortorder = "field_desc"
+	case "FunctionTable1":
+		sortorder = "function_table1"
+	case "FunctionTable2":
+		sortorder = "function_table2"
+	case "FunctionTable3":
+		sortorder = "function_table3"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

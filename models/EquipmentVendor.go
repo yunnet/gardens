@@ -23,6 +23,10 @@ type EquipmentVendorQueryParam struct {
 	Used       string
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentVendor))
+}
+
 //设备供应商
 func EquipmentVendorTBName() string  {
 	return "equipment_vendor"
@@ -36,6 +40,12 @@ func EquipmentVendorPageList(params *EquipmentVendorQueryParam) ([]*EquipmentVen
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "VendorNO":
+		sortorder = "vendor_no"
+	case "VendorDesc":
+		sortorder = "vendor_desc"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

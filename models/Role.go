@@ -18,6 +18,10 @@ type Role struct {
 	RoleBackendUserRel []*RoleBackendUserRel `orm:"reverse(many)" json:"-"` // 设置一对多的反向关系
 }
 
+func init() {
+	orm.RegisterModel(new(Role))
+}
+
 //获取 Role 对应的表名称
 func RoleTBName() string {
 	return "sys_role"

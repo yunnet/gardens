@@ -19,6 +19,7 @@ type EquipmentMeterRomConfig struct {
 	Needct         int       `orm:"column(need_ct)"`
 	Calcfactor     float64   `orm:"digits(12);decimals(4);column(calcfactor)"`
 	Msbbit         int       `orm:"column(msb_bit)"`
+	BigEndian      int       `orm:"column(bigendian)"`
 	Bytelength     int       `orm:"column(byte_length)"`
 	FunctionTable1 string    `orm:"column(function_table1)"`
 	FunctionTable2 string    `orm:"column(function_table2)"`
@@ -37,6 +38,10 @@ type EquipmentMeterRomConfigQueryParam struct {
 	Used        string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentMeterRomConfig))
+}
+
 func EquipmentMeterRomConfigTBName() string {
 	return "equipment_meter_rom_config"
 }
@@ -52,6 +57,44 @@ func EquipmentMeterRomConfigPageList(params *EquipmentMeterRomConfigQueryParam) 
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "MeterTypeNO":
+		sortorder = "meter_type_no"
+	case "AddressSort":
+		sortorder = "address_sort"
+	case "RomAddress":
+		sortorder = "rom_address"
+	case "RomName":
+		sortorder = "rom_name"
+	case "Units":
+		sortorder = "units"
+	case "DataType":
+		sortorder = "data_type"
+	case "SegmentNO":
+		sortorder = "segment_no"
+	case "Offset":
+		sortorder = "offset"
+	case "Needpt":
+		sortorder = "need_pt"
+	case "Needct":
+		sortorder = "need_ct"
+	case "Calcfactor":
+		sortorder = "calcfactor"
+	case "Msbbit":
+		sortorder = "msb_bit"
+	case "BigEndian":
+		sortorder = "bigendian"
+	case "Bytelength":
+		sortorder = "byte_length"
+	case "FunctionTable1":
+		sortorder = "function_table1"
+	case "FunctionTable2":
+		sortorder = "function_table2"
+	case "FunctionTable3":
+		sortorder = "function_table3"
+	case "FunctionField":
+		sortorder = "function_field"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

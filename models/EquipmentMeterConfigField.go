@@ -27,6 +27,10 @@ type EquipmentMeterConfigFieldQueryParam struct {
 	Used         string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentMeterConfigField))
+}
+
 func EquipmentMeterConfigFieldTBName() string {
 	return "equipment_meter_config_field"
 }
@@ -43,6 +47,20 @@ func EquipmentMeterConfigFieldPageList(params *EquipmentMeterConfigFieldQueryPar
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "DTU_no":
+		sortorder = "dtu_no"
+	case "MeterAddress":
+		sortorder = "meter_address"
+	case "MeterTypeNO":
+		sortorder = "meter_type_no"
+	case "GatewayNO":
+		sortorder = "gateway_no"
+	case "DsAddr":
+		sortorder = "ds_addr"
+	case "FieldName":
+		sortorder = "field_name"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

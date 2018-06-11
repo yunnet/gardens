@@ -161,27 +161,6 @@
                     align: 'right',
                     sortable: true
                 }, {
-                    field: 'Needpt',
-                    title: '是否电压变比',
-                    width: '123px',
-                    align: 'center',
-                    sortable: true,
-                    formatter: sdtheme.showYes
-                }, {
-                    field: 'Needct',
-                    title: '是否电流变比',
-                    width: '123px',
-                    align: 'center',
-                    sortable: true,
-                    formatter: sdtheme.showYes
-                }, {
-                    field: 'Msbbit',
-                    title: '符号位',
-                    width: '100px',
-                    align: 'center',
-                    sortable: true,
-                    formatter: sdtheme.showYes
-                }, {
                     field: 'Bytelength',
                     title: '数据长度',
                     width: '110px',
@@ -211,7 +190,34 @@
                     width: '110px',
                     align: 'center',
                     sortable: true
-
+                }, {
+                    field: 'Needpt',
+                    title: '是否电压变比',
+                    width: '123px',
+                    align: 'center',
+                    sortable: true,
+                    formatter: sdtheme.showYes
+                }, {
+                    field: 'Needct',
+                    title: '是否电流变比',
+                    width: '123px',
+                    align: 'center',
+                    sortable: true,
+                    formatter: sdtheme.showYes
+                }, {
+                    field: 'Msbbit',
+                    title: '符号位',
+                    width: '100px',
+                    align: 'center',
+                    sortable: true,
+                    formatter: sdtheme.showYes
+                }, {
+                    field: 'BigEndian',
+                    title: '大端模式',
+                    width: '110px',
+                    align: 'center',
+                    sortable: true,
+                    formatter: sdtheme.showYes
                 }, {
                     field: 'CreateUser',
                     title: '创建人',
@@ -247,6 +253,7 @@
                     title: '状态',
                     width: '100px',
                     align: 'center',
+                    sortable: true,
                     formatter: sdtheme.showTwoState
                 }, {
                     field: 'operate',
@@ -335,7 +342,7 @@
             shade: 0.2,
             maxmin: true,
             shift: 1,
-            area: ['800px', '550px'],
+            area: ['800px', '650px'],
             content: url,
             btn: ['保存', '关闭'],
             yes: function (index, layero) {

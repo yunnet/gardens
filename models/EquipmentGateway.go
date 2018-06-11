@@ -23,6 +23,10 @@ type EquipmentGatewayQueryParam struct {
 	Used        string
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentGateway))
+}
+
 //设备网关通道
 func EquipmentGatewayTBName() string  {
 	return "equipment_gateway"
@@ -40,6 +44,12 @@ func EquipmentGatewayPageList(params *EquipmentGatewayQueryParam) ([]*EquipmentG
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "GatewayNO":
+		sortorder = "gateway_no"
+	case "GatewayDesc":
+		sortorder = "GatewayDesc"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

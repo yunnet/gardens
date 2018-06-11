@@ -25,6 +25,7 @@ func (this *BaseController) Prepare() {
 	this.Data["siteApp"] = beego.AppConfig.String("site.app")
 	this.Data["siteName"] = beego.AppConfig.String("site.name")
 	this.Data["siteVersion"] = beego.AppConfig.String("site.version")
+
 	//从Session里获取数据 设置用户信息
 	this.adapterUserInfo()
 }
@@ -137,8 +138,9 @@ func (this *BaseController) setBackendUser2Session(userId int) error {
 // 设置模板
 // 第一个参数模板，第二个参数为layout
 func (this *BaseController) setTpl(template ...string) {
-	var tplName string
 	layout := "shared/layout_page.html"
+
+	var tplName string
 	switch {
 	case len(template) == 1:
 		tplName = template[0]
@@ -151,13 +153,14 @@ func (this *BaseController) setTpl(template ...string) {
 		actionName := strings.ToLower(this.actionName)
 		tplName = ctrlName + "/" + actionName + ".html"
 	}
+
 	this.Layout = layout
 	this.TplName = tplName
 }
 
 func (this *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
-	r := &models.JsonResult{code, msg, obj}
-	this.Data["json"] = r
+	res := &models.JsonResult{code, msg, obj}
+	this.Data["json"] = res
 	this.ServeJSON()
 	this.StopRun()
 }

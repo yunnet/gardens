@@ -26,6 +26,10 @@ type SystemValQueryParam struct {
 	Used string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(SystemVal))
+}
+
 func SystemValTBName() string {
 	return "sys_val"
 }
@@ -42,6 +46,8 @@ func SystemValPageList(params *SystemValQueryParam) ([]*SystemVal, int64) {
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

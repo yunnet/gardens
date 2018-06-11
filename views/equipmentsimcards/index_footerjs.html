@@ -121,21 +121,21 @@
                 }, {
                     field: 'TotalTraffic',
                     title: '总流量(M)',
-                    width: '110px',
+                    width: '102px',
                     align: 'right',
                     sortable: true,
                     formatter: sdtheme.formatterDecimalByspan
                 }, {
                     field: 'UseTraffic',
                     title: '使用量(M)',
-                    width: '110px',
+                    width: '102px',
                     align: 'right',
                     sortable: true,
                     formatter: sdtheme.formatterDecimalByspan
                 }, {
                     field: 'RemainTraffic',
                     title: '剩余量(M)',
-                    width: '110px',
+                    width: '102px',
                     align: 'right',
                     sortable: true,
                     formatter: sdtheme.formatterDecimalByspan
@@ -145,6 +145,7 @@
                     width: '150px',
                     align: 'center',
                     sortable: true,
+                    visible: false,
                     formatter: sdtheme.formatterDateBySpan
                 }, {
                     field: 'PackageStopTime',
@@ -152,6 +153,7 @@
                     width: '150px',
                     align: 'center',
                     sortable: true,
+                    visible: false,
                     formatter: sdtheme.formatterDateBySpan
                 }, {
                     field: 'TrafficSyncTime',
@@ -194,6 +196,7 @@
                     title: '状态',
                     width: '100px',
                     align: 'center',
+                    sortable: true,
                     formatter: sdtheme.showTwoState
                 }, {
                     field: 'operate',

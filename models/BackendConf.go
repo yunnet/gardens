@@ -24,6 +24,10 @@ type BackendConfQueryParam struct {
 	Used    string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(BackendConf))
+}
+
 func BackendConfTBName() string {
 	return "sys_backend_conf"
 }
@@ -40,6 +44,8 @@ func BackendConfPageList(params *BackendConfQueryParam) ([]*BackendConf, int64) 
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

@@ -12,15 +12,42 @@
 
     function pageInit() {
         $("#Used").selectpicker('val', '{{.m.Used}}');
-        rms.selectMeterType('{{ urlfor "EquipmentMeterTypeController.DataGridSelect"}}', '{{.m.MeterTypeNO}}');
-
         $("#FunctionTable1").selectpicker('val', '{{.m.FunctionTable1}}');
         $("#FunctionTable2").selectpicker('val', '{{.m.FunctionTable2}}');
         $("#FunctionTable3").selectpicker('val', '{{.m.FunctionTable3}}');
-
         $("#DataType").selectpicker('val', '{{.m.DataType}}');
+        rms.selectMeterType('{{ urlfor "EquipmentMeterTypeController.DataGridSelect"}}', '{{.m.MeterTypeNO}}');
+
+        initCheckbox();
+
         //验证
         validateInfo();
+    }
+
+    function initCheckbox() {
+        {{if eq 1 .m.Needpt }}
+            $("#Needpt").bootstrapSwitch('state', true);
+        {{else}}
+            $("#Needpt").bootstrapSwitch('state', false);
+        {{end}}
+
+        {{if eq 1 .m.Needct }}
+            $("#Needct").bootstrapSwitch('state', true);
+        {{else}}
+            $("#Needct").bootstrapSwitch('state', false);
+        {{end}}
+
+        {{if eq 1 .m.Msbbit }}
+            $("#Msbbit").bootstrapSwitch('state', true);
+        {{else}}
+            $("#Msbbit").bootstrapSwitch('state', false);
+        {{end}}
+
+        {{if eq 1 .m.BigEndian }}
+            $("#BigEndian").bootstrapSwitch('state', true);
+        {{else}}
+            $("#BigEndian").bootstrapSwitch('state', false);
+        {{end}}
     }
 
     //表单验证及AJAX提交
@@ -47,14 +74,11 @@
                 },
                 Calcfactor:{
                     required: true
-                },
-                FunctionField:{
-                    required: true
                 }
             },
             messages: {},
             submitHandler: function (form) {
-                var url = '{{ urlfor "EquipmentDtuConfigController.Edit"}}';
+                var url = '{{ urlfor "EquipmentMeterRomConfigController.Edit"}}';
                 var params = $thisForm.serialize();
                 $.sdpost(url, params, function (re) {
                     if (re.code === 0) {

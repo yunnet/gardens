@@ -25,6 +25,10 @@ type Resource struct {
 	RoleResourceRel []*RoleResourceRel `orm:"reverse(many)"` // 设置一对多的反向关系
 }
 
+func init() {
+	orm.RegisterModel(new(Resource))
+}
+
 func (a *Resource) TableName() string {
 	return ResourceTBName()
 }

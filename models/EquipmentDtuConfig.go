@@ -26,6 +26,10 @@ type EquipmentDtuConfigQueryParam struct {
 	Used    string //为空不查询，有值精确查询
 }
 
+func init() {
+	orm.RegisterModel(new(EquipmentDtuConfig))
+}
+
 //DTU配置
 func EquipmentDtuConfigTBName() string {
 	return "equipment_dtu_config"
@@ -50,6 +54,16 @@ func EquipmentDtuConfigPageList(params *EquipmentDtuConfigQueryParam) ([]*Equipm
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "DTU_no":
+		sortorder = "dtu_no"
+	case "Room_no":
+		sortorder = "room_no"
+	case "Sim_no":
+		sortorder = "sim_no"
+	case "TimeInterval":
+		sortorder = "time_interval"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {

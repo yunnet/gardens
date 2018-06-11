@@ -80,13 +80,7 @@ func (this *EquipmentMeterRomConfigController) Edit() {
 
 //add | update
 func (this *EquipmentMeterRomConfigController) Save() {
-	var err error
 	m := models.EquipmentMeterRomConfig{}
-
-	//获取form里的值
-	if err = this.ParseForm(&m); err != nil {
-		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
-	}
 
 	id := this.Input().Get("Id")
 	m.Id, _ = strconv.Atoi(id)
@@ -97,11 +91,8 @@ func (this *EquipmentMeterRomConfigController) Save() {
 	m.AddressSort, _ = strconv.Atoi(tmpInt)
 
 	m.RomAddress = this.GetString("RomAddress")
-
 	m.RomName = this.GetString("RomName")
-
 	m.Units = this.GetString("Units")
-
 	m.DataType = this.GetString("DataType")
 
 	tmpInt = this.Input().Get("SegmentNO")
@@ -119,8 +110,19 @@ func (this *EquipmentMeterRomConfigController) Save() {
 	tmpFloat := this.Input().Get("Calcfactor")
 	m.Calcfactor, _ = strconv.ParseFloat(tmpFloat, 64)
 
-	tmpInt = this.Input().Get("Msbbit")
-	m.Msbbit, _ = strconv.Atoi(tmpInt)
+	tmp_str := this.GetString("Msbbit")
+	if tmp_str == "on" {
+		m.Msbbit = 1
+	} else {
+		m.Msbbit = 0
+	}
+
+	tmp_str = this.GetString("BigEndian")
+	if tmp_str == "on" {
+		m.BigEndian = 1
+	} else {
+		m.BigEndian = 0
+	}
 
 	tmpInt = this.Input().Get("Bytelength")
 	m.Bytelength, _ = strconv.Atoi(tmpInt)
@@ -141,15 +143,14 @@ func (this *EquipmentMeterRomConfigController) Save() {
 		m.CreateUser = this.curUser.RealName
 		m.CreateDate = time.Now()
 
-		if _, err = o.Insert(&m); err == nil {
+		if _, err := o.Insert(&m); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 		}
 	} else {
-		if _, err = o.Update(&m, "DTU_no", "MeterTypeNO", "AddressSort", "RomAddress",
-			                           "RomName", "Units", "DataType",
-			                           "SegmentNO", "Offset", "Needpt", "Needct", "Calcfactor", "Msbbit", "Bytelength",
+		if _, err := o.Update(&m, "MeterTypeNO", "AddressSort", "RomAddress", "RomName", "Units", "DataType",
+			                           "SegmentNO", "Offset", "Needpt", "Needct", "Calcfactor", "Msbbit", "BigEndian", "Bytelength",
 			                           "FunctionTable1", "FunctionTable2", "FunctionTable3", "FunctionField",
 			                           "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)

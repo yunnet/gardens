@@ -4,13 +4,6 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type BackendUserQueryParam struct {
-	BaseQueryParam
-	UserNameLike string //模糊查询
-	RealNameLike string //模糊查询
-	Mobile       string //精确查询
-	SearchStatus string //为空不查询，有值精确查询
-}
 
 type BackendUser struct {
 	Id                 int
@@ -25,6 +18,18 @@ type BackendUser struct {
 	RoleIds            []int                 `orm:"-" form:"RoleIds"`
 	RoleBackendUserRel []*RoleBackendUserRel `orm:"reverse(many)"` // 设置一对多的反向关系
 	ResourceUrlForList []string              `orm:"-"`
+}
+
+type BackendUserQueryParam struct {
+	BaseQueryParam
+	UserNameLike string //模糊查询
+	RealNameLike string //模糊查询
+	Mobile       string //精确查询
+	SearchStatus string //为空不查询，有值精确查询
+}
+
+func init(){
+	orm.RegisterModel(new(BackendUser))
 }
 
 func (a *BackendUser) TableName() string {
@@ -46,6 +51,8 @@ func BackendUserPageList(params *BackendUserQueryParam) ([]*BackendUser, int64) 
 	switch params.Sort {
 	case "Id":
 		sortorder = "Id"
+	case "Used":
+		sortorder = "tag"
 	}
 
 	if params.Order == "desc" {
