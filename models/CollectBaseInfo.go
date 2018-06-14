@@ -10,6 +10,10 @@ import (
 type DtuRowOfDay struct {
 	DTU_no       string    `orm:"column(dtu_no)"`
 	MeterAddress int       `orm:"column(meter_address)"`
+	//MeterTypeNO  string    `orm:"column(meter_type_no)"`
+	//MeterType    string    `orm:"column(meter_type)"`
+	//GatewayNO    string    `orm:"column(gateway_no)"`
+	//GatewayDesc  string    `orm:"column(gateway_desc)"`
 	CollectTime  time.Time `orm:"column(collect_time)"`
 	Rows         int       `orm:"column(rows)"`
 }
@@ -147,13 +151,11 @@ func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) [] *CollectBaseI
 
 //今日采集进度查询
 func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
-	data := make([] *DtuRowOfDay, 0)
-
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-	//sql := "call p_dtu_day_rowtotal('collect_base_info', '')"
 	sql := "call p_dtu_day_row_today()"
-	//sql := fmt.Sprintf(`SELECT dtu_no, meter_address, max(collect_time) as collect_time, count(1) as rows FROM collect_base_info_%s GROUP BY dtu_no, meter_address`, formatTodayUnderline())
+
+	data := make([] *DtuRowOfDay, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err

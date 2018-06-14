@@ -25,29 +25,41 @@
     }
 
     function initCheckbox() {
-        {{if eq 1 .m.Needpt }}
-            $("#Needpt").bootstrapSwitch('state', true);
-        {{else}}
-            $("#Needpt").bootstrapSwitch('state', false);
-        {{end}}
+        var isNeedpt = {{eq 1 .m.Needpt }};
+        $("#Needpt").bootstrapSwitch('state', isNeedpt ? true : false);
 
-        {{if eq 1 .m.Needct }}
-            $("#Needct").bootstrapSwitch('state', true);
-        {{else}}
-            $("#Needct").bootstrapSwitch('state', false);
-        {{end}}
+        var isNeedct = {{eq 1 .m.Needct }};
+        $("#Needct").bootstrapSwitch('state', isNeedct ? true : false);
 
-        {{if eq 1 .m.Msbbit }}
-            $("#Msbbit").bootstrapSwitch('state', true);
-        {{else}}
-            $("#Msbbit").bootstrapSwitch('state', false);
-        {{end}}
+        var isMsbbit = {{eq 1 .m.Msbbit }};
+        $("#Msbbit").bootstrapSwitch('state', isMsbbit ? true : false);
 
-        {{if eq 1 .m.BigEndian }}
-            $("#BigEndian").bootstrapSwitch('state', true);
-        {{else}}
-            $("#BigEndian").bootstrapSwitch('state', false);
-        {{end}}
+        var isBigEndian = {{eq 1 .m.BigEndian }};
+        $("#BigEndian").bootstrapSwitch('state', isBigEndian ? true : false);
+
+        {{/*{{if eq 1 .m.Needpt }}*/}}
+            {{/*$("#Needpt").bootstrapSwitch('state', true);*/}}
+        {{/*{{else}}*/}}
+            {{/*$("#Needpt").bootstrapSwitch('state', false);*/}}
+        {{/*{{end}}*/}}
+        {{/**/}}
+        {{/*{{if eq 1 .m.Needct }}*/}}
+            {{/*$("#Needct").bootstrapSwitch('state', true);*/}}
+        {{/*{{else}}*/}}
+            {{/*$("#Needct").bootstrapSwitch('state', false);*/}}
+        {{/*{{end}}*/}}
+
+        {{/*{{if eq 1 .m.Msbbit }}*/}}
+            {{/*$("#Msbbit").bootstrapSwitch('state', true);*/}}
+        {{/*{{else}}*/}}
+            {{/*$("#Msbbit").bootstrapSwitch('state', false);*/}}
+        {{/*{{end}}*/}}
+
+        {{/*{{if eq 1 .m.BigEndian }}*/}}
+            {{/*$("#BigEndian").bootstrapSwitch('state', true);*/}}
+        {{/*{{else}}*/}}
+            {{/*$("#BigEndian").bootstrapSwitch('state', false);*/}}
+        {{/*{{end}}*/}}
     }
 
     //表单验证及AJAX提交

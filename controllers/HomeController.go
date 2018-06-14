@@ -59,12 +59,14 @@ func (this *HomeController) Login() {
 	this.setTpl("home/login.html", "shared/layout_base.html")
 }
 
+//退出
 func (this *HomeController) Logout() {
 	user := models.BackendUser{}
 	this.SetSession("backenduser", user)
 	this.pageLogin()
 }
 
+//登陆
 func (this *HomeController) DoLogin() {
 	remoteAddr := this.Ctx.Request.RemoteAddr
 	addrs := strings.Split(remoteAddr, "::1")
@@ -97,6 +99,31 @@ func (this *HomeController) DoLogin() {
 		this.jsonResult(enums.JRCodeSucc, "登录成功", "")
 	} else {
 		this.jsonResult(enums.JRCodeFailed, "用户名或者密码错误", "")
+	}
+}
+
+//************************************* A P I ******************************************************
+
+//获取配置文件信息
+func (this *HomeController)GetConfigValue() {
+	key := this.GetString("key")
+	result := ""
+	err := true
+	if key == "siteApp" {
+		result = beego.AppConfig.String("site.app")
+		err = false
+	}else if key == "siteName"{
+		result = beego.AppConfig.String("site.name")
+		err = false
+	}else if key == "siteVersion"{
+		result = beego.AppConfig.String("site.version")
+		err = false
+	}
+
+	if err{
+		this.jsonResult(enums.JRCodeFailed, "获取参数失败", key)
+	}else{
+		this.jsonResult(enums.JRCodeSucc, "", result)
 	}
 }
 

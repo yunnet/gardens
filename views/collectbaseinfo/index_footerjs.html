@@ -5,16 +5,34 @@
 <script src="/static/plugins/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="/static/plugins/bootstrap-table/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
 <script src="/static/plugins/echarts/echarts.min.js"></script>
+<script src="/static/plugins/metrics-graphics/metricsgraphics.js"></script>
+<script src="/static/plugins/d3/d3.js"></script>
+<script src="/static/product/scripts/todaySeconds.js"></script>
 
 <script>
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm");
 
-    // $('#electricityChart').css('width', $('#electricityChart').width());
     var electricityChart = echarts.init(document.getElementById('electricityChart'));
     var voltageChart = echarts.init(document.getElementById('voltageChart'));
     var powerfactorChart = echarts.init(document.getElementById('powerfactorChart'));
     var totalPateeChart = echarts.init(document.getElementById('totalPateeChart'));
+
+    var A_electricity_list = [];
+    var B_electricity_list = [];
+    var C_electricity_list = [];
+
+    var A_voltage_list = [];
+    var B_voltage_list = [];
+    var C_voltage_list = [];
+
+    var A_power_factor_list = [];
+    var B_power_factor_list = [];
+    var C_power_factor_list = [];
+    var Total_power_factor_list = [];
+
+    var Total_p_at_ee_list = [];
+
 
     //初始化加载
     $(function () {
@@ -29,9 +47,12 @@
         //初始化表格
         dataGridInit();
 
+        echartsInit();
+
         //搜索
         $("#btnSearch").on("click", function (e) {
             refreshToFirstPage();
+
             collectRowsToday();
         });
 
@@ -73,6 +94,7 @@
 
         if($("#DTU_no").val().length == 0){
             $('.searchForm input[name="DTU_no"]').val('900000000001');
+            $('.searchForm input[name="MeterAddress"]').val(1);
         }
 
         layui.use('laydate', function () {
@@ -405,8 +427,456 @@
         });
     }
 
+    function echartsInit(){
+        var icon = 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z';
+        var option = {
+            title: {
+                text: '24小时数据',
+                subtext: '5分钟一条'
+            },
+
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            //下栏拉动条
+            dataZoom: [{
+                type: 'inside',
+                start: 0
+            }, {
+                start: 0,
+                handleIcon: icon,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+
+            //开关
+            legend: {
+                data:['A相电流','B相电流','C相电流']
+            },
+
+            //右侧工具栏
+            toolbox:{
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+
+            //表格布局
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '17%',
+                containLabel: true
+            },
+
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                splitLine: {
+                    show: false
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#0E2A43'
+                    }
+                },
+                data: date_list
+            },
+
+            yAxis: {
+                splitLine: {
+                    show: false
+                },
+                axisPointer: {
+                    snap: true
+                }
+            },
+            series: [ {
+                name: 'A相电流',
+                type: 'line',
+                data: A_electricity_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(219,50,51)'
+                    }
+                }
+            }, {
+                name: 'B相电流',
+                type: 'line',
+                data: B_electricity_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(0,136,212)'
+                    }
+                }
+            }, {
+                name: 'C相电流',
+                type: 'line',
+                data: C_electricity_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(137,189,27)'
+                    }
+                }
+            }]
+        };
+        electricityChart.setOption(option);
+
+        //********************************************************************************************
+        var option2 = {
+            title: {
+                text: '24小时数据',
+                subtext: '5分钟一条'
+            },
+
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            //下栏拉动条
+            dataZoom: [{
+                type: 'inside',
+                start: 0
+            }, {
+                start: 0,
+                handleIcon: icon,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+
+            legend: {
+                data:['A相电压','B相电压','C相电压']
+            },
+            toolbox:{
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: date_list,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                axisLabel: {
+                    formatter: function (val) {
+                        return val;
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                scale: true
+            },
+            series: [ {
+                name: 'A相电压',
+                type: 'line',
+                data: A_voltage_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(219,50,51)'
+                    }
+                }
+            }, {
+                name: 'B相电压',
+                type: 'line',
+                data: B_voltage_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(0,136,212)'
+                    }
+                }
+            }, {
+                name: 'C相电压',
+                type: 'line',
+                data: C_voltage_list,
+                smooth: true,
+                showSymbol: false,
+                itemStyle: {
+                    normal: {
+                        color: 'rgb(137,189,27)'
+                    }
+                }
+            }]
+        };
+        voltageChart.setOption(option2);
+
+        //********************************************************************************************
+        var option3 = {
+            title: {
+                text: '24小时数据',
+                subtext: '5分钟一条'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            //下栏拉动条
+            dataZoom: [{
+                type: 'inside',
+                start: 0
+            }, {
+                start: 0,
+                handleIcon: icon,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+
+            legend: {
+                data:['A相功率因数','B相功率因数','C相功率因数', '3相总功率因数']
+            },
+
+            toolbox:{
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: date_list,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                axisLabel: {
+                    formatter: function (val) {
+                        return val;
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                scale: true
+            },
+            series: [ {
+                name: 'A相功率因数',
+                type: 'line',
+                data: A_power_factor_list,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                smooth: true,
+                showSymbol: false
+            }, {
+                name: 'B相功率因数',
+                type: 'line',
+                data: B_power_factor_list,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                smooth: true,
+                showSymbol: false
+            }, {
+                name: 'C相功率因数',
+                type: 'line',
+                data: C_power_factor_list,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                smooth: true,
+                showSymbol: false
+            }, {
+                name: '3相总功率因数',
+                type: 'line',
+                data: Total_power_factor_list,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                smooth: true,
+                showSymbol: false
+            }]
+        };
+        powerfactorChart.setOption(option3);
+
+        //********************************************************************************************
+        var option4 = {
+            title: {
+                text: '24小时数据',
+                subtext: '5分钟一条'
+            },
+
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            //下栏拉动条
+            dataZoom: [{
+                type: 'inside',
+                start: 0
+            }, {
+                start: 0,
+                handleIcon: icon,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+
+            legend: {
+                data:['3相总正向有功电能']
+            },
+            toolbox:{
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            calculable: true,
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                data: date_list,
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: function (val) {
+                        return val;
+                    }
+                },
+                boundaryGap: [0, '100%'],
+                scale: true
+            },
+            series: [ {
+                name: '3相总正向有功电能',
+                type: 'line',
+                data: Total_p_at_ee_list,
+                smooth: true,
+                showSymbol: false
+            }]
+        };
+        totalPateeChart.setOption(option4);
+    }
+
     //echarts
     function collectRowsToday() {
+        electricityChart.showLoading({
+            text: '正在努力',
+            color: '#c23531',
+            textColor: '#000',
+            maskColor: 'rgba(255, 255, 255, 0)',
+            zlevel: 0
+        });
+        voltageChart.showLoading();
+        powerfactorChart.showLoading();
+        totalPateeChart.showLoading();
+
+        A_electricity_list.splice(0, A_electricity_list.length);
+        B_electricity_list.splice(0, B_electricity_list.length);
+        C_electricity_list.splice(0, C_electricity_list.length);
+
+        A_voltage_list.splice(0, A_voltage_list.length);
+        B_voltage_list.splice(0, B_voltage_list.length);
+        C_voltage_list.splice(0, C_voltage_list.length);
+
+        A_power_factor_list.splice(0, A_power_factor_list.length);
+        B_power_factor_list.splice(0, B_power_factor_list.length);
+        C_power_factor_list.splice(0, C_power_factor_list.length);
+        Total_power_factor_list.splice(0, Total_power_factor_list.length);
+
+        Total_p_at_ee_list.splice(0, Total_p_at_ee_list.length);
+
         var url = '{{ urlfor "CollectBaseInfoController.DataList"}}';
         var params ={CollectTime: $('.searchForm input[name="CollectTime"]').val(),
                      DTU_no: $('.searchForm input[name="DTU_no"]').val(),
@@ -414,355 +884,92 @@
                      };
         $.sdpost(url, params, function (re) {
             if (re.code === 0) {
-                var dateList = re.obj.map(function (item) {
-                    return new Date(item.CollectTime).format("hh:mm:ss");
+                re.obj.map(function (item, index, array) {
+                    var idx = index > 0 ? index - 1 : 0;
+                    var currentTime = new Date(item.CollectTime);
+                    var diff = currentTime - new Date(array[idx].CollectTime);
+
+                    if(diff > 15 * 60 * 1000){
+                        var t = currentTime.getSeconds() + 1;
+                        var tt = {'time': t, 'value':[t, ]};
+                        A_electricity_list.push(tt);
+                        B_electricity_list.push(tt);
+                        C_electricity_list.push(tt);
+
+                        A_voltage_list.push(tt);
+                        B_voltage_list.push(tt);
+                        C_voltage_list.push(tt);
+
+                        A_power_factor_list.push(tt);
+                        B_power_factor_list.push(tt);
+                        C_power_factor_list.push(tt);
+                        Total_power_factor_list.push(tt);
+
+                        Total_p_at_ee_list.push(tt);
+                    }
+
+                    var time = currentTime.format("hh:mm:ss");
+                    var ae = {'time': time, 'value':[time, item.A_electricity]};
+                    var be = {'time': time, 'value':[time, item.B_electricity]};
+                    var ce = {'time': time, 'value':[time, item.C_electricity]};
+                    A_electricity_list.push(ae);
+                    B_electricity_list.push(be);
+                    C_electricity_list.push(ce);
+
+                    var av = {'time': time, 'value':[time, item.A_voltage]};
+                    var bv = {'time': time, 'value':[time, item.B_voltage]};
+                    var cv = {'time': time, 'value':[time, item.C_voltage]};
+                    A_voltage_list.push(av);
+                    B_voltage_list.push(bv);
+                    C_voltage_list.push(cv);
+
+                    var ap = {'time': time, 'value':[time, item.A_power_factor]};
+                    var bp = {'time': time, 'value':[time, item.B_power_factor]};
+                    var cp = {'time': time, 'value':[time, item.C_power_factor]};
+                    var tp = {'time': time, 'value':[time, item.Total_power_factor_list]};
+                    A_power_factor_list.push(ap);
+                    B_power_factor_list.push(bp);
+                    C_power_factor_list.push(cp);
+                    Total_power_factor_list.push(tp);
+
+                    var te = {'time': time, 'value':[time, item.Total_p_at_ee]};
+                    Total_p_at_ee_list.push(te);
                 });
 
-                // var dateList=[];
-                // var z = new Date(0,0,0);
-                // for(var i=0; i<86400; i++){
-                //     dateList.push(z.format('hh:mm:ss'));
-                //     z.setSeconds(z.getSeconds() + 1)
-                // }
-                //
-                // console.log(dateList);
+                electricityChart.hideLoading();
+                electricityChart.setOption({
+                    series:[
+                        {data: A_electricity_list},
+                        {data: B_electricity_list},
+                        {data: C_electricity_list}
+                    ]
+                });
 
-                var option = {
-                    title: {
-                        text: '24小时数据',
-                        subtext: '5分钟一条'
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data:['A相电流','B相电流','C相电流']
-                    },
-                    toolbox:{
-                        show: true,
-                        orient: 'vertical',
-                        left: 'right',
-                        top: 'center',
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    calculable: true,
+                voltageChart.hideLoading();
+                voltageChart.setOption({
+                    series:[
+                        {data: A_voltage_list},
+                        {data: B_voltage_list},
+                        {data: C_voltage_list}
+                    ]
+                });
 
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: dateList,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        axisLabel: {
-                            formatter: function (val) {
-                                return val;
-                            }
-                        },
+                powerfactorChart.hideLoading();
+                powerfactorChart.setOption({
+                    series:[
+                        {data: A_power_factor_list},
+                        {data: B_power_factor_list},
+                        {data: C_power_factor_list},
+                        {data: Total_power_factor_list}
+                    ]
+                });
 
-                        splitLine: {
-                            show: false
-                        },
-                        scale: true
-                    },
-                    series: [ {
-                        name: 'A相电流',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.A_electricity;
-                        }),
-                        showSymbol: false
-                    }, {
-                        name: 'B相电流',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.B_electricity;
-                        }),
-                        showSymbol: false
-                    }, {
-                        name: 'C相电流',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.C_electricity;
-                        }),
-                        showSymbol: false
-                    }]
-                };
-                electricityChart.setOption(option);
-
-                var option2 = {
-                    title: {
-                        text: '24小时数据',
-                        subtext: '5分钟一条'
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data:['A相电压','B相电压','C相电压']
-                    },
-                    toolbox:{
-                        show: true,
-                        orient: 'vertical',
-                        left: 'right',
-                        top: 'center',
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    calculable: true,
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: dateList,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        axisLabel: {
-                            formatter: function (val) {
-                                return val;
-                            }
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        scale: true
-                    },
-                    series: [ {
-                        name: 'A相电压',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.A_voltage;
-                        }),
-                        showSymbol: false
-                    }, {
-                        name: 'B相电压',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.B_voltage;
-                        }),
-                        showSymbol: false
-                    }, {
-                        name: 'C相电压',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.C_voltage;
-                        }),
-                        showSymbol: false
-                    }]
-                };
-                voltageChart.setOption(option2);
-
-                var option3 = {
-                    title: {
-                        text: '24小时数据',
-                        subtext: '5分钟一条'
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data:['A相功率因数','B相功率因数','C相功率因数', '3相总功率因数']
-                    },
-                    toolbox:{
-                        show: true,
-                        orient: 'vertical',
-                        left: 'right',
-                        top: 'center',
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    calculable: true,
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: dateList,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        axisLabel: {
-                            formatter: function (val) {
-                                return val;
-                            }
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        scale: true
-                    },
-                    series: [ {
-                        name: 'A相功率因数',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.A_power_factor;
-                        }),
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        },
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        showSymbol: false
-                    }, {
-                        name: 'B相功率因数',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.B_power_factor;
-                        }),
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        },
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        showSymbol: false
-                    }, {
-                        name: 'C相功率因数',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.C_power_factor;
-                        }),
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        },
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        showSymbol: false
-                    }, {
-                        name: '3相总功率因数',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.Total_power_factor;
-                        }),
-                        markLine: {
-                            data: [
-                                {type: 'average', name: '平均值'}
-                            ]
-                        },
-                        markPoint: {
-                            data: [
-                                {type: 'max', name: '最大值'},
-                                {type: 'min', name: '最小值'}
-                            ]
-                        },
-                        showSymbol: false
-                    }]
-                };
-                powerfactorChart.setOption(option3);
-
-                var option4 = {
-                    title: {
-                        text: '24小时数据',
-                        subtext: '5分钟一条'
-                    },
-                    tooltip: {
-                        trigger: 'axis'
-                    },
-                    legend: {
-                        data:['3相总正向有功电能']
-                    },
-                    toolbox:{
-                        show: true,
-                        orient: 'vertical',
-                        left: 'right',
-                        top: 'center',
-                        feature: {
-                            mark: {show: true},
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                            restore: {show: true},
-                            saveAsImage: {show: true}
-                        }
-                    },
-                    calculable: true,
-                    grid: {
-                        left: '3%',
-                        right: '4%',
-                        bottom: '3%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: dateList,
-                        splitLine: {
-                            show: false
-                        }
-                    },
-                    yAxis: {
-                        axisLabel: {
-                            formatter: function (val) {
-                                return val;
-                            }
-                        },
-                        splitLine: {
-                            show: false
-                        },
-                        boundaryGap: [0, '100%'],
-                        scale: true
-                    },
-                    series: [ {
-                        name: '3相总正向有功电能',
-                        type: 'line',
-                        data: re.obj.map(function (item) {
-                            return item.Total_p_at_ee;
-                        }),
-
-                        showSymbol: false
-                    }]
-                };
-                totalPateeChart.setOption(option4);
+                totalPateeChart.hideLoading();
+                totalPateeChart.setOption({
+                    series:[
+                        {data: Total_p_at_ee_list}
+                    ]
+                });
 
             } else {
                 layer.alert("collectRowsToday 数据获取失败", {icon: 2, title: '错误'})

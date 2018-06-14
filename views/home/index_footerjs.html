@@ -29,6 +29,7 @@
 <script src="/static/plugins/echarts/theme/macarons.js"></script>
 <!-- 引入百度地图扩展 -->
 <script src="/static/plugins/echarts/extension/bmap/bmap.min.js"></script>
+<script src="/static/product/scripts/hashmap.js"></script>
 
 <script>
     var d3tree;
@@ -649,18 +650,21 @@
         $.sdpost(url, {}, function (re) {
             if (re.code === 0) {
                 var html = [], html2 = [];
-                var dtuOnline = 0, dtuOffline = 0;
-                var dtuNormal = 0, dtuAbnormal = 0;
+                //datastateary[0]  dtuOnline
+                //datastateary[1]  dtuOffline
+                //datastateary[2]  dtuNormal
+                //datastateary[3]  dtuAbnormal
+                var datastateary = new Array(0,0,0,0);
 
                 $(re.obj).each(function (i, row) {
                     if(row.Rows == 0){
-                        dtuOffline++;
+                        datastateary[1]++;
 
                         html2.push('<tr>');
-                        html2.push(' <td>' + dtuOffline  + '</td>  <td>' + row.DTU_no  + '</td> <td>' + row.MeterAddress  + '</td>');
+                        html2.push(' <td>' + datastateary[1]  + '</td>  <td>' + row.DTU_no  + '</td> <td>' + row.MeterAddress  + '</td>');
                         html2.push('</tr>');
                     }else{
-                        dtuOnline++;
+                        datastateary[0]++;
 
                         html.push('<div class="progress-group">');
                         html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
@@ -673,23 +677,25 @@
                         var maxValue = getNowRows();
                         if(row.Rows  < (maxValue * 0.60 )) {
                             html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
-                            dtuAbnormal++;
+                            datastateary[3]++;
                         } else if(row.Rows < (maxValue * 0.95 )){
                             html.push('<div class="progress-bar progress-bar-yellow" style="width:' + rate + '%"></div>');
-                            dtuAbnormal++;
+                            datastateary[3]++;
                         } else {
                             html.push('<div class="progress-bar progress-bar-aqua" style="width:' + rate + '%"></div>');
-                            dtuNormal++;
+                            datastateary[2]++;
                         }
-
                         html.push('</div>');
                     }
                 });
 
-                var dtuState = '状态(在线:' + dtuOnline + ' 离线:' + dtuOffline + ') 数据(正常:' + dtuNormal + ' 异常:' + dtuAbnormal + ')';
+                var dtuState = '状态(在线:' + datastateary[0] +
+                               ' 离线:' + datastateary[1] +
+                               ') 数据(正常:' + datastateary[2] +
+                               ' 异常:' + datastateary[3] + ')';
                 $('#dtuState').html(dtuState);
 
-                $('#meterCount').html(dtuOnline + dtuOffline);
+                $('#meterCount').html(datastateary[0] + datastateary[1]);
                 $('#dtuRowToday').html(html.join(''));
                 $('#offlineTable').find("tbody").html(html2.join());
 

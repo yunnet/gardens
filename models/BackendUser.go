@@ -4,7 +4,6 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-
 type BackendUser struct {
 	Id                 int
 	RealName           string                `orm:"size(32)"`
@@ -28,7 +27,7 @@ type BackendUserQueryParam struct {
 	SearchStatus string //为空不查询，有值精确查询
 }
 
-func init(){
+func init() {
 	orm.RegisterModel(new(BackendUser))
 }
 

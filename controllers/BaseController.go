@@ -46,7 +46,7 @@ func (this *BaseController) checkLogin() {
 			returnURL := this.Ctx.Input.Refer()
 			this.jsonResult(enums.JRCode302, "请登录", urlstr + returnURL)
 		}
-		this.Redirect(urlstr + returnURL, 302)
+		this.Redirect(urlstr+returnURL, 302)
 		this.StopRun()
 	}
 }
@@ -56,8 +56,10 @@ func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
 	if this.curUser.Id == 0 {
 		return false
 	}
+
 	//从session获取用户信息
 	user := this.GetSession("backenduser")
+
 	//类型断言
 	v, ok := user.(models.BackendUser)
 	if ok {
@@ -65,6 +67,7 @@ func (this *BaseController) checkActionAuthor(ctrlName, ActName string) bool {
 		if v.IsSuper == true {
 			return true
 		}
+
 		//遍历用户所负责的资源列表
 		for i, _ := range v.ResourceUrlForList {
 			urlfor := strings.TrimSpace(v.ResourceUrlForList[i])
@@ -126,6 +129,7 @@ func (this *BaseController) setBackendUser2Session(userId int) error {
 	if err != nil {
 		return err
 	}
+
 	//获取这个用户能获取到的所有资源列表
 	resourceList := models.ResourceTreeGridByUserId(userId, 1000)
 	for _, item := range resourceList {
