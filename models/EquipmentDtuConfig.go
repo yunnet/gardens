@@ -6,16 +6,16 @@ import (
 )
 
 type EquipmentDtuConfig struct {
-	Id           int       `form:"id"`
-	DTU_no       string    `orm:"column(dtu_no)"`
-	Room_no      string    `orm:"column(room_no)"`
-	Sim_no       string    `orm:"column(sim_no)"`
-	TimeInterval int       `orm:"column(time_interval)"`
-	Used         int       `orm:"column(tag)"`
-	CreateUser   string    `orm:"column(createuser)"`
-	CreateDate   time.Time `orm:"auto_now_add;type(datetime);column(createdate)"`
-	ChangeUser   string    `orm:"column(changeuser)"`
-	ChangeDate   time.Time `orm:"auto_now;type(datetime);column(changedate)"`
+	Id           int       `orm:"column(id)" form:"Id"`
+	DTU_no       string    `orm:"column(dtu_no)" form:"DTU_no"`
+	Room_no      string    `orm:"column(room_no)" form:"Room_no"`
+	Sim_no       string    `orm:"column(sim_no)" form:"Sim_no"`
+	TimeInterval int       `orm:"column(time_interval)" form:"TimeInterval"`
+	Used         int       `orm:"column(tag)" form:"Used"`
+	CreateUser   string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate   time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser   string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate   time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentDtuConfigQueryParam struct {

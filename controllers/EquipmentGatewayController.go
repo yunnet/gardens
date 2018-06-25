@@ -93,12 +93,7 @@ func (this *EquipmentGatewayController) Save() {
 	if err = this.ParseForm(&m); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
-
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
-	m.GatewayDesc = this.GetString("GatewayDesc")
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

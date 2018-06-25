@@ -6,30 +6,30 @@ import (
 )
 
 type EquipmentMeterRomConfig struct {
-	Id             int       `form:"id"`
-	MeterTypeNO    string    `orm:"column(meter_type_no)"`
-	AddressSort    int       `orm:"column(address_sort)"`
-	RomAddress     string    `orm:"column(rom_address)"`
-	RomName        string    `orm:"column(rom_name)"`
-	Units          string    `orm:"column(units)"`
-	DataType       string    `orm:"column(data_type)"`
-	SegmentNO      int       `orm:"column(segment_no)"`
-	Offset         int       `orm:"column(offset)"`
-	Needpt         int       `orm:"column(need_pt)"`
-	Needct         int       `orm:"column(need_ct)"`
-	Calcfactor     float64   `orm:"digits(12);decimals(4);column(calcfactor)"`
-	Msbbit         int       `orm:"column(msb_bit)"`
-	BigEndian      int       `orm:"column(bigendian)"`
-	Bytelength     int       `orm:"column(byte_length)"`
-	FunctionTable1 string    `orm:"column(function_table1)"`
-	FunctionTable2 string    `orm:"column(function_table2)"`
-	FunctionTable3 string    `orm:"column(function_table3)"`
-	FunctionField  string    `orm:"column(function_field)"`
-	Used           int       `orm:"column(tag)"`
-	CreateUser     string    `orm:"column(createuser)"`
-	CreateDate     time.Time `orm:"column(createdate)"`
-	ChangeUser     string    `orm:"column(changeuser)"`
-	ChangeDate     time.Time `orm:"column(changedate)"`
+	Id             int       `orm:"column(id)" form:"Id"`
+	MeterTypeNO    string    `orm:"column(meter_type_no)" form:"MeterTypeNO"`
+	AddressSort    int       `orm:"column(address_sort)" form:"AddressSort"`
+	RomAddress     string    `orm:"column(rom_address)" form:"RomAddress"`
+	RomName        string    `orm:"column(rom_name)" form:"RomName"`
+	Units          string    `orm:"column(units)" form:"Units"`
+	DataType       string    `orm:"column(data_type)" form:"DataType"`
+	SegmentNO      int       `orm:"column(segment_no)" form:"SegmentNO"`
+	Offset         int       `orm:"column(offset)" form:"Offset"`
+	Needpt         int       `orm:"column(need_pt)" form:"Needpt"`
+	Needct         int       `orm:"column(need_ct)" form:"Needct"`
+	Calcfactor     float64   `orm:"digits(12);decimals(4);column(calcfactor)" form:"Calcfactor"`
+	Msbbit         int       `orm:"column(msb_bit)" form:"Msbbit"`
+	BigEndian      int       `orm:"column(bigendian)" form:"BigEndian"`
+	Bytelength     int       `orm:"column(byte_length)" form:"Bytelength"`
+	FunctionTable1 string    `orm:"column(function_table1)" form:"FunctionTable1"`
+	FunctionTable2 string    `orm:"column(function_table2)" form:"FunctionTable2"`
+	FunctionTable3 string    `orm:"column(function_table3)" form:"FunctionTable3"`
+	FunctionField  string    `orm:"column(function_field)" form:"FunctionField"`
+	Used           int       `orm:"column(tag)" form:"Used"`
+	CreateUser     string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate     time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser     string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate     time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentMeterRomConfigQueryParam struct {

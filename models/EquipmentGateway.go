@@ -6,14 +6,14 @@ import (
 )
 
 type EquipmentGateway struct {
-	Id          int       `form:"id"`
-	GatewayNO   string    `orm:"column(gateway_no)"`
-	GatewayDesc string    `orm:"column(gateway_desc)"`
-	Used        int       `orm:"column(tag)"`
-	CreateUser  string    `orm:"column(createuser)"`
-	CreateDate  time.Time `orm:"column(createdate)"`
-	ChangeUser  string    `orm:"column(changeuser)"`
-	ChangeDate  time.Time `orm:"column(changedate)"`
+	Id          int       `orm:"column(id)" form:"Id"`
+	GatewayNO   string    `orm:"column(gateway_no)" form:"GatewayNO"`
+	GatewayDesc string    `orm:"column(gateway_desc)" form:"GatewayDesc"`
+	Used        int       `orm:"column(tag)" form:"Used"`
+	CreateUser  string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate  time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser  string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate  time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentGatewayQueryParam struct {
@@ -28,7 +28,7 @@ func init() {
 }
 
 //设备网关通道
-func EquipmentGatewayTBName() string  {
+func EquipmentGatewayTBName() string {
 	return "equipment_gateway"
 }
 

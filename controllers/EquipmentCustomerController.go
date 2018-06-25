@@ -95,24 +95,7 @@ func (this *EquipmentCustomerController) Save() {
 	if err = this.ParseForm(&m); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
-
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
-
-	m.CustomerName = this.GetString("CustomerName")
-	m.CustomerDesc = this.GetString("CustomerDesc")
-	m.Contacts = this.GetString("Contacts")
-	m.Phone = this.GetString("Phone")
-	m.Address = this.GetString("Address")
-
-	longitude := this.Input().Get("Longitude")
-	m.Longitude, _ = strconv.ParseFloat(longitude, 64)
-
-	latitude := this.Input().Get("Latitude")
-	m.Latitude, _ = strconv.ParseFloat(latitude, 64)
-
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
@@ -145,7 +128,6 @@ func (this *EquipmentCustomerController) Save() {
 			}
 		}
 	} else {
-		m.CustomerNO = this.GetString("CustomerNO")
 		if _, err = o.Update(&m, "CustomerNO", "CustomerName", "CustomerDesc", "Contacts", "Phone", "Address", "Longitude", "Latitude", "Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {

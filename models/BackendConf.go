@@ -6,16 +6,16 @@ import (
 )
 
 type BackendConf struct {
-	Id         int       `form:"id"`
-	AppName    string    `orm:"column(appname)"`
-	AppVersion string    `orm:"column(appversion)"`
-	Deploy     string    `orm:"column(deploy)"`
-	ConfigText string    `orm:"column(configtext)"`
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id         int       `form:"Id"`
+	AppName    string    `orm:"column(appname)" form:"AppName"`
+	AppVersion string    `orm:"column(appversion)" form:"AppVersion"`
+	Deploy     string    `orm:"column(deploy)"  form:"Deploy"`
+	ConfigText string    `orm:"column(configtext)" form:"ConfigText"`
+	Used       int       `orm:"column(tag)" form:"Used"`
+	CreateUser string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate time.Time `orm:"column(createdate)" form:"CreateDate"`
+	ChangeUser string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate time.Time `orm:"column(changedate)" form:"ChangeDate"`
 }
 
 type BackendConfQueryParam struct {

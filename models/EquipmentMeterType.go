@@ -8,18 +8,18 @@ import (
 
 type (
 	EquipmentMeterType struct {
-		Id          int       `form:"id"`
-		MeterTypeNO string    `orm:"column(meter_type_no)"`
-		MeterType   string    `orm:"column(meter_type)"`
-		VendorNO    string    `orm:"column(vendor_no)"`
-		PtAddress   string    `orm:"column(pt_address)"`
-		CtAddress   string    `orm:"column(ct_address)"`
-		ThreePhase  int       `orm:"column(three_phase)"`
-		Used        int       `orm:"column(tag)"`
-		CreateUser  string    `orm:"column(createuser)"`
-		CreateDate  time.Time `orm:"column(createdate)"`
-		ChangeUser  string    `orm:"column(changeuser)"`
-		ChangeDate  time.Time `orm:"column(changedate)"`
+		Id          int       `orm:"column(id)" form:"Id"`
+		MeterTypeNO string    `orm:"column(meter_type_no)" form:"MeterTypeNO"`
+		MeterType   string    `orm:"column(meter_type)" form:"MeterType"`
+		VendorNO    string    `orm:"column(vendor_no)" form:"VendorNO"`
+		PtAddress   string    `orm:"column(pt_address)" form:"PtAddress"`
+		CtAddress   string    `orm:"column(ct_address)" form:"CtAddress"`
+		ThreePhase  int       `orm:"column(three_phase)" form:"ThreePhase"`
+		Used        int       `orm:"column(tag)" form:"Used"`
+		CreateUser  string    `orm:"column(createuser)" form:"CreateUser"`
+		CreateDate  time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+		ChangeUser  string    `orm:"column(changeuser)" form:"ChangeUser"`
+		ChangeDate  time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 	}
 
 	EquipmentMeterTypeGrid struct {
@@ -59,7 +59,7 @@ func (this *EquipmentMeterType) TableName() string {
 	return EquipmentMeterTypeTBName()
 }
 
-func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam)([]*EquipmentMeterType, error){
+func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam) ([]*EquipmentMeterType, error) {
 	query := orm.NewOrm().QueryTable(EquipmentMeterTypeTBName())
 
 	params.Limit = -1
@@ -80,7 +80,7 @@ func EquipmentMeterTypeSelect(params *EquipmentMeterTypeQueryParam)([]*Equipment
 
 	data := make([]*EquipmentMeterType, 0)
 	_, err := query.OrderBy(sortorder).Limit(params.Limit, params.Offset).All(&data)
-	if(err != nil){
+	if (err != nil) {
 		return nil, err
 	}
 	return data, nil

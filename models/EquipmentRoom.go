@@ -6,15 +6,15 @@ import (
 )
 
 type EquipmentRoom struct {
-	Id         int       `form:"id"`
-	RoomNO     string    `orm:"column(room_no)"`
-	RoomName   string    `orm:"column(room_name)"`
-	CustomerNO string    `orm:"column(customer_no)"`
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id         int       `orm:"column(id)" form:"Id"`
+	RoomNO     string    `orm:"column(room_no)" form:"RoomNO"`
+	RoomName   string    `orm:"column(room_name)" form:"RoomName"`
+	CustomerNO string    `orm:"column(customer_no)" form:"CustomerNO"`
+	Used       int       `orm:"column(tag)" form:"Used"`
+	CreateUser string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentRoomQueryParam struct {

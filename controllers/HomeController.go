@@ -9,6 +9,9 @@ import (
 	"time"
 	"fmt"
 	"github.com/astaxie/beego"
+		"net/http"
+	"io/ioutil"
+	"github.com/tidwall/gjson"
 )
 
 type HomeController struct {
@@ -78,9 +81,9 @@ func (this *HomeController) DoLogin() {
 	userpwd := strings.TrimSpace(this.GetString("UserPwd"))
 
 	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil{
-		utils.LogError("LoginTraceAdd error.")
+		beego.Error("LoginTraceAdd error.")
 	}
-	utils.LogInfo(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
+	beego.Info(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
 
 	if len(username) == 0 || len(userpwd) == 0 {
 		this.jsonResult(enums.JRCodeFailed, "用户名和密码不正确", "")
@@ -132,7 +135,7 @@ func (this *HomeController) GetDtuRowForDay() {
 	before := time.Now().Unix()
 	if data, err := models.GetDtuRowsTodayList(); err != nil{
 		after := time.Now().Unix()
-		utils.LogInfo(fmt.Sprintf("GetDtuRowForDay spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetDtuRowForDay spend: %d s", after - before))
 
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
@@ -145,7 +148,7 @@ func (this *HomeController) GetCustomerForMeter() {
 	before := time.Now().Unix()
 	if data, err := models.GetCustomerForMeter(); err != nil {
 		after := time.Now().Unix()
-		utils.LogInfo(fmt.Sprintf("GetCustomerForMeter spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCustomerForMeter spend: %d s", after - before))
 
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
@@ -158,7 +161,7 @@ func (this *HomeController) GetDtuCount() {
 	before := time.Now().Unix()
 	count := models.EquipmentDtuConfigCount()
 	after := time.Now().Unix()
-	utils.LogInfo(fmt.Sprintf("GetDtuCount spend: %d ns", after - before))
+	beego.Info(fmt.Sprintf("GetDtuCount spend: %d ns", after - before))
 
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
@@ -168,7 +171,7 @@ func (this *HomeController) GetMeterCount() {
 	before := time.Now().Unix()
 	count := models.EquipmentMeterConfigCount()
 	after := time.Now().Unix()
-	utils.LogInfo(fmt.Sprintf("GetMeterCount spend: %d s", after - before))
+	beego.Info(fmt.Sprintf("GetMeterCount spend: %d s", after - before))
 
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
@@ -178,7 +181,7 @@ func (this *HomeController) GetCollectCountOfMonth() {
 	before := time.Now().Unix()
 	if data, err := models.GetCollectRowsOfMonth(); err != nil {
 		after := time.Now().Unix()
-		utils.LogInfo(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
@@ -191,7 +194,7 @@ func (this *HomeController)GetOverviewToday()  {
 	choiceDate := this.Input().Get("choiceDate")
 	if data, err := models.GetOverviewToday(choiceDate); err != nil {
 		after := time.Now().Unix()
-		utils.LogInfo(fmt.Sprintf("GetOverviewToday spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after - before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
@@ -203,9 +206,35 @@ func (this *HomeController) GetCustomerZone()  {
 	before := time.Now().Unix()
 	if data, err := models.GetCustomerZone(); err != nil {
 		after := time.Now().Unix()
-		utils.LogInfo(fmt.Sprintf("GetCustomerZone spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCustomerZone spend: %d s", after - before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	}else{
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
+}
+
+func (this *HomeController)GetWeather()  {
+	url := "http://api.openweathermap.org/data/2.5/weather?q=Guangzhou&appid=dafef1a9be486b5015eb92330a0add7d"
+	ch := make(chan string)
+
+	go func(url string, ch chan string) {
+		resp, err := http.Get(url)
+		if err != nil{
+			beego.Error("同步天气出错." + err.Error())
+			return
+		}
+		defer resp.Body.Close()
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if nil != err{
+			beego.Error("同步天气出错：" + err.Error())
+			return
+		}
+		ch <- string(body)
+	}(url, ch)
+
+	reuslt := <- ch
+	gjsonData := gjson.Parse(reuslt)
+	temp := gjsonData.Get("main.temp").Float() - 274.15
+	this.jsonResult(enums.JRCodeSucc, "", temp)
 }

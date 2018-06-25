@@ -6,22 +6,22 @@ import (
 )
 
 type EquipmentMeterConfig struct {
-	Id             int       `form:"id"`
-	DTU_no         string    `orm:"column(dtu_no)"`
-	MeterAddress   int       `orm:"column(meter_address)"`
-	MeterTypeNO    string    `orm:"column(meter_type_no)"`
-	GatewayNO      string    `orm:"column(gateway_no)"`
-	GatewayQzone   int       `orm:"column(gateway_qzone); null"`
-	GatewayAddress int       `orm:"column(gateway_address); null"`
-	GatewaySite    int       `orm:"column(gateway_site); null"`
-	LoopName       string   `orm:"column(loop_name)"`
-	Pt             int       `orm:"column(pt)"`
-	Ct             int       `orm:"column(ct)"`
-	Used           int       `orm:"column(tag)"`
-	CreateUser     string    `orm:"column(createuser)"`
-	CreateDate     time.Time `orm:"column(createdate)"`
-	ChangeUser     string    `orm:"column(changeuser)"`
-	ChangeDate     time.Time `orm:"column(changedate)"`
+	Id             int       `orm:"column(id)" form:"Id"`
+	DTU_no         string    `orm:"column(dtu_no)" form:"DTU_no"`
+	MeterAddress   int       `orm:"column(meter_address)" form:"MeterAddress"`
+	MeterTypeNO    string    `orm:"column(meter_type_no)" form:"MeterTypeNO"`
+	GatewayNO      string    `orm:"column(gateway_no)" form:"GatewayNO"`
+	GatewayQzone   int       `orm:"column(gateway_qzone); null" form:"GatewayQzone"`
+	GatewayAddress int       `orm:"column(gateway_address); null" form:"GatewayAddress"`
+	GatewaySite    int       `orm:"column(gateway_site); null" form:"GatewaySite"`
+	LoopName       string    `orm:"column(loop_name)" form:"LoopName"`
+	Pt             int       `orm:"column(pt)" form:"Pt"`
+	Ct             int       `orm:"column(ct)" form:"Ct"`
+	Used           int       `orm:"column(tag)" form:"Used"`
+	CreateUser     string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate     time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser     string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate     time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentMeterConfigQueryParam struct {

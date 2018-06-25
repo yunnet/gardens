@@ -55,6 +55,7 @@
         loadDtuCount();
         loadMonthCollector();
         loadEchartsMap();
+        loadWeather();
 
         $(window).resize(function () {
             collectCountOfMonthChart.resize();
@@ -88,13 +89,19 @@
             return;
         }
 
-        var icons = new Skycons({
-                    "color": "#73879C"
-                }),
-                list = ["clear-day", "clear-night", "partly-cloudy-day","partly-cloudy-night",
-                    "cloudy", "rain", "sleet", "snow", "wind", "fog"
-                ],
-                i;
+        var icons = new Skycons({"color": "#73879C"});
+        var list = ["clear-day",
+                    "clear-night",
+                    "partly-cloudy-day",
+                    "partly-cloudy-night",
+                    "cloudy",
+                    "rain",
+                    "sleet",
+                    "snow",
+                    "wind",
+                    "fog"
+                    ],
+                    i;
         for (i = list.length; i--;)
             icons.set(list[i], list[i]);
 
@@ -916,6 +923,16 @@
                 loadOverviewToday(choiceDate);
             }else{
                 loadOverviewToday(curdate);
+            }
+        });
+    }
+
+    //获取天气
+    function loadWeather(){
+        var url = '{{ urlfor "HomeController.GetWeather"}}';
+        $.sdpost(url, {}, function (re) {
+            if (re.code === 0) {
+                $("#degress").html(re.obj)
             }
         });
     }

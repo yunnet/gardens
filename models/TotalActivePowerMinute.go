@@ -30,8 +30,10 @@ func TotalActivePowerMinutePageList(params *TotalActivePowerMinuteQueryParam) ([
 		return nil, 0
 	}
 
-	beginTime := params.CollectTime + " 00:00:00"
-	endTime := params.CollectTime + " 23:59:59"
+	//2018-06-01 - 2018-06-22
+	ary := strings.Split(params.CollectTime, " - ")
+	beginTime := ary[0] + " 00:00:00"
+	endTime := ary[1] + " 23:59:59"
 
 	data := make([] *TotalActivePowerMinute, 0)
 	o := orm.NewOrm()

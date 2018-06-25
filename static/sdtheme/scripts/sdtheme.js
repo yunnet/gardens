@@ -40,9 +40,23 @@ var sdtheme = function () {
     };
 
     //格式化日期 yyyy-MM-dd hh:mm:ss
+    formatterDateTimeBySpan = function (value, row, index){
+        if(value !== null){
+            var date = formatDateTime(value);
+            return "<span>" + date + "</span>";
+        }
+        return "";
+    };
+
+    //日期格式化：yyyy-MM-dd hh:mm:ss
+    function formatDateTime(date) {
+        return new Date(date).format('yyyy-MM-dd hh:mm:ss');
+    }
+
+    //格式化日期 yyyy-MM-dd
     formatterDateBySpan = function (value, row, index){
         if(value !== null){
-            var date = new Date(value).format("yyyy-MM-dd hh:mm:ss");
+            var date = formatDate(value);
             return "<span>" + date + "</span>";
         }
         return "";
@@ -51,11 +65,6 @@ var sdtheme = function () {
     //日期格式化：yyyy-MM-dd
     function formatDate(date) {
         return new Date(date).format('yyyy-MM-dd');
-    }
-
-    //日期格式化：yyyy-MM-dd hh:mm:ss
-    function formatDateTime(date) {
-        return new Date(date).format('yyyy-MM-dd hh:mm:ss');
     }
 
     //Date属性format
@@ -320,8 +329,11 @@ var sdtheme = function () {
         //使用span将值包裹
         showlongstr: showlongstr,
 
-        //格式化日期 yyyy-MM-dd hh:mm:ss
+        //格式化日期 yyyy-MM-dd
         formatterDateBySpan: formatterDateBySpan,
+
+        //格式化日期 yyyy-MM-dd hh:mm:ss
+        formatterDateTimeBySpan: formatterDateTimeBySpan,
 
         //格式化两位小数
         formatterDecimalByspan: formatterDecimalByspan,

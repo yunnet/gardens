@@ -6,16 +6,16 @@ import (
 )
 
 type EquipmentMeterAddrConfig struct {
-	Id               int       `form:"id"`
-	MeterTypeNO      string    `orm:"column(meter_type_no)"`
-	SegmentStartAddr int       `orm:"column(segment_start_addr)"`
-	SegmentLen       int       `orm:"column(segment_len)"`
-	SegmentNO        int       `orm:"column(segment_no)"`
-	Used             int       `orm:"column(tag)"`
-	CreateUser       string    `orm:"column(createuser)"`
-	CreateDate       time.Time `orm:"column(createdate)"`
-	ChangeUser       string    `orm:"column(changeuser)"`
-	ChangeDate       time.Time `orm:"column(changedate)"`
+	Id               int       `orm:"column(id)" form:"Id"`
+	MeterTypeNO      string    `orm:"column(meter_type_no)" form:"MeterTypeNO"`
+	SegmentStartAddr int       `orm:"column(segment_start_addr)" form:"SegmentStartAddr"`
+	SegmentLen       int       `orm:"column(segment_len)" form:"SegmentLen"`
+	SegmentNO        int       `orm:"column(segment_no)" form:"SegmentNO"`
+	Used             int       `orm:"column(tag)" form:"Used"`
+	CreateUser       string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate       time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser       string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate       time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentMeterAddrConfigQueryParam struct {

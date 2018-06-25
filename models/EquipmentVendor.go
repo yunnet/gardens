@@ -6,14 +6,14 @@ import (
 )
 
 type EquipmentVendor struct {
-	Id         int       `form:"id"`
-	VendorNO   string    `orm:"column(vendor_no)"`
-	VendorDesc string    `orm:"column(vendor_desc)"`
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id         int       `orm:"column(id)" form:"Id"`
+	VendorNO   string    `orm:"column(vendor_no)" form:"VendorNO"`
+	VendorDesc string    `orm:"column(vendor_desc)" form:"VendorDesc"`
+	Used       int       `orm:"column(tag)" form:"Used"`
+	CreateUser string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentVendorQueryParam struct {
@@ -28,7 +28,7 @@ func init() {
 }
 
 //设备供应商
-func EquipmentVendorTBName() string  {
+func EquipmentVendorTBName() string {
 	return "equipment_vendor"
 }
 

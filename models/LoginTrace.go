@@ -6,10 +6,10 @@ import (
 )
 
 type LoginTrace struct {
-	Id         int64     `form:"id"`
-	UserName   string    `orm:"column(user)"`
-	RemoteAddr string    `orm:"column(remoteAddr)"`
-	LoginTime  time.Time `orm:"column(loginTime)"`
+	Id         int64     `orm:"column(id)" form:"Id"`
+	UserName   string    `orm:"column(user)" form:"UserName"`
+	RemoteAddr string    `orm:"column(remoteAddr)" form:"RemoteAddr"`
+	LoginTime  time.Time `orm:"column(loginTime)" form:"LoginTime"`
 }
 
 type LoginTraceQueryParam struct {
@@ -29,7 +29,7 @@ func (this *LoginTrace) TableName() string {
 	return LoginTraceTBName()
 }
 
-func LoginTracePageList(params *LoginTraceQueryParam)([] *LoginTrace, int64)  {
+func LoginTracePageList(params *LoginTraceQueryParam) ([] *LoginTrace, int64) {
 	sortorder := "Id"
 	switch params.Sort {
 	case "Id":
@@ -50,7 +50,7 @@ func LoginTracePageList(params *LoginTraceQueryParam)([] *LoginTrace, int64)  {
 	return data, total
 }
 
-func LoginTraceDataList(params *LoginTraceQueryParam)[] *LoginTrace  {
+func LoginTraceDataList(params *LoginTraceQueryParam) [] *LoginTrace {
 	params.Limit = -1
 	params.Sort = "Id"
 	params.Order = "asc"
@@ -58,8 +58,8 @@ func LoginTraceDataList(params *LoginTraceQueryParam)[] *LoginTrace  {
 	return data
 }
 
-func LoginTraceAdd(_user string, _remote_add string,  _login_time time.Time) error {
-	m := LoginTrace{UserName:_user, RemoteAddr:_remote_add, LoginTime:_login_time}
+func LoginTraceAdd(_user string, _remote_add string, _login_time time.Time) error {
+	m := LoginTrace{UserName: _user, RemoteAddr: _remote_add, LoginTime: _login_time}
 
 	o := orm.NewOrm()
 	if _, err := o.Insert(&m); err == nil {

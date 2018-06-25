@@ -5,8 +5,6 @@
 <script src="/static/plugins/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="/static/plugins/bootstrap-table/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
 <script src="/static/plugins/echarts/echarts.min.js"></script>
-<script src="/static/plugins/metrics-graphics/metricsgraphics.js"></script>
-<script src="/static/plugins/d3/d3.js"></script>
 <script src="/static/product/scripts/todaySeconds.js"></script>
 
 <script>
@@ -148,7 +146,7 @@
                         valign: 'middle',
                         align: 'center',
                         class: 'W160',
-                        formatter: sdtheme.formatterDateBySpan,
+                        formatter: sdtheme.formatterDateTimeBySpan,
                         colspan: 1,        //规定表头单元格可横跨的列数
                         rowspan: 2         //规定表头单元格可横跨的行数
                     }, {

@@ -46,7 +46,7 @@ func (this *BaseController) checkLogin() {
 			returnURL := this.Ctx.Input.Refer()
 			this.jsonResult(enums.JRCode302, "请登录", urlstr + returnURL)
 		}
-		this.Redirect(urlstr+returnURL, 302)
+		this.Redirect(urlstr + returnURL, 302)
 		this.StopRun()
 	}
 }
@@ -124,6 +124,7 @@ func (this *BaseController) adapterUserInfo() {
 }
 
 //SetBackendUser2Session 获取用户信息（包括资源UrlFor）保存至Session
+//被 HomeController.DoLogin 调用
 func (this *BaseController) setBackendUser2Session(userId int) error {
 	m, err := models.BackendUserOne(userId)
 	if err != nil {

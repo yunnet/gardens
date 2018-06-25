@@ -80,35 +80,41 @@ func (this *EquipmentMeterRomConfigController) Edit() {
 
 //add | update
 func (this *EquipmentMeterRomConfigController) Save() {
+	var err error
 	m := models.EquipmentMeterRomConfig{}
 
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
+	//获取form里的值
+	if err = this.ParseForm(&m); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
+	}
 
-	m.MeterTypeNO = this.GetString("MeterTypeNO")
-
-	tmpInt := this.Input().Get("AddressSort")
-	m.AddressSort, _ = strconv.Atoi(tmpInt)
-
-	m.RomAddress = this.GetString("RomAddress")
-	m.RomName = this.GetString("RomName")
-	m.Units = this.GetString("Units")
-	m.DataType = this.GetString("DataType")
-
-	tmpInt = this.Input().Get("SegmentNO")
-	m.SegmentNO, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("Offset")
-	m.Offset, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("Needpt")
-	m.Needpt, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("Needct")
-	m.Needct, _ = strconv.Atoi(tmpInt)
-
-	tmpFloat := this.Input().Get("Calcfactor")
-	m.Calcfactor, _ = strconv.ParseFloat(tmpFloat, 64)
+	//id := this.Input().Get("Id")
+	//m.Id, _ = strconv.Atoi(id)
+	//
+	//m.MeterTypeNO = this.GetString("MeterTypeNO")
+	//
+	//tmpInt := this.Input().Get("AddressSort")
+	//m.AddressSort, _ = strconv.Atoi(tmpInt)
+	//
+	//m.RomAddress = this.GetString("RomAddress")
+	//m.RomName = this.GetString("RomName")
+	//m.Units = this.GetString("Units")
+	//m.DataType = this.GetString("DataType")
+	//
+	//tmpInt = this.Input().Get("SegmentNO")
+	//m.SegmentNO, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("Offset")
+	//m.Offset, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("Needpt")
+	//m.Needpt, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("Needct")
+	//m.Needct, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpFloat := this.Input().Get("Calcfactor")
+	//m.Calcfactor, _ = strconv.ParseFloat(tmpFloat, 64)
 
 	tmp_str := this.GetString("Msbbit")
 	if tmp_str == "on" {
@@ -124,19 +130,19 @@ func (this *EquipmentMeterRomConfigController) Save() {
 		m.BigEndian = 0
 	}
 
-	tmpInt = this.Input().Get("Bytelength")
-	m.Bytelength, _ = strconv.Atoi(tmpInt)
-
-	m.FunctionTable1 = this.GetString("FunctionTable1")
-
-	m.FunctionTable2 = this.GetString("FunctionTable2")
-
-	m.FunctionTable3 = this.GetString("FunctionTable3")
-
-	m.FunctionField = this.GetString("FunctionField")
+	//tmpInt = this.Input().Get("Bytelength")
+	//m.Bytelength, _ = strconv.Atoi(tmpInt)
+	//
+	//m.FunctionTable1 = this.GetString("FunctionTable1")
+	//
+	//m.FunctionTable2 = this.GetString("FunctionTable2")
+	//
+	//m.FunctionTable3 = this.GetString("FunctionTable3")
+	//
+	//m.FunctionField = this.GetString("FunctionField")
 
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
+	//m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

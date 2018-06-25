@@ -7,21 +7,21 @@ import (
 )
 
 type EquipmentCustomer struct {
-	Id           int       `form:"id"`
-	CustomerNO   string    `orm:"column(customer_no)"`
-	CustomerName string    `orm:"column(customer_name)"`
-	CustomerDesc string    `orm:"column(customer_desc)"`
-	Contacts     string    `orm:"column(contacts)"`
-	Phone        string    `orm:"column(phone)"`
-	Address      string    `orm:"column(address)"`
-	Zone         string    `orm:"column(zone)"`
-	Longitude    float64   `orm:"digits(12);decimals(6);column(longitude)"`
-	Latitude     float64   `orm:"digits(12);decimals(6);column(latitude)"`
-	Used         int       `orm:"column(tag)"`
-	CreateUser   string    `orm:"column(createuser)"`
-	CreateDate   time.Time `orm:"column(createdate)"`
-	ChangeUser   string    `orm:"column(changeuser)"`
-	ChangeDate   time.Time `orm:"column(changedate)"`
+	Id           int       `orm:"column(id)" form:"Id"`
+	CustomerNO   string    `orm:"column(customer_no)" form:"CustomerNO"`
+	CustomerName string    `orm:"column(customer_name)" form:"CustomerName"`
+	CustomerDesc string    `orm:"column(customer_desc)" form:"CustomerDesc"`
+	Contacts     string    `orm:"column(contacts)" form:"Contacts"`
+	Phone        string    `orm:"column(phone)" form:"Phone"`
+	Address      string    `orm:"column(address)" form:"Address"`
+	Zone         string    `orm:"column(zone)" form:"Zone"`
+	Longitude    float64   `orm:"digits(12);decimals(6);column(longitude)" form:"Longitude"`
+	Latitude     float64   `orm:"digits(12);decimals(6);column(latitude)" form:"Latitude"`
+	Used         int       `orm:"column(tag)" form:"Used"`
+	CreateUser   string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate   time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser   string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate   time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentCustomerQueryParam struct {
@@ -120,12 +120,12 @@ func (this *EquipmentCustomer) TableName() string {
 	return EquipmentCustomerTBName()
 }
 
-//取月采集数量
+//获取客户分布
 func GetCustomerZone() ([] *CustomerZone, error) {
 	data := make([] *CustomerZone, 0)
 
 	o := orm.NewOrm()
-	sql := fmt.Sprintf(`SELECT customer_no, customer_name, zone, longitude, latitude, count(customer_no) as num FROM v_customer_room_meter GROUP BY customer_no`)
+	sql := fmt.Sprintf(`SELECT customer_no, customer_name, zone, longitude, latitude, count(customer_no) as num FROM v_customer_room_meter WHERE meter_config_tag = 0 GROUP BY customer_no`)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err

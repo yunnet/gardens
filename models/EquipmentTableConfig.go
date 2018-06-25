@@ -6,17 +6,17 @@ import (
 )
 
 type EquipmentTableConfig struct {
-	Id             int       `form:"id"`
-	FieldName      string    `orm:"column(field_name)"`
-	FieldDesc      string    `orm:"column(field_desc)"`
-	FunctionTable1 string    `orm:"column(function_table1)"`
-	FunctionTable2 string    `orm:"column(function_table2)"`
-	FunctionTable3 string    `orm:"column(function_table3)"`
-	Used           int       `orm:"column(tag)"`
-	CreateUser     string    `orm:"column(createuser)"`
-	CreateDate     time.Time `orm:"column(createdate)"`
-	ChangeUser     string    `orm:"column(changeuser)"`
-	ChangeDate     time.Time `orm:"column(changedate)"`
+	Id             int       `orm:"column(id)" form:"Id"`
+	FieldName      string    `orm:"column(field_name)" form:"FieldName"`
+	FieldDesc      string    `orm:"column(field_desc)" form:"FieldDesc"`
+	FunctionTable1 string    `orm:"column(function_table1)" form:"FunctionTable1"`
+	FunctionTable2 string    `orm:"column(function_table2)" form:"FunctionTable2"`
+	FunctionTable3 string    `orm:"column(function_table3)" form:"FunctionTable3"`
+	Used           int       `orm:"column(tag)" form:"Used"`
+	CreateUser     string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate     time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser     string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate     time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type EquipmentTableConfigQueryParam struct {

@@ -154,7 +154,6 @@ func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := "call p_dtu_day_row_today()"
-
 	data := make([] *DtuRowOfDay, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
@@ -167,7 +166,7 @@ func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
 func GetCollectRowsOfMonth() ([] *CollectCountOfMonth, error) {
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-	sql := fmt.Sprintf(`SELECT collect_date, rows FROM collect_total_rows where collect_date <'%s'`, time.Now().Format("2006-01-02"))
+	sql := fmt.Sprintf(`SELECT collect_date, rows FROM v_collect_total_rows where collect_date <'%s'`, time.Now().Format("2006-01-02"))
 	data := make([] *CollectCountOfMonth, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
@@ -181,10 +180,7 @@ func GetOverviewToday(choiceDate string) ([] *OverviewToday, error) {
 	data := make([] *OverviewToday, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-
-	//today := time.Now().Format("2006-01-02")
 	sql := fmt.Sprintf(`call p_collect_overview('%s')`, choiceDate)
-
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err

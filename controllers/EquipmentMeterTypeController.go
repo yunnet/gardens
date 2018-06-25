@@ -93,13 +93,18 @@ func (this *EquipmentMeterTypeController) Save() {
 	var err error
 	m := models.EquipmentMeterType{}
 
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
+	//获取form里的值
+	if err = this.ParseForm(&m); err != nil {
+		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
+	}
 
-	m.MeterType = this.GetString("MeterType")
-	m.VendorNO = this.GetString("VendorNO")
-	m.PtAddress = this.GetString("PtAddress")
-	m.CtAddress = this.GetString("CtAddress")
+	//id := this.Input().Get("Id")
+	//m.Id, _ = strconv.Atoi(id)
+	//
+	//m.MeterType = this.GetString("MeterType")
+	//m.VendorNO = this.GetString("VendorNO")
+	//m.PtAddress = this.GetString("PtAddress")
+	//m.CtAddress = this.GetString("CtAddress")
 
 	tmp_str := this.GetString("ThreePhase")
 	if tmp_str == "on" {
@@ -108,10 +113,10 @@ func (this *EquipmentMeterTypeController) Save() {
 		m.ThreePhase = 0
 	}
 
-	m.Used, _ = this.GetInt("Used")
+	//m.Used, _ = this.GetInt("Used")
 
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
+	//m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

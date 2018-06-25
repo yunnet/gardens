@@ -7,6 +7,11 @@ import (
 )
 
 func init() {
+	//TotalDtuRows
+	beego.Router("/totaldturows/index", &controllers.TotalDtuRowsController{}, "*:Index")
+	beego.Router("/totaldturows/datagrid", &controllers.TotalDtuRowsController{}, "Get,Post:DataGrid")
+	beego.Router("/totaldturows/datalist", &controllers.TotalDtuRowsController{}, "Post:DataList")
+
 	//EquipmentRoom
 	beego.Router("/equipmentroom/index", &controllers.EquipmentRoomController{}, "*:Index")
 	beego.Router("/equipmentroom/datagrid", &controllers.EquipmentRoomController{}, "Get,Post:DataGrid")
@@ -191,6 +196,7 @@ func init() {
 	beego.Router("/home/overviewtoday", &controllers.HomeController{}, "*:GetOverviewToday")
 	beego.Router("/home/customerZone", &controllers.HomeController{}, "*:GetCustomerZone")
 	beego.Router("/home/configvalue", &controllers.HomeController{}, "*:GetConfigValue")
+	beego.Router("/home/weather", &controllers.HomeController{}, "*:GetWeather")
 
 	beego.Router("/", &controllers.HomeController{}, "*:Index")
 }

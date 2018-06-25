@@ -90,35 +90,35 @@ func (this *EquipmentMeterConfigController) Save() {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
 
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
-	m.DTU_no = this.GetString("DTU_no")
-
-	tmpInt := this.Input().Get("MeterAddress")
-	m.MeterAddress, _ = strconv.Atoi(tmpInt)
-
-	m.MeterTypeNO = this.GetString("MeterTypeNO")
-	m.GatewayNO = this.GetString("GatewayNO")
-
-	tmpInt = this.Input().Get("GatewayQzone")
-	m.GatewayQzone, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("GatewayAddress")
-	m.GatewayAddress, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("GatewaySite")
-	m.GatewaySite, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("Pt")
-	m.Pt, _ = strconv.Atoi(tmpInt)
-
-	tmpInt = this.Input().Get("Ct")
-	m.Ct, _ = strconv.Atoi(tmpInt)
-
-	m.LoopName = this.GetString("LoopName")
+	//id := this.Input().Get("Id")
+	//m.Id, _ = strconv.Atoi(id)
+	//m.DTU_no = this.GetString("DTU_no")
+	//
+	//tmpInt := this.Input().Get("MeterAddress")
+	//m.MeterAddress, _ = strconv.Atoi(tmpInt)
+	//
+	//m.MeterTypeNO = this.GetString("MeterTypeNO")
+	//m.GatewayNO = this.GetString("GatewayNO")
+	//
+	//tmpInt = this.Input().Get("GatewayQzone")
+	//m.GatewayQzone, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("GatewayAddress")
+	//m.GatewayAddress, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("GatewaySite")
+	//m.GatewaySite, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("Pt")
+	//m.Pt, _ = strconv.Atoi(tmpInt)
+	//
+	//tmpInt = this.Input().Get("Ct")
+	//m.Ct, _ = strconv.Atoi(tmpInt)
+	//
+	//m.LoopName = this.GetString("LoopName")
 
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
+	//m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

@@ -88,24 +88,24 @@ func (this *EquipmentMeterConfigFieldController) Save() {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
 
-	id := this.Input().Get("Id")
-	m.Id, _ = strconv.Atoi(id)
-
-	m.DTU_no = this.GetString("DTU_no")
-
-	tmpInt := this.Input().Get("MeterAddress")
-	m.MeterAddress, _ = strconv.Atoi(tmpInt)
-
-	m.MeterTypeNO = this.GetString("MeterTypeNO")
-	m.GatewayNO = this.GetString("GatewayNO")
-
-	tmpInt = this.Input().Get("DsAddr")
-	m.DsAddr, _ = strconv.Atoi(tmpInt)
-
-	m.FieldName = this.GetString("FieldName")
+	//id := this.Input().Get("Id")
+	//m.Id, _ = strconv.Atoi(id)
+	//
+	//m.DTU_no = this.GetString("DTU_no")
+	//
+	//tmpInt := this.Input().Get("MeterAddress")
+	//m.MeterAddress, _ = strconv.Atoi(tmpInt)
+	//
+	//m.MeterTypeNO = this.GetString("MeterTypeNO")
+	//m.GatewayNO = this.GetString("GatewayNO")
+	//
+	//tmpInt = this.Input().Get("DsAddr")
+	//m.DsAddr, _ = strconv.Atoi(tmpInt)
+	//
+	//m.FieldName = this.GetString("FieldName")
 
 	m.ChangeUser = this.curUser.RealName
-	m.ChangeDate = time.Now()
+	//m.ChangeDate = time.Now()
 
 	o := orm.NewOrm()
 	if m.Id == 0 {

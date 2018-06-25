@@ -6,17 +6,17 @@ import (
 )
 
 type SystemVal struct {
-	Id         int       `form:"id"`
-	Code       string    `orm:"column(code)"`
-	Desc       string    `orm:"column(desc)"`
-	Value      string    `orm:"column(value)"`
-	UpLimit    string    `orm:"column(uplimit)"`
-	Step       string    `orm:"column(step)"`
-	Used       int       `orm:"column(tag)"`
-	CreateUser string    `orm:"column(createuser)"`
-	CreateDate time.Time `orm:"column(createdate)"`
-	ChangeUser string    `orm:"column(changeuser)"`
-	ChangeDate time.Time `orm:"column(changedate)"`
+	Id         int       `orm:"column(id)" form:"Id"`
+	Code       string    `orm:"column(code)" form:"Code"`
+	Desc       string    `orm:"column(desc)" form:"Desc"`
+	Value      string    `orm:"column(value)" form:"Value"`
+	UpLimit    string    `orm:"column(uplimit)" form:"UpLimit"`
+	Step       string    `orm:"column(step)" form:"Step"`
+	Used       int       `orm:"column(tag)" form:"Used"`
+	CreateUser string    `orm:"column(createuser)" form:"CreateUser"`
+	CreateDate time.Time `orm:"auto_now_add;type(datetime);column(createdate)" form:"CreateDate"`
+	ChangeUser string    `orm:"column(changeuser)" form:"ChangeUser"`
+	ChangeDate time.Time `orm:"auto_now;type(datetime);column(changedate)" form:"ChangeDate"`
 }
 
 type SystemValQueryParam struct {

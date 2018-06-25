@@ -1,8 +1,12 @@
 {{template "shared/bootstraptablejs.html"}}
+<script src="/static/plugins/echarts/echarts.min.js"></script>
+<script src="/static/plugins/echarts/theme/macarons.js"></script>
 
 <script>
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm");
+
+    var rowsChart = echarts.init(document.getElementById('rowsChart'), 'macarons');
 
     //高亮显示id
     var highlightPk = null;
@@ -20,9 +24,13 @@
         //初始化表格
         dataGridInit();
 
+        echartsInit();
+
         //搜索
         $("#btnSearch").on("click", function (e) {
             refreshToFirstPage();
+
+            collectRowsQuery();
         });
 
         //清除搜索
@@ -64,7 +72,7 @@
             var result = cur.getFullYear() + '-' + month + '-01 - ' + cur.format('yyyy-MM-dd') ;
 
             laydate.render({
-                elem: '#CollectTime',
+                elem: '#CollectDate',
                 range: true,
                 //yyyy-MM-dd - yyyy-MM-dd
                 value: result,
@@ -95,13 +103,13 @@
     function dataGridInit() {
         $dataGrid.bootstrapTable({
             method: 'post',
-            url: '{{ urlfor "TotalActivePowerMinuteController.DataGrid"}}',
+            url: '{{ urlfor "TotalDtuRowsController.DataGrid"}}',
             sidePagination: 'server',  //服务器端用 server
-            idField: 'CollectTime',    //标识哪个字段为id主键
+            idField: 'CollectDate',    //标识哪个字段为id主键
             striped: true,             //使表格带有条纹
             queryParamsType: 'limit',   //参数格式,发送标准的RESTFul类型的参数请求
             queryParams: function (params) {
-                params.CollectTime  = $('.searchForm input[name="CollectTime"]').val();
+                params.CollectDate  = $('.searchForm input[name="CollectDate"]').val();
                 params.DTU_no       = $('.searchForm input[name="DTU_no"]').val();
                 params.MeterAddress = $('.searchForm input[name="MeterAddress"]').val();
                 return params;
@@ -117,19 +125,19 @@
             cookie: true,
             classes: 'table table-bordered table-hover',
             undefinedText: '',
-            sortName: 'CollectTime',
+            sortName: 'CollectDate',
             sortOrder: 'asc',
             stickyHeader: true,
             resizable: true,
 
             columns: [
                 {
-                    field: 'CollectTime',
-                    title: '采集时间',
+                    field: 'CollectDate',
+                    title: '采集日期',
                     width: '120px',
                     align: 'center',
                     sortable: true,
-                    formatter: sdtheme.formatterDateTimeBySpan
+                    formatter: sdtheme.formatterDateBySpan
                 }, {
                     field: 'DTU_no',
                     title: 'DTU编号',
@@ -143,8 +151,8 @@
                     align: 'center',
                     sortable: true
                 }, {
-                    field: 'TotalActivePower',
-                    title: '3相总有功功率',
+                    field: 'Rows',
+                    title: '条数',
                     width: '110px',
                     align: 'center'
                 }
@@ -172,6 +180,115 @@
             },
             onLoadError: function (status) {
                 layer.alert('获取数据失败,错误代码：' + status);
+            },
+            onDblClickRow: function (item) {
+                var info = '采集日期：' + new Date(item.CollectDate).format('yyyy-MM-dd') + '<br>' +
+                        'DTU编号：' + item.DTU_no + '<br>' +
+                        '电表地址：' + item.MeterAddress + '<br>' +
+                        '条数：' + item.Rows;
+                layer.alert(info);
+            }
+        });
+    }
+
+    function echartsInit(){
+        var icon = 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z';
+        var option = {
+            title: {
+                left: 'center',
+                text: '终端采集条数',
+                subtext: '参考值：5分钟一条，每天/288条'
+            },
+
+            tooltip: {
+                trigger: 'axis'
+            },
+
+            grid: {
+                left: '3%',
+                right: '3%',
+                bottom: '15%',
+                containLabel: true
+            },
+
+            //下栏拉动条
+            dataZoom: [{
+                type: 'inside',
+                start: 0
+            }, {
+                start: 0,
+                handleIcon: icon,
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            }],
+
+            //右侧工具栏
+            toolbox: {
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    mark: {show: true},
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+
+            xAxis: {
+                type: 'category',
+                data: []
+            },
+
+            yAxis: [{
+                type:"value"
+            }],
+
+            series: [{
+                name: '条数',
+                type: 'bar',
+                barMaxWidth: 30,
+                data: []
+            }]
+        };
+        rowsChart.setOption(option);
+    }
+
+    function collectRowsQuery() {
+        rowsChart.showLoading();
+        var url = '{{ urlfor "TotalDtuRowsController.DataList"}}';
+        var params ={CollectDate: $('.searchForm input[name="CollectDate"]').val(),
+            DTU_no: $('.searchForm input[name="DTU_no"]').val(),
+            MeterAddress: $('.searchForm input[name="MeterAddress"]').val()
+        };
+
+        $.sdpost(url, params, function (re) {
+            if (re.code === 0) {
+                rowsChart.hideLoading();
+
+                rowsChart.setOption({
+                    xAxis: {
+                        data: re.obj.map(function (item) {
+                            return new Date(item.CollectDate).format('yyyy-MM-dd');
+                        })
+                    },
+                    series:[
+                        {
+                            data: re.obj.map(function (item) {
+                                return item.Rows;
+                            })
+                        }
+                    ]
+                });
+
             }
         });
     }
