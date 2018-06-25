@@ -5,16 +5,17 @@
 <script src="/static/plugins/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="/static/plugins/bootstrap-table/extensions/sticky-header/bootstrap-table-sticky-header.min.js"></script>
 <script src="/static/plugins/echarts/echarts.min.js"></script>
+<script src="/static/plugins/echarts/theme/macarons.js"></script>
 <script src="/static/product/scripts/todaySeconds.js"></script>
 
 <script>
     var $dataGrid = $('#dataGrid');
     var $searchForm = $("#searchForm");
 
-    var electricityChart = echarts.init(document.getElementById('electricityChart'));
-    var voltageChart = echarts.init(document.getElementById('voltageChart'));
-    var powerfactorChart = echarts.init(document.getElementById('powerfactorChart'));
-    var totalPateeChart = echarts.init(document.getElementById('totalPateeChart'));
+    var electricityChart = echarts.init(document.getElementById('electricityChart'), 'macarons');
+    var voltageChart = echarts.init(document.getElementById('voltageChart'), 'macarons');
+    var powerfactorChart = echarts.init(document.getElementById('powerfactorChart'), 'macarons');
+    var totalPateeChart = echarts.init(document.getElementById('totalPateeChart'), 'macarons');
 
     var A_electricity_list = [];
     var B_electricity_list = [];
@@ -110,7 +111,7 @@
         $dataGrid.bootstrapTable({
             method: 'post',
             url: '{{ urlfor "CollectBaseInfoController.DataGrid"}}',
-            sidePagination: 'server',   //服务器端用 server
+
             idField: 'CollectTime',     //标识哪个字段为id主键
             queryParamsType: 'limit',   //参数格式,发送标准的RESTFul类型的参数请求
             queryParams: function (params) {
@@ -124,16 +125,17 @@
             showRefresh: true,     //显示刷新按钮
             showColumns: false,    //显示隐藏列
             toolbar: '#toolbar',    //设置工具栏的Id或者class
+            sidePagination: 'server',   //分页方式：client客户端分页，server服务端分页
             pageSize: 10,
             pageList: [5, 10, 20, 100, 200],
-            paginationShowPageGo: false,    //20170812 lht 扩展select跳转
-            paginationUseBSSelect: false,   //20170812 lht 扩展select跳转 启用BoostrapSelect(页面须引用botstrap-select.min.js)
+            paginationShowPageGo: true,    //20170812 lht 扩展select跳转
+            paginationUseBSSelect: true,   //20170812 lht 扩展select跳转 启用BoostrapSelect(页面须引用botstrap-select.min.js)
             cookie: true,
             classes: 'table table-bordered table-hover',
             undefinedText: '',
             sortName: 'CollectTime',
-            showToggle: true,
             sortOrder: 'asc',
+            showToggle: true,        //是否显示详细视图和列表视图的切换按钮
             showExport: true,
             exportDataType: 'all',
             stickyHeader: true,
@@ -185,6 +187,12 @@
                         rowspan: 1
                     }, {
                         title: "视在功率",
+                        valign:"middle",
+                        align:"center",
+                        colspan: 4,
+                        rowspan: 1
+                    }, {
+                        title: "无功功率",
                         valign:"middle",
                         align:"center",
                         colspan: 4,
@@ -330,26 +338,50 @@
                         valign:"middle",
                         align: 'center'
                     }, {
-                        field: 'A_reactive_power',
+                        field: 'A_ap_power',
                         title: 'A相视在功率',
                         width: '110px',
                         valign:"middle",
                         align: 'center'
                     }, {
-                        field: 'B_reactive_power',
+                        field: 'B_ap_power',
                         title: 'B相视在功率',
                         width: '110px',
                         valign:"middle",
                         align: 'center'
                     }, {
-                        field: 'C_reactive_power',
+                        field: 'C_ap_power',
                         title: 'C相视在功率',
                         width: '110px',
                         valign:"middle",
                         align: 'center'
                     }, {
-                        field: 'Total_reactive_power',
+                        field: 'Total_ap_power',
                         title: '3相总视在功率',
+                        width: '110px',
+                        valign:"middle",
+                        align: 'center'
+                    }, {
+                        field: 'A_reactive_power',
+                        title: 'A相无功功率',
+                        width: '110px',
+                        valign:"middle",
+                        align: 'center'
+                    }, {
+                        field: 'B_reactive_power',
+                        title: 'B相无功功率',
+                        width: '110px',
+                        valign:"middle",
+                        align: 'center'
+                    }, {
+                        field: 'C_reactive_power',
+                        title: 'C相无功功率',
+                        width: '110px',
+                        valign:"middle",
+                        align: 'center'
+                    }, {
+                        field: 'Total_reactive_power',
+                        title: '3相总无功功率',
                         width: '110px',
                         valign:"middle",
                         align: 'center'
@@ -434,7 +466,10 @@
             },
 
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
             },
 
             //下栏拉动条
@@ -496,14 +531,12 @@
                 data: date_list
             },
 
-            yAxis: {
-                splitLine: {
-                    show: false
-                },
-                axisPointer: {
-                    snap: true
+            yAxis: [
+                {
+                    type: 'value'
                 }
-            },
+            ],
+
             series: [ {
                 name: 'A相电流',
                 type: 'line',
@@ -549,7 +582,10 @@
             },
 
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
             },
 
             //下栏拉动条
@@ -589,7 +625,7 @@
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '17%',
                 containLabel: true
             },
             xAxis: {
@@ -654,7 +690,10 @@
                 subtext: '5分钟一条'
             },
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
             },
 
             //下栏拉动条
@@ -695,7 +734,7 @@
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '17%',
                 containLabel: true
             },
             xAxis: {
@@ -776,7 +815,10 @@
             },
 
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'     //鼠标随动虚线
+                }
             },
 
             //下栏拉动条
@@ -816,7 +858,7 @@
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '17%',
                 containLabel: true
             },
             xAxis: {

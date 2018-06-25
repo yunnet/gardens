@@ -98,7 +98,6 @@
             url: '{{ urlfor "TotalActivePowerMinuteController.DataGrid"}}',
             sidePagination: 'server',  //服务器端用 server
             idField: 'CollectTime',    //标识哪个字段为id主键
-            striped: true,             //使表格带有条纹
             queryParamsType: 'limit',   //参数格式,发送标准的RESTFul类型的参数请求
             queryParams: function (params) {
                 params.CollectTime  = $('.searchForm input[name="CollectTime"]').val();
@@ -106,6 +105,7 @@
                 params.MeterAddress = $('.searchForm input[name="MeterAddress"]').val();
                 return params;
             },
+            striped: true,         //使表格带有条纹
             pagination: true,      //在表格底部显示分页工具栏
             showRefresh: true,     //显示刷新按钮
             showColumns: true,     //显示隐藏列
