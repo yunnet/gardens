@@ -167,7 +167,7 @@ func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
 func GetCollectRowsOfMonth() ([] *CollectCountOfMonth, error) {
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-	sql := fmt.Sprintf(`SELECT collect_date, rows FROM v_collect_total_rows where collect_date <'%s'`, time.Now().Format("2006-01-02"))
+	sql := fmt.Sprintf("SELECT collect_date, `rows` FROM v_collect_total_rows where collect_date <'%s'", time.Now().Format("2006-01-02"))
 	data := make([] *CollectCountOfMonth, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
