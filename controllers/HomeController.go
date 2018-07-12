@@ -3,15 +3,15 @@ package controllers
 import (
 	"strings"
 
+	"fmt"
+	"github.com/astaxie/beego"
+	"github.com/tidwall/gjson"
 	"github.com/yunnet/gdkxdl/enums"
 	"github.com/yunnet/gdkxdl/models"
 	"github.com/yunnet/gdkxdl/utils"
-	"time"
-	"fmt"
-	"github.com/astaxie/beego"
-		"net/http"
 	"io/ioutil"
-	"github.com/tidwall/gjson"
+	"net/http"
+	"time"
 )
 
 type HomeController struct {
@@ -73,14 +73,14 @@ func (this *HomeController) Logout() {
 func (this *HomeController) DoLogin() {
 	remoteAddr := this.Ctx.Request.RemoteAddr
 	addrs := strings.Split(remoteAddr, "::1")
-	if len(addrs) > 1{
+	if len(addrs) > 1 {
 		remoteAddr = "localhost"
 	}
 
 	username := strings.TrimSpace(this.GetString("UserName"))
 	userpwd := strings.TrimSpace(this.GetString("UserPwd"))
 
-	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil{
+	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil {
 		beego.Error("LoginTraceAdd error.")
 	}
 	beego.Info(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
@@ -108,24 +108,24 @@ func (this *HomeController) DoLogin() {
 //************************************* A P I ******************************************************
 
 //获取配置文件信息
-func (this *HomeController)GetConfigValue() {
+func (this *HomeController) GetConfigValue() {
 	key := this.GetString("key")
 	result := ""
 	err := true
 	if key == "siteApp" {
 		result = beego.AppConfig.String("site.app")
 		err = false
-	}else if key == "siteName"{
+	} else if key == "siteName" {
 		result = beego.AppConfig.String("site.name")
 		err = false
-	}else if key == "siteVersion"{
+	} else if key == "siteVersion" {
 		result = beego.AppConfig.String("site.version")
 		err = false
 	}
 
-	if err{
+	if err {
 		this.jsonResult(enums.JRCodeFailed, "获取参数失败", key)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", result)
 	}
 }
@@ -133,12 +133,12 @@ func (this *HomeController)GetConfigValue() {
 //今日采集进度查询
 func (this *HomeController) GetDtuRowForDay() {
 	before := time.Now().Unix()
-	if data, err := models.GetDtuRowsTodayList(); err != nil{
+	if data, err := models.GetDtuRowsTodayList(); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetDtuRowForDay spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetDtuRowForDay spend: %d s", after-before))
 
 		this.jsonResult(enums.JRCodeFailed, "", 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
@@ -148,10 +148,10 @@ func (this *HomeController) GetCustomerForMeter() {
 	before := time.Now().Unix()
 	if data, err := models.GetCustomerForMeter(); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetCustomerForMeter spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCustomerForMeter spend: %d s", after-before))
 
 		this.jsonResult(enums.JRCodeFailed, "", 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
@@ -161,7 +161,7 @@ func (this *HomeController) GetDtuCount() {
 	before := time.Now().Unix()
 	count := models.EquipmentDtuConfigCount()
 	after := time.Now().Unix()
-	beego.Info(fmt.Sprintf("GetDtuCount spend: %d ns", after - before))
+	beego.Info(fmt.Sprintf("GetDtuCount spend: %d ns", after-before))
 
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
@@ -171,7 +171,7 @@ func (this *HomeController) GetMeterCount() {
 	before := time.Now().Unix()
 	count := models.EquipmentMeterConfigCount()
 	after := time.Now().Unix()
-	beego.Info(fmt.Sprintf("GetMeterCount spend: %d s", after - before))
+	beego.Info(fmt.Sprintf("GetMeterCount spend: %d s", after-before))
 
 	this.jsonResult(enums.JRCodeSucc, "", count)
 }
@@ -181,59 +181,59 @@ func (this *HomeController) GetCollectCountOfMonth() {
 	before := time.Now().Unix()
 	if data, err := models.GetCollectRowsOfMonth(); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCollectCountOfMonth spend: %d s", after-before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
 
-//获取概述信息
-func (this *HomeController)GetOverviewToday()  {
+//获取概述信息GetDtuRowForDay
+func (this *HomeController) GetOverviewToday() {
 	before := time.Now().Unix()
 	choiceDate := this.Input().Get("choiceDate")
 	if data, err := models.GetOverviewToday(choiceDate); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after-before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
 
 //获取客户分布
-func (this *HomeController) GetCustomerZone()  {
+func (this *HomeController) GetCustomerZone() {
 	before := time.Now().Unix()
 	if data, err := models.GetCustomerZone(); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetCustomerZone spend: %d s", after - before))
+		beego.Info(fmt.Sprintf("GetCustomerZone spend: %d s", after-before))
 		this.jsonResult(enums.JRCodeFailed, "", 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
 
-func (this *HomeController)GetWeather()  {
+func (this *HomeController) GetWeather() {
 	url := "http://api.openweathermap.org/data/2.5/weather?q=Guangzhou&appid=dafef1a9be486b5015eb92330a0add7d"
 	ch := make(chan string)
 
 	go func(url string, ch chan string) {
 		resp, err := http.Get(url)
-		if err != nil{
+		if err != nil {
 			beego.Error("同步天气出错." + err.Error())
 			return
 		}
 		defer resp.Body.Close()
 
 		body, err := ioutil.ReadAll(resp.Body)
-		if nil != err{
+		if nil != err {
 			beego.Error("同步天气出错：" + err.Error())
 			return
 		}
 		ch <- string(body)
 	}(url, ch)
 
-	reuslt := <- ch
+	reuslt := <-ch
 	gjsonData := gjson.Parse(reuslt)
 	temp := gjsonData.Get("main.temp").Float() - 274.15
 	this.jsonResult(enums.JRCodeSucc, "", temp)
