@@ -1,16 +1,6 @@
 <!-- jquery-ui -->
 <script src="/static/plugins/jquery-ui.min.js"></script>
 
-<!-- iCheck -->
-<script src="/static/plugins/icheck/icheck.min.js"></script>
-
-<!-- 验证插件 -->
-<script src="/static/plugins/jquery-validation/jquery.validate.min.js"></script>
-<script src="/static/plugins/jquery-validation/localization/messages_zh.min.js"></script>
-
-<!-- 针对当前主题进行简单封装，精简代码 -->
-<script src="/static/sdtheme/scripts/sdvalidate.js"></script>
-
 <!-- d3.js -->
 <script src="/static/plugins/d3/d3.min.js"></script>
 <!-- datepicker -->
@@ -23,8 +13,8 @@
 <script src="/static/plugins/skycons/skycons.js"></script>
 <script src="/static/plugins/jquery-knob/js/jquery.knob.js"></script>
 
-<script src="/static/plugins/chart.js/Chart.js"></script>
-
+<!-- echart -->
+<script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=Bp7u5buCk50MW9vp9ufmnFD34d2z2KBH"></script>
 <script type="text/javascript" src="/static/plugins/echarts/echarts.min.js"></script>
 <script src="/static/plugins/echarts/theme/macarons.js"></script>
 <!-- 引入百度地图扩展 -->
@@ -32,7 +22,6 @@
 <script src="/static/product/scripts/hashmap.js"></script>
 
 <script>
-    var d3tree;
     var collectCountOfMonthChart = echarts.init(document.getElementById('collectCountOfMonth'));
     var overviewTodayChart = echarts.init(document.getElementById('overviewTodayChart'), 'macarons');
     var myChart = echarts.init(document.getElementById('world-map-gdp'));
@@ -131,12 +120,11 @@
 
                 var d_data = [];
                 var moveLines = [];
-                var ary = new Array('天河区', '海珠区', '白云区', '荔湾区', '黄埔区', '花都区', '南沙区', '其它');
-                var ary2 = new Array(8);
-                for(i=0; i<ary2.length; i++){
-                    ary2[i] = 0;
-                }
-
+                var ary = new Array('天河区', '海珠区', '白云区', '越秀区', '荔湾区', '黄埔区',
+                                     '增城区', '花都区', '从化区', '番禺区', '南沙区', '其它');
+                var ary2 = new Array(0, 0, 0, 0, 0, 0,
+                                      0, 0, 0, 0, 0, 0
+                                      );
                 var total = 0;
                 $(re.obj).each(function (i, row) {
                     var obj = {name: row.CustomerName, value:[row.Longitude , row.Latitude , row.Num]};
@@ -148,28 +136,32 @@
                         case '天河区': ary2[0]++; break;
                         case '海珠区': ary2[1]++; break;
                         case '白云区': ary2[2]++; break;
-                        case '荔湾区': ary2[3]++; break;
-                        case '黄埔区': ary2[4]++; break;
-                        case '花都区': ary2[5]++; break;
-                        case '南沙区': ary2[6]++; break;
-                        case '其它'  : ary2[7]++; break;
+                        case '越秀区': ary2[3]++; break;
+                        case '荔湾区': ary2[4]++; break;
+                        case '黄埔区': ary2[5]++; break;
+                        case '增城区': ary2[6]++; break;
+                        case '花都区': ary2[7]++; break;
+                        case '从化区': ary2[8]++; break;
+                        case '番禺区': ary2[9]++; break;
+                        case '南沙区': ary2[10]++; break;
+                        case '其它'  : ary2[11]++; break;
                         default: break;
                     }
                     total++;
                 });
 
                 var html = [];
-                for(i=0; i<ary.length; i++){
-                    var num = ary2[i];
+                ary.map(function (value, index) {
+                    var num = ary2[index];
                     var rate = num / total * 100;
                     html.push('<div class="progress-group">');
-                    html.push('<span class="progress-text"> ' + ary[i] + '</span>');
+                    html.push('<span class="progress-text"> ' + value + '</span>');
                     html.push('<span class="progress-number">'+ num +'</span>');
                     html.push('<div class="progress sm">');
                     html.push('<div class="progress-bar progress-bar-aqua" style="width: '+ rate + '%"></div>');
                     html.push('</div>');
                     html.push('</div>');
-                }
+                });
                 $('#customerZone').html(html.join(''));
                 $('#customers').html(total);
 
@@ -179,9 +171,9 @@
                         // formatter: '  {a}<br>{b}<br> {c}'
                         formatter: function (params) {
                             var res = '';
-                            if(params['seriesType'] == 'effectScatter'){
+                            if(params['seriesType'] === 'effectScatter'){
                                 res = params['seriesName'] + '<br>' + params['name'] + '<br>' + '电表数量：' + params['value'][2];
-                            }else if(params['seriesType'] == 'lines'){
+                            }else if(params['seriesType'] === 'lines'){
                                 res = params.data['fromName'];
                             }
                             return res;
@@ -283,8 +275,8 @@
                 bmap.addControl(new BMap.OverviewMapControl());   //缩略地图控件
 
                 $("#world-map-gdp").resize(function () {
-                    var h = $(".box.maximized-box .box-body").height() - 10;
-                    if(h == -10)
+                    var h = $(".box.maximized-box .box-body").height();
+                    if(h === null)
                         h = 360;
                     $("#world-map-gdp").height(h);
                     myChart.resize();
@@ -296,19 +288,15 @@
     }
 
     //设备安装信息
+    //http://www.robschmuecker.com/d3-js-drag-and-drop-zoomable-tree/
     function loadTree() {
         var url = '{{ urlfor "HomeController.GetCustomerForMeter"}}';
-        d3tree = d3.json(url, function(error, re) {
-            if(re.code != 0) throw error;
 
-            // size of the diagram
-            var viewerWidth = $("#tree-container").width();
-            var viewerHeight = $("#tree-container").height() == 0 ? 300 : $("#tree-container").height();
+        d3.json(url, function(error, re) {
+            if(re.code != 0) throw error;
 
             // Define the root
             var root = JSON.parse(re.obj);
-            root.x0 = 0;
-            root.y0 = 0;
 
             // Calculate total nodes, max label length
             var totalNodes = 0;
@@ -321,6 +309,10 @@
             // Misc. variables
             var i = 0;
             var duration = 750;
+
+            // size of the diagram
+            var viewerWidth = $("#tree-container").width();
+            var viewerHeight = $("#tree-container").height() == 0 ? 300 : $("#tree-container").height();
 
             var tree = d3.layout.tree().size([viewerHeight, viewerWidth]);
 
@@ -344,7 +336,6 @@
                     }
                 }
             }
-
             // Call visit function to establish maxLabelLength
             visit(root, function(d) {
                 totalNodes++;
@@ -371,7 +362,8 @@
             var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
             // define the baseSvg, attaching a class for styling and the zoomListener
-            var baseSvg = d3.select("#tree-container").append("svg")
+            var baseSvg = d3.select("#tree-container")
+                            .append("svg")
                             .attr("width", viewerWidth)
                             .attr("height", viewerHeight)
                             .attr("class", "overlay")
@@ -418,11 +410,8 @@
             // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
             function centerNode(source) {
                 scale = zoomListener.scale();
-
-                x = -source.y0;
+                x = 80;
                 y = -source.x0;
-
-                x = x * scale + viewerWidth / 2;
                 y = y * scale + viewerHeight / 2;
 
                 d3.select('g').transition()
@@ -628,9 +617,17 @@
 
             // Layout the tree initially and center on the root node.
             root.x0 = 0;
-            update(root);
+            root.y0 = 0;
 
+            update(root);
             centerNode(root);
+        });
+
+        $('#tree-container').resize(function () {
+            var h = $(".box.maximized-box .box-body").height();
+            if(h === null)
+                h = 300;
+            $("#tree-container .overlay").height(h);
         });
     }
 
@@ -664,7 +661,7 @@
                 var datastateary = new Array(0,0,0,0);
 
                 $(re.obj).each(function (i, row) {
-                    if(row.Rows == 0){
+                    if(row.Rows === 0){
                         datastateary[1]++;
 
                         html2.push('<tr>');
@@ -677,10 +674,10 @@
                         html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
                         html.push('<i class="fa fa-clock-o"></i>');
                         html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
-                        html.push('<span class="progress-number"><b>' + row.Rows + '</b>/288</span>');
+                        html.push('<span class="progress-number"><b>' + row.Rows + '</b>/' + row.DayRows + '</span>');
                         html.push('<div class="progress sm">');
 
-                        var rate = Math.round((row.Rows / 288) * 10000) / 100;
+                        var rate = Math.round((row.Rows / row.DayRows) * 10000) / 100;
                         var maxValue = getNowRows();
                         if(row.Rows  < (maxValue * 0.60 )) {
                             html.push('<div class="progress-bar progress-bar-red" style="width:' + rate + '%"></div>');
@@ -795,7 +792,7 @@
                 $(re.obj).each(function (i, row) {
                     var html = [];
                     var rate = (row.Rows / row.DayRows * 100).toFixed(2);
-                    if (row.TypeID == 1){
+                    if (row.TypeID === 1){
                         html.push('<span class="info-box-text">' + row.TypeDesc + '</span>');
                         html.push('<span class="info-box-number">' + row.Rows + '/' + row.DayRows + '</span>');
                         html.push('<div class="progress">');
@@ -813,7 +810,7 @@
                             case 1009: $('#RJ-OP485').html(html.join('')); break;
                             default: break;
                         }
-                    }else if(row.TypeID == 2){
+                    }else if(row.TypeID === 2){
                         html.push('<div class="progress-group">');
                         html.push('  <span class="progress-text"> '+ row.TypeDesc +'</span>');
                         html.push('  <small class="text-green">已采集：' + rate + '% </small>');
@@ -875,7 +872,7 @@
                             width: '40%',
                             funnelAlign: 'right',
                             data: re.obj.map(function (item) {
-                                if(item.TypeID == 2){
+                                if(item.TypeID === 2){
                                     return {value: item.Num, name: item.TypeDesc};
                                 }
                             })
@@ -890,7 +887,7 @@
                             width: '35%',
                             funnelAlign: 'left',
                             data: re.obj.map(function (item) {
-                                if(item.TypeID == 1){
+                                if(item.TypeID === 1){
                                     return {value: item.Num, name: item.TypeDesc};
                                 }
                             })
@@ -911,10 +908,10 @@
 
         $('#dateSelect').on('click', 'li', function () {
             var line = $(this).text();
-            if(line == '前一天'){
+            if(line === '前一天'){
                 choiceDate.setDate(choiceDate.getDate() -1);
                 loadOverviewToday(choiceDate);
-            }else if(line == '后一天'){
+            }else if(line === '后一天'){
                 choiceDate.setDate(choiceDate.getDate() + 1);
                 if(choiceDate > curdate){
                     choiceDate.setDate(choiceDate.getDate() -1);

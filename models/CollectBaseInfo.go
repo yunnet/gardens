@@ -8,14 +8,15 @@ import (
 )
 
 type DtuRowOfDay struct {
-	DTU_no       string    `orm:"column(dtu_no)"`
-	MeterAddress int       `orm:"column(meter_address)"`
+	DTU_no       string `orm:"column(dtu_no)"`
+	MeterAddress int    `orm:"column(meter_address)"`
 	//MeterTypeNO  string    `orm:"column(meter_type_no)"`
 	//MeterType    string    `orm:"column(meter_type)"`
 	//GatewayNO    string    `orm:"column(gateway_no)"`
 	//GatewayDesc  string    `orm:"column(gateway_desc)"`
-	CollectTime  time.Time `orm:"column(collect_time)"`
-	Rows         int       `orm:"column(rows)"`
+	CollectTime time.Time `orm:"column(collect_time)"`
+	DayRows     int       `orm:"column(day_rows)"`
+	Rows        int       `orm:"column(rows)"`
 }
 
 type OverviewToday struct {

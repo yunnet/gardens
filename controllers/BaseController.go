@@ -30,6 +30,15 @@ func (this *BaseController) Prepare() {
 	this.adapterUserInfo()
 }
 
+//从session里取用户信息
+func (this *BaseController) adapterUserInfo() {
+	a := this.GetSession("backenduser")
+	if a != nil {
+		this.curUser = a.(models.BackendUser)
+		this.Data["backenduser"] = a
+	}
+}
+
 // checkLogin判断用户是否登录，未登录则跳转至登录页面
 // 一定要在BaseController.Prepare()后执行
 func (this *BaseController) checkLogin() {
@@ -44,9 +53,9 @@ func (this *BaseController) checkLogin() {
 		if this.Ctx.Input.IsAjax() {
 			//由于是ajax请求，因此地址是header里的Referer
 			returnURL := this.Ctx.Input.Refer()
-			this.jsonResult(enums.JRCode302, "请登录", urlstr + returnURL)
+			this.jsonResult(enums.JRCode302, "请登录", urlstr+returnURL)
 		}
-		this.Redirect(urlstr + returnURL, 302)
+		this.Redirect(urlstr+returnURL, 302)
 		this.StopRun()
 	}
 }
@@ -111,15 +120,6 @@ func (this *BaseController) checkAuthor(ignores ...string) {
 				this.pageError("无权访问")
 			}
 		}
-	}
-}
-
-//从session里取用户信息
-func (this *BaseController) adapterUserInfo() {
-	a := this.GetSession("backenduser")
-	if a != nil {
-		this.curUser = a.(models.BackendUser)
-		this.Data["backenduser"] = a
 	}
 }
 

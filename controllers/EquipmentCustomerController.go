@@ -48,7 +48,7 @@ func (this *EquipmentCustomerController) DataGrid() {
 	this.ServeJSON()
 }
 
-//下拉选择列表
+//客户下拉选择列表
 func(this *EquipmentCustomerController)SelectPicker(){
 	var params = models.EquipmentCustomerQueryParam{}
 	params.Used = this.Input().Get("Used")
