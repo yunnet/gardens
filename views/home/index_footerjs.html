@@ -272,7 +272,7 @@
                 bmap.addControl(new BMap.ScaleControl());         //比例尺
                 bmap.addControl(new BMap.NavigationControl());    //缩放控件
                 bmap.addControl(new BMap.MapTypeControl());       //地图类型控件
-                bmap.addControl(new BMap.OverviewMapControl());   //缩略地图控件
+                bmap.addControl(new BMap.OverviewMapControl({isOpen: true, anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));   //缩略地图控件
 
                 $("#world-map-gdp").resize(function () {
                     var h = $(".box.maximized-box .box-body").height();
@@ -673,7 +673,7 @@
                         html.push('<div class="progress-group">');
                         html.push('<span class="progress-text">' + row.DTU_no + " & " + row.MeterAddress+ '</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
                         html.push('<i class="fa fa-clock-o"></i>');
-                        html.push(' <small>'+ sdtheme.formatterDateBySpan(row.CollectTime) +'</small>');
+                        html.push(' <small>'+ sdtheme.formatterDateTimeBySpan(row.CollectTime) +'</small>');
                         html.push('<span class="progress-number"><b>' + row.Rows + '</b>/' + row.DayRows + '</span>');
                         html.push('<div class="progress sm">');
 
