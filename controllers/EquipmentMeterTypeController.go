@@ -88,36 +88,30 @@ func (this *EquipmentMeterTypeController) Edit() {
 	this.LayoutSections["footerjs"] = "equipmentmetertype/edit_footerjs.html"
 }
 
+//预处理
+func (this *EquipmentMeterTypeController)preform() {
+	tmp_str := this.Input().Get("ThreePhase")
+	if tmp_str == "on" {
+		this.Input().Set("ThreePhase", "1")
+	} else {
+		this.Input().Set("ThreePhase", "0")
+	}
+}
+
 //add | update
 func (this *EquipmentMeterTypeController) Save() {
 	var err error
 	m := models.EquipmentMeterType{}
+
+	//有bootstapswitch控件，需要预处理一下
+	this.preform()
 
 	//获取form里的值
 	if err = this.ParseForm(&m); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", m.Id)
 	}
 
-	//id := this.Input().Get("Id")
-	//m.Id, _ = strconv.Atoi(id)
-	//
-	//m.MeterType = this.GetString("MeterType")
-	//m.VendorNO = this.GetString("VendorNO")
-	//m.PtAddress = this.GetString("PtAddress")
-	//m.CtAddress = this.GetString("CtAddress")
-
-	tmp_str := this.GetString("ThreePhase")
-	if tmp_str == "on" {
-		m.ThreePhase = 1
-	} else {
-		m.ThreePhase = 0
-	}
-
-	//m.Used, _ = this.GetInt("Used")
-
 	m.ChangeUser = this.curUser.RealName
-	//m.ChangeDate = time.Now()
-
 	o := orm.NewOrm()
 	if m.Id == 0 {
 		if err = o.Begin(); err != nil{

@@ -7,6 +7,14 @@ import (
 )
 
 func init() {
+	//TotalCollectRate
+	beego.Router("/totalcollectrate/index", &controllers.TotalCollectRateController{}, "*:Index")
+	beego.Router("/totalcollectrate/datagrid", &controllers.TotalCollectRateController{}, "Get,Post:DataGrid")
+
+	//TerminalTrace
+	beego.Router("/terminaltrace/index", &controllers.TerminalTraceController{}, "*:Index")
+	beego.Router("/terminaltrace/datagrid", &controllers.TerminalTraceController{}, "Get,Post:DataGrid")
+
 	//TotalDtuRows
 	beego.Router("/totaldturows/index", &controllers.TotalDtuRowsController{}, "*:Index")
 	beego.Router("/totaldturows/datagrid", &controllers.TotalDtuRowsController{}, "Get,Post:DataGrid")

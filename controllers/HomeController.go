@@ -44,7 +44,7 @@ func (this *HomeController) Index2() {
 }
 
 func (this *HomeController) Page404() {
-	this.setTpl()
+	this.setTpl("home/page404.html", "shared/layout_base.html")
 }
 
 func (this *HomeController) Error() {

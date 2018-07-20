@@ -116,6 +116,17 @@ var sdtheme = function () {
         }
     };
 
+    //状态： 0.启用 1.禁用
+    showConnectState = function (val) {
+        if (val === 0 || val === "0") {
+            return '<label class="label label-danger label-sm"><i class="fa fa-ban"></i> 断开</label>';
+        } else if (val === 1 || val === "1")
+            return '<label class="label label-success label-sm"><i class="fa fa-check"></i> 连接</label>';
+        else {
+            return "";
+        }
+    };
+
     //状态： 0.否 1.是
     showYes = function (val) {
         if (val === 1 || val === "1" || val === true) {
@@ -341,8 +352,11 @@ var sdtheme = function () {
         //显示启用或者禁用
         showEnable: showEnable,
 
-        //显示启用或删除
+        //显示启用 || 禁用
         showTwoState: showTwoState,
+
+        //1.连接 || 0.断开
+        showConnectState: showConnectState,
 
         //显示是否
         showYes: showYes,

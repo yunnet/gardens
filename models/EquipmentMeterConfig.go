@@ -28,6 +28,7 @@ type EquipmentMeterConfigQueryParam struct {
 	BaseQueryParam
 	DTU_no       string
 	MeterAddress string
+	MeterTypeNO  string
 	Used         string //为空不查询，有值精确查询
 }
 
@@ -84,6 +85,7 @@ func EquipmentMeterConfigPageList(params *EquipmentMeterConfigQueryParam) ([]*Eq
 
 	query = query.Filter("DTU_no__contains", params.DTU_no)
 	query = query.Filter("MeterAddress__istartswith", params.MeterAddress)
+	query = query.Filter("MeterTypeNO__istartswith", params.MeterTypeNO)
 	query = query.Filter("tag__istartswith", params.Used)
 
 	total, _ := query.Count()

@@ -13,11 +13,7 @@
     });
 
     function pageInit() {
-        {{if eq 1 .m.ThreePhase }}
-            $("#ThreePhase").bootstrapSwitch('state', true);
-        {{else}}
-            $("#ThreePhase").bootstrapSwitch('state', false);
-        {{end}}
+        $("#ThreePhase").bootstrapSwitch('state', {{.m.ThreePhase}});
 
         var url = '{{ urlfor "EquipmentVendorController.DataGrid"}}';
         rms.selectVendorNO(url, '{{.m.VendorNO}}');
