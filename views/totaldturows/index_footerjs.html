@@ -151,10 +151,21 @@
                     align: 'center',
                     sortable: true
                 }, {
-                    field: 'Rows',
-                    title: '条数',
+                    field: 'NeedRows',
+                    title: '应采条数',
                     width: '110px',
                     align: 'center'
+                }, {
+                    field: 'Rows',
+                    title: '实采条数',
+                    width: '110px',
+                    align: 'center'
+                }, {
+                    field: 'Rate',
+                    title: '实采比率',
+                    width: '110px',
+                    align: 'center',
+                    formatter: sdtheme.showTableRate
                 }
                 ],
             onLoadSuccess: function (data) {
@@ -182,10 +193,13 @@
                 layer.alert('获取数据失败,错误代码：' + status);
             },
             onDblClickRow: function (item) {
-                var info = '采集日期：' + new Date(item.CollectDate).format('yyyy-MM-dd') + '<br>' +
-                        'DTU编号：' + item.DTU_no + '<br>' +
-                        '电表地址：' + item.MeterAddress + '<br>' +
-                        '条数：' + item.Rows;
+                var info = '采集日期：' + new Date(item.CollectDate).format('yyyy-MM-dd') + '<br/>' +
+                        'DTU编号：' + item.DTU_no + '<br/>' +
+                        '电表地址：' + item.MeterAddress + '<br/>' +
+                        '应采条数：' + item.NeedRows + '<br/>' +
+                        '实采条数：' + item.Rows + '<br/>' +
+                        '实采比率：' + item.Rate + '%<br/>'
+                        ;
                 layer.alert(info);
             }
         });
@@ -228,6 +242,12 @@
                 }
             }],
 
+            //开关
+            legend: {
+                left: 'right',
+                data:['应采条数','实际条数']
+            },
+
             //右侧工具栏
             toolbox: {
                 show: true,
@@ -252,12 +272,19 @@
                 type:"value"
             }],
 
-            series: [{
-                name: '条数',
-                type: 'bar',
-                barMaxWidth: 30,
-                data: []
-            }]
+            series: [
+                {
+                    name: '应采条数',
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    data: []
+                },{
+                    name: '实际条数',
+                    type: 'bar',
+                    barMaxWidth: 30,
+                    data: []
+                }
+            ]
         };
         rowsChart.setOption(option);
     }
@@ -281,6 +308,11 @@
                         })
                     },
                     series:[
+                        {
+                            data: re.obj.map(function (item) {
+                                return item.NeedRows;
+                            })
+                        },
                         {
                             data: re.obj.map(function (item) {
                                 return item.Rows;

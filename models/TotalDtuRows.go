@@ -11,7 +11,9 @@ type TotalDtuRows struct {
 	CollectDate  time.Time `orm:"column(collect_date)"`
 	DTU_no       string    `orm:"column(dtu_no)"`
 	MeterAddress int       `orm:"column(meter_address)"`
+	NeedRows     float64   `orm:"digits(12);decimals(0);column(need_rows)"`
 	Rows         int       `orm:"column(rows)"`
+	Rate         float64   `orm:"digits(12);decimals(2);column(rate)"`
 }
 
 type TotalDtuRowsQueryParam struct {
@@ -21,9 +23,15 @@ type TotalDtuRowsQueryParam struct {
 	MeterAddress string
 }
 
+const C_SQL_TOTALDTUROWS = "SELECT ct.collect_date, ct.dtu_no, ct.meter_address, dt.need_rows, ct.`rows`, (ct.`rows`/ dt.need_rows * 100) as rate FROM collect_total_dtu_rows as ct " +
+	"LEFT JOIN gdkxdl.v_equipment_dtu_config as dt ON ct.dtu_no = dt.dtu_no " +
+	"WHERE ct.collect_date BETWEEN '%s' and '%s' and ct.dtu_no like '%s%%' and ct.meter_address = %s"
 
 func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([] *TotalDtuRows, int64) {
 	if len(strings.TrimSpace(params.CollectDate)) <= 0 {
+		return nil, 0
+	}
+	if len(strings.TrimSpace(params.DTU_no)) <= 0 {
 		return nil, 0
 	}
 	if len(strings.TrimSpace(params.MeterAddress)) <= 0 {
@@ -38,12 +46,7 @@ func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([] *TotalDtuRows, int
 	data := make([] *TotalDtuRows, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
-	sql := fmt.Sprintf(`SELECT collect_date, dtu_no, meter_address, rows		 
-		FROM collect_total_dtu_rows 
-       where collect_date BETWEEN '%s' and '%s'
-         and dtu_no like '%s%%'
-         and meter_address = %s
-       `,
+	sql := fmt.Sprintf(C_SQL_TOTALDTUROWS,
 		beginTime,
 		endTime,
 		params.DTU_no,

@@ -57,13 +57,13 @@
             //当前范围 减 6
             var tmp_cur = new Date();
             var predate = new Date(tmp_cur.setDate(tmp_cur.getDate() - 1));
-            var result = predate.format('yyyy-MM-dd') + ' - ' + predate.format('yyyy-MM-dd');
+            //yyyy-MM-dd - yyyy-MM-dd
+            var cur_date = predate.format('yyyy-MM-dd') + ' - ' + predate.format('yyyy-MM-dd');
 
             laydate.render({
                 elem: '#CollectDate',
                 range: true,
-                //yyyy-MM-dd - yyyy-MM-dd
-                value: result,
+                value: cur_date,
                 max: 0
             });
         });
@@ -161,7 +161,8 @@
                     title: '采集完成率',
                     width: '110px',
                     align: 'center',
-                    sortable: true
+                    sortable: true,
+                    formatter: sdtheme.showTableRate
                 }
                 ],
             onLoadSuccess: function (data) {
