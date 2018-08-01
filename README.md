@@ -26,9 +26,9 @@
 # 增加部分
 1. 增加了font-awesome图标选择的功能；
 2. 增加了font-awesome图标显示页面；
-3. 增加了d3.js展示客户信息；
+3. 增加了d3.js展示客户信息和可全屏展示；
 4. 增加了用户登陆信息日志显示；
-5. 增加了eCharts和百度地图的展示；
+5. 增加了eCharts和百度地图的展示和全屏展示；
 6. 增加了BoxWidget.prototype.maximize功能；
 7. 增加了websocket测试实例；
 8. 增加了nprogress（<a href="https://github.com/rstacruz/nprogress/">更多信息</a>）；
