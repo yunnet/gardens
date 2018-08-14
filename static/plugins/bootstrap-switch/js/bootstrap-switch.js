@@ -4,7 +4,7 @@
   * @version v3.3.4
   * @homepage https://bttstrp.github.io/bootstrap-switch
   * @author Mattia Larentis <mattia@larentis.eu> (http://larentis.eu)
-  * @license Apache-2.0
+  * @license Apache-2.0bootstrapSwitch
   */
 
 (function (global, factory) {

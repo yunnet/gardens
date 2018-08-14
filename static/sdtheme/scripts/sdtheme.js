@@ -90,6 +90,18 @@ var sdtheme = function () {
         return format;
     };
 
+    showTableRate = function(val){
+        if(val >= 90){
+            return '<span class="badge bg-green">' + val + '%</span>'
+        }else if(val >= 80){
+            return '<span class="badge bg-yellow">' + val + '%</span>'
+        }else if(val >= 60){
+            return '<span class="badge bg-light-blue">' + val + '%</span>'
+        }else{
+            return '<span class="badge bg-red">' + val + '%</span>'
+        }
+    };
+
     //状态：-1.删除 0.禁用 1.启用
     showEnable = function (val) {
         if (val === 1 || val === "1") {
@@ -357,6 +369,9 @@ var sdtheme = function () {
 
         //1.连接 || 0.断开
         showConnectState: showConnectState,
+
+        //显示table中的百分比
+        showTableRate: showTableRate,
 
         //显示是否
         showYes: showYes,
