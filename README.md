@@ -26,7 +26,7 @@
 # 增加部分
 1. 增加了font-awesome图标选择的功能；
 2. 增加了font-awesome图标显示页面；
-3. 增加了d3.js展示客户信息和可全屏展示；
+3. 增加了d3.js展示客户树信息和可全屏展示（<a href="http://www.robschmuecker.com/d3-js-drag-and-drop-zoomable-tree/">更多信息</a>）；
 4. 增加了用户登陆信息日志显示；
 5. 增加了eCharts和百度地图的展示和全屏展示；
 6. 增加了BoxWidget.prototype.maximize功能；
@@ -37,6 +37,7 @@
 11. 增加了bootstrap-table列宽手工调整功能（<a href="https://github.com/wenzhixin/bootstrap-table/tree/master/src/extensions/resizable/">更多信息</a>）；
 12. 对百度地图做了动态线功能
 13. 对eCharts拆线图增加了扩大缩小比例尺
+14. 增加了对https的支持
 
 # 安装方法
 
@@ -56,7 +57,8 @@ go get github.com/yunnet/gdkxdl
 ```
 bee run
 ```
-在浏览器里打开 http://localhost:8080 进行访问
+http: 在浏览器里打开 http://localhost:8080 进行访问
+https: 在浏览器里打开 https://localhost:10443 进行访问
 
 # 系统截图
 
