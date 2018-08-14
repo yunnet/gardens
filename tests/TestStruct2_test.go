@@ -95,7 +95,7 @@ func TestStruct2JSON(t *testing.T) {
 }
 
 func TestRows(t *testing.T) {
-	orm.RegisterDataBase("default", "mysql", "root:kxADMIN@%1001@tcp(120.76.200.33:3306)/kxtimingdata?charset=utf8&loc=Asia%2FShanghai", 30)
+	orm.RegisterDataBase("default", "mysql", "root:root@tcp(120.76.200.33:3306)/kxtimingdata?charset=utf8&loc=Asia%2FShanghai", 30)
 	days := time.Now().Format("2006_01_02")
 	sql := "SELECT count(1) as rows FROM collect_base_info_" + days
 	o := orm.NewOrm()
