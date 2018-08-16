@@ -7,6 +7,11 @@ import (
 )
 
 func init() {
+	//EquipmentOverview
+	beego.Router("/equipmentoverview/index", &controllers.EquipmentOverviewController{}, "*:Index")
+	beego.Router("/equipmentoverview/datagrid", &controllers.EquipmentOverviewController{}, "Get,Post:DataGrid")
+	beego.Router("/equipmentoverview/datalist", &controllers.EquipmentOverviewController{}, "Post:DataList")
+
 	//TotalCollectRate
 	beego.Router("/totalcollectrate/index", &controllers.TotalCollectRateController{}, "*:Index")
 	beego.Router("/totalcollectrate/datagrid", &controllers.TotalCollectRateController{}, "Get,Post:DataGrid")

@@ -164,7 +164,7 @@ func (this *BaseController) setTpl(template ...string) {
 }
 
 func (this *BaseController) jsonResult(code enums.JsonResultCode, msg string, obj interface{}) {
-	res := &models.JsonResult{code, msg, obj}
+	res := &models.JsonResult{Code: code, Msg: msg, Obj: obj}
 	this.Data["json"] = res
 	this.ServeJSON()
 	this.StopRun()
