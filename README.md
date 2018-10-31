@@ -1,4 +1,4 @@
-## gdkxdl
+## gardens
 
 # 简介
 基于Beego开发的易用、易扩展、界面友好的轻量级功能权限管理系统。前端框架基于AdminLTE2进行资源整合，包含了多款优秀的插件，是笔者对多年后台管理系统开发经验精华的萃取。
@@ -44,7 +44,7 @@
 1. 安装golang环境（ 略）
 2. 运行MySQL和Redis
 3. 安装本系统
-<br>`go get github.com/yunnet/gdkxdl`
+<br>`go get github.com/yunnet/gardens`
 4. 将根目录下的gdkxdl.sql导入mysql
 5. 修改配置文件 `conf/app.conf`
 6. 运行在gdkxdl目录使用beego官方提供的命令运行
