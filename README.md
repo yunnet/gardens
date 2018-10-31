@@ -45,7 +45,7 @@
 2. 运行MySQL和Redis
 3. 安装本系统
 <br>`go get github.com/yunnet/gardens`
-4. 将根目录下的gdkxdl.sql导入mysql
+4. 将doc目录下的gdkxdl.sql和kxtimingdata.sql导入mysql(业务需求，分库治理)
 5. 修改配置文件 `conf/app.conf`
 6. 运行在gdkxdl目录使用beego官方提供的命令运行
 <br>`bee run`
