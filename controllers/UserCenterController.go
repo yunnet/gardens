@@ -3,9 +3,9 @@ package controllers
 import (
 	"strings"
 
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
-	"github.com/yunnet/gdkxdl/utils"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
+	"github.com/yunnet/gardens/utils"
 
 	"github.com/astaxie/beego/orm"
 )
@@ -55,10 +55,9 @@ func (this *UserCenterController) BasicInfoSave() {
 	oM.Mobile = m.Mobile
 	oM.Email = m.Email
 	oM.Avatar = this.GetString("ImageUrl")
-	if len(oM.Avatar) == 0{
+	if len(oM.Avatar) == 0 {
 		oM.Avatar = "/static/upload/tigger.png"
 	}
-
 
 	o := orm.NewOrm()
 	if _, err := o.Update(oM); err != nil {

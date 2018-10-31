@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "github.com/yunnet/gdkxdl/routers"
-	_ "github.com/yunnet/gdkxdl/sysinit"
+	_ "github.com/yunnet/gardens/routers"
+	_ "github.com/yunnet/gardens/sysinit"
 
 	"github.com/astaxie/beego"
 )

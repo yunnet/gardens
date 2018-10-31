@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"github.com/gorilla/websocket"
-	"log"
-	"github.com/yunnet/gdkxdl/models"
 	"fmt"
-	"github.com/yunnet/gdkxdl/utils"
+	"github.com/gorilla/websocket"
+	"github.com/yunnet/gardens/models"
+	"github.com/yunnet/gardens/utils"
+	"log"
 	"time"
 )
 
@@ -42,7 +42,7 @@ func (this *WebsocketWidgetController) Index() {
 
 func handleMessage() {
 	for {
-		msg := <- broadcast
+		msg := <-broadcast
 		fmt.Println("clients len : ", len(clients))
 
 		for client := range clients {
@@ -89,8 +89,8 @@ func (this *WebsocketWidgetController) Get() {
 		log.Printf("%d recv: %s", mt, message)
 
 		ticker := time.NewTicker(1 * time.Second)
-		for{
-			time := <- ticker.C
+		for {
+			time := <-ticker.C
 			msg := []byte(time.Format("2006-01-02 15:04:05"))
 			mt := 1
 			log.Printf("%d send: %s", mt, msg)

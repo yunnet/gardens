@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 	"strconv"
 	"strings"
 	"time"
-	)
+)
 
 type EquipmentMeterRomConfigController struct {
 	BaseController
@@ -79,18 +79,18 @@ func (this *EquipmentMeterRomConfigController) Edit() {
 }
 
 //预处理
-func (this *EquipmentMeterRomConfigController)preform() {
+func (this *EquipmentMeterRomConfigController) preform() {
 	tmp_str := this.Input().Get("Needpt")
-	if tmp_str == "on"{
+	if tmp_str == "on" {
 		this.Input().Set("Needpt", "1")
-	}else{
+	} else {
 		this.Input().Set("Needpt", "0")
 	}
 
 	tmp_str = this.Input().Get("Needct")
-	if tmp_str == "on"{
+	if tmp_str == "on" {
 		this.Input().Set("Needct", "1")
-	}else{
+	} else {
 		this.Input().Set("Needct", "0")
 	}
 
@@ -135,9 +135,9 @@ func (this *EquipmentMeterRomConfigController) Save() {
 		}
 	} else {
 		if _, err := o.Update(&m, "MeterTypeNO", "AddressSort", "RomAddress", "RomName", "Units", "DataType",
-			                           "SegmentNO", "Offset", "Needpt", "Needct", "Calcfactor", "Msbbit", "BigEndian", "Bytelength",
-			                           "FunctionTable1", "FunctionTable2", "FunctionTable3", "FunctionField",
-			                           "Used", "ChangeUser", "ChangeDate"); err == nil {
+			"SegmentNO", "Offset", "Needpt", "Needct", "Calcfactor", "Msbbit", "BigEndian", "Bytelength",
+			"FunctionTable1", "FunctionTable2", "FunctionTable3", "FunctionField",
+			"Used", "ChangeUser", "ChangeDate"); err == nil {
 			this.jsonResult(enums.JRCodeSucc, "编辑成功", m.Id)
 		} else {
 			this.jsonResult(enums.JRCodeFailed, "编辑失败", m.Id)

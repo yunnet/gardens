@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 	"strconv"
 	"strings"
 	"time"
@@ -49,7 +49,7 @@ func (this *EquipmentGatewayController) DataGrid() {
 }
 
 //下拉选择列表
-func(this *EquipmentGatewayController)SelectPicker(){
+func (this *EquipmentGatewayController) SelectPicker() {
 	var params = models.EquipmentGatewayQueryParam{}
 	params.Used = this.Input().Get("Used")
 	data := models.EquipmentGatewayDataList(&params)
@@ -97,12 +97,12 @@ func (this *EquipmentGatewayController) Save() {
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
-		if err = o.Begin(); err != nil{
+		if err = o.Begin(); err != nil {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			return
 		}
 
-		if m.GatewayNO, err = GetSysValNO("gatewayno"); err != nil{
+		if m.GatewayNO, err = GetSysValNO("gatewayno"); err != nil {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			o.Rollback()
 			return
@@ -112,15 +112,15 @@ func (this *EquipmentGatewayController) Save() {
 		m.CreateDate = time.Now()
 
 		if _, err = o.Insert(&m); err == nil {
-			if err = o.Commit(); err != nil{
+			if err = o.Commit(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 			}
 		} else {
-			if err = o.Rollback(); err != nil{
+			if err = o.Rollback(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			}
 		}

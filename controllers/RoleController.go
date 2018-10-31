@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 
 	"fmt"
 	"strconv"

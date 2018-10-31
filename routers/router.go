@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"github.com/yunnet/gdkxdl/controllers"
+	"github.com/yunnet/gardens/controllers"
 
 	"github.com/astaxie/beego"
 )
@@ -51,7 +51,6 @@ func init() {
 	//websocket
 	beego.Router("/websocketwidget/index", &controllers.WebsocketWidgetController{}, "*:Index")
 	beego.Router("/websocketwidget/ws", &controllers.WebsocketWidgetController{}, "Get:Get")
-
 
 	//logintrace
 	beego.Router("/logintrace/index", &controllers.LoginTraceController{}, "*:Index")

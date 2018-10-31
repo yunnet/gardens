@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 	"strconv"
 	"strings"
 	"time"
@@ -39,7 +39,7 @@ func (this *EquipmentMeterTypeController) DataGridSelect() {
 	var params models.EquipmentMeterTypeQueryParam
 	json.Unmarshal(this.Ctx.Input.RequestBody, &params)
 	data, err := models.EquipmentMeterTypeSelect(&params)
-	if err != nil{
+	if err != nil {
 		this.jsonResult(enums.JRCodeFailed, "获取数据失败", "")
 	}
 	this.jsonResult(enums.JRCodeSucc, "", data)
@@ -89,7 +89,7 @@ func (this *EquipmentMeterTypeController) Edit() {
 }
 
 //预处理
-func (this *EquipmentMeterTypeController)preform() {
+func (this *EquipmentMeterTypeController) preform() {
 	tmp_str := this.Input().Get("ThreePhase")
 	if tmp_str == "on" {
 		this.Input().Set("ThreePhase", "1")
@@ -114,12 +114,12 @@ func (this *EquipmentMeterTypeController) Save() {
 	m.ChangeUser = this.curUser.RealName
 	o := orm.NewOrm()
 	if m.Id == 0 {
-		if err = o.Begin(); err != nil{
+		if err = o.Begin(); err != nil {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			return
 		}
 
-		if m.MeterTypeNO, err = GetSysValNO("metertypeno"); err != nil{
+		if m.MeterTypeNO, err = GetSysValNO("metertypeno"); err != nil {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			o.Rollback()
 			return
@@ -129,15 +129,15 @@ func (this *EquipmentMeterTypeController) Save() {
 		m.CreateDate = time.Now()
 
 		if _, err = o.Insert(&m); err == nil {
-			if err = o.Commit(); err != nil{
+			if err = o.Commit(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 			}
 		} else {
-			if err = o.Rollback(); err != nil{
+			if err = o.Rollback(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			}
 		}

@@ -1,7 +1,7 @@
 package sysinit
 
 import (
-	_ "github.com/yunnet/gdkxdl/models"
+	_ "github.com/yunnet/gardens/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -33,7 +33,6 @@ func InitDatabase() {
 	//数据库端口
 	dbPort := beego.AppConfig.String(dbType + "::db_port")
 
-
 	dbName2 := "kxtimingdata"
 
 	switch dbType {
@@ -43,7 +42,7 @@ func InitDatabase() {
 		dbCharset := beego.AppConfig.String(dbType + "::db_charset")
 		orm.RegisterDataBase(dbAlias, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/"+dbName+"?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
 
-		orm.RegisterDataBase(dbName2, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/" + dbName2 + "?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
+		orm.RegisterDataBase(dbName2, dbType, dbUser+":"+dbPwd+"@tcp("+dbHost+":"+dbPort+")/"+dbName2+"?charset="+dbCharset+"&loc=Asia%2FShanghai", 30)
 	}
 
 	//如果是开发模式，则显示命令信息

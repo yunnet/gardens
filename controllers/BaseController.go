@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
-	"github.com/yunnet/gdkxdl/utils"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
+	"github.com/yunnet/gardens/utils"
 
 	"github.com/astaxie/beego"
 )

@@ -1,14 +1,14 @@
 package controllers
 
 import (
-	"strings"
-	"strconv"
 	"encoding/json"
-	"time"
 	"fmt"
-	"github.com/yunnet/gdkxdl/models"
-	"github.com/yunnet/gdkxdl/enums"
 	"github.com/astaxie/beego/orm"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type SystemValController struct {
@@ -136,7 +136,7 @@ func (this *SystemValController) Delete() {
 }
 
 //取电房编号
-func GetSysValNO(_code string)(string, error) {
+func GetSysValNO(_code string) (string, error) {
 	var no string
 	o := orm.NewOrm()
 	sql := fmt.Sprintf("call p_sysval_no('%s');", _code)

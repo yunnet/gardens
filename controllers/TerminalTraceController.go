@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/models"
 )
 
 type TerminalTraceController struct {

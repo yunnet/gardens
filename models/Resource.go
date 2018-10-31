@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/yunnet/gdkxdl/utils"
+	"github.com/yunnet/gardens/utils"
 
 	"github.com/astaxie/beego/orm"
 )
@@ -11,8 +11,8 @@ import (
 //Resource 权限控制资源表
 type Resource struct {
 	Id              int
-	Name            string             `orm:"size(64)"`
-	Parent          *Resource          `orm:"null;rel(fk)"` // RelForeignKey relation
+	Name            string    `orm:"size(64)"`
+	Parent          *Resource `orm:"null;rel(fk)"` // RelForeignKey relation
 	Rtype           int
 	Seq             int
 	Sons            []*Resource        `orm:"reverse(many)"` // fk 的反向关系

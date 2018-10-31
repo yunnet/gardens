@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/yunnet/gdkxdl/models"
 	"encoding/json"
+	"github.com/yunnet/gardens/models"
 )
 
 type TotalCollectRateController struct {

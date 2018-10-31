@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"github.com/yunnet/gdkxdl/models"
 	"encoding/json"
-	"github.com/yunnet/gdkxdl/enums"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 )
 
 type CollectBaseInfoController struct {

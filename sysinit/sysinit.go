@@ -1,7 +1,7 @@
 package sysinit
 
 import (
-	"github.com/yunnet/gdkxdl/utils"
+	"github.com/yunnet/gardens/utils"
 
 	"github.com/astaxie/beego"
 )

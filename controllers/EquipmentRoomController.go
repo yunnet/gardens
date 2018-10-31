@@ -1,14 +1,14 @@
 package controllers
 
 import (
-	"strings"
-	"strconv"
-	"github.com/yunnet/gdkxdl/models"
 	"encoding/json"
-	"time"
 	"fmt"
-	"github.com/yunnet/gdkxdl/enums"
 	"github.com/astaxie/beego/orm"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
+	"strconv"
+	"strings"
+	"time"
 )
 
 type EquipmentRoomController struct {
@@ -49,7 +49,7 @@ func (this *EquipmentRoomController) DataGrid() {
 }
 
 //下拉选择列表
-func(this *EquipmentRoomController)SelectPicker(){
+func (this *EquipmentRoomController) SelectPicker() {
 	var params = models.EquipmentRoomQueryParam{}
 	params.Used = this.Input().Get("Used")
 	data := models.EquipmentRoomDataList(&params)
@@ -106,7 +106,7 @@ func (this *EquipmentRoomController) Save() {
 
 	o := orm.NewOrm()
 	if m.Id == 0 {
-		if err = o.Begin(); err != nil{
+		if err = o.Begin(); err != nil {
 			this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			return
 		}
@@ -116,15 +116,15 @@ func (this *EquipmentRoomController) Save() {
 		m.CreateDate = time.Now()
 
 		if _, err = o.Insert(&m); err == nil {
-			if err = o.Commit(); err != nil{
+			if err = o.Commit(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 			}
 		} else {
-			if err = o.Rollback(); err != nil{
+			if err = o.Rollback(); err != nil {
 				this.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
-			}else{
+			} else {
 				this.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			}
 		}
@@ -140,7 +140,7 @@ func (this *EquipmentRoomController) Save() {
 }
 
 //取电房编号
-func GetCustomerNO(_customer_no string)string {
+func GetCustomerNO(_customer_no string) string {
 	var no string
 	o := orm.NewOrm()
 	sql := fmt.Sprintf("call p_equipment_room_no('%s');", _customer_no)
@@ -166,4 +166,3 @@ func (this *EquipmentRoomController) Delete() {
 		this.jsonResult(enums.JRCodeFailed, "删除失败", 0)
 	}
 }
-

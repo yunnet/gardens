@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 	"strconv"
 	"strings"
 	"time"
-							)
+)
 
 type EquipmentSimCardsController struct {
 	BaseController
@@ -54,7 +54,7 @@ func (this *EquipmentSimCardsController) DataGrid() {
 }
 
 //下拉选择列表
-func(this *EquipmentSimCardsController)SelectPicker(){
+func (this *EquipmentSimCardsController) SelectPicker() {
 	var params = models.EquipmentSimCardsQueryParam{}
 	params.Used = this.Input().Get("Used")
 	data := models.EquipmentSimCardsDataList(&params)
@@ -140,11 +140,10 @@ func (this *EquipmentSimCardsController) Delete() {
 }
 
 //abcdefg hijklmn opqrst uvwxyz
-func (this *EquipmentSimCardsController)TrafficSync() {
-	if num, err := models.TrafficSync(); err == nil{
+func (this *EquipmentSimCardsController) TrafficSync() {
+	if num, err := models.TrafficSync(); err == nil {
 		this.jsonResult(enums.JRCodeSucc, fmt.Sprintf("同步成功 %d 项", num), 0)
-	}else{
+	} else {
 		this.jsonResult(enums.JRCodeFailed, "同步失败", 0)
 	}
 }
-

@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/orm"
-	"github.com/yunnet/gdkxdl/enums"
-	"github.com/yunnet/gdkxdl/models"
+	"github.com/yunnet/gardens/enums"
+	"github.com/yunnet/gardens/models"
 	"strconv"
 	"strings"
 	"time"
@@ -49,7 +49,7 @@ func (this *EquipmentDtuConfigController) DataGrid() {
 }
 
 //下拉选择列表
-func(this *EquipmentDtuConfigController)SelectPicker(){
+func (this *EquipmentDtuConfigController) SelectPicker() {
 	var params = models.EquipmentDtuConfigQueryParam{}
 	params.Used = this.Input().Get("Used")
 	data := models.EquipmentDtuConfigDataList(&params)
