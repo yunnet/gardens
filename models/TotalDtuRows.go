@@ -1,10 +1,24 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
-	"strings"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strings"
+	"time"
 )
 
 type TotalDtuRows struct {
@@ -27,7 +41,7 @@ const C_SQL_TOTALDTUROWS = "SELECT ct.collect_date, ct.dtu_no, ct.meter_address,
 	"LEFT JOIN gdkxdl.v_equipment_dtu_config as dt ON ct.dtu_no = dt.dtu_no " +
 	"WHERE ct.collect_date BETWEEN '%s' and '%s' and ct.dtu_no like '%s%%' and ct.meter_address = %s"
 
-func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([] *TotalDtuRows, int64) {
+func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([]*TotalDtuRows, int64) {
 	if len(strings.TrimSpace(params.CollectDate)) <= 0 {
 		return nil, 0
 	}
@@ -43,7 +57,7 @@ func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([] *TotalDtuRows, int
 	beginTime := ary[0]
 	endTime := ary[1]
 
-	data := make([] *TotalDtuRows, 0)
+	data := make([]*TotalDtuRows, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := fmt.Sprintf(C_SQL_TOTALDTUROWS,
@@ -65,7 +79,7 @@ func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([] *TotalDtuRows, int
 	return data, total
 }
 
-func TotalDtuRowsDataList(params *TotalDtuRowsQueryParam) [] *TotalDtuRows {
+func TotalDtuRowsDataList(params *TotalDtuRowsQueryParam) []*TotalDtuRows {
 	params.Limit = 65535
 	params.Sort = "collect_date"
 	params.Order = "asc"

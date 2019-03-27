@@ -1,10 +1,24 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strings"
+	"time"
 )
 
 type TotalCollectRate struct {
@@ -27,7 +41,7 @@ type TotalCollectRateQueryParam struct {
 const C_SQL_TOTALCOLLECTRATE_ROWS = "SELECT count(1) as `rows` FROM v_collect_total_rate where collect_date BETWEEN '%s' and '%s' and customer_no like '%s%%' and customer_name like '%s%%' "
 const C_SQL_TOTALCOLLECTRATE = "SELECT collect_date, customer_no, customer_name, num, need_rows, `rows`, rate FROM v_collect_total_rate where collect_date BETWEEN '%s' and '%s' and customer_no like '%s%%' and customer_name like '%s%%' "
 
-func TotalCollectRatePageList(params *TotalCollectRateQueryParam) ([] *TotalCollectRate, int64) {
+func TotalCollectRatePageList(params *TotalCollectRateQueryParam) ([]*TotalCollectRate, int64) {
 	if len(strings.TrimSpace(params.CollectDate)) <= 0 {
 		return nil, 0
 	}
@@ -37,7 +51,7 @@ func TotalCollectRatePageList(params *TotalCollectRateQueryParam) ([] *TotalColl
 	beginTime := ary[0] + " 00:00:00"
 	endTime := ary[1] + " 23:59:59"
 
-	data := make([] *TotalCollectRate, 0)
+	data := make([]*TotalCollectRate, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 

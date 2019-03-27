@@ -1,10 +1,24 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
-	"strings"
-	"github.com/astaxie/beego/orm"
 	"fmt"
+	"github.com/astaxie/beego/orm"
+	"strings"
+	"time"
 )
 
 type TotalActivePowerMinute struct {
@@ -21,7 +35,7 @@ type TotalActivePowerMinuteQueryParam struct {
 	MeterAddress string
 }
 
-func TotalActivePowerMinutePageList(params *TotalActivePowerMinuteQueryParam) ([] *TotalActivePowerMinute, int64) {
+func TotalActivePowerMinutePageList(params *TotalActivePowerMinuteQueryParam) ([]*TotalActivePowerMinute, int64) {
 	if len(strings.TrimSpace(params.CollectTime)) <= 0 {
 		return nil, 0
 	}
@@ -35,7 +49,7 @@ func TotalActivePowerMinutePageList(params *TotalActivePowerMinuteQueryParam) ([
 	beginTime := ary[0] + " 00:00:00"
 	endTime := ary[1] + " 23:59:59"
 
-	data := make([] *TotalActivePowerMinute, 0)
+	data := make([]*TotalActivePowerMinute, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := fmt.Sprintf(`SELECT collect_time, dtu_no, meter_address, total_active_power		 
@@ -63,7 +77,7 @@ func TotalActivePowerMinutePageList(params *TotalActivePowerMinuteQueryParam) ([
 	return data, total
 }
 
-func TotalActivePowerMinuteDataList(params *TotalActivePowerMinuteQueryParam) [] *TotalActivePowerMinute {
+func TotalActivePowerMinuteDataList(params *TotalActivePowerMinuteQueryParam) []*TotalActivePowerMinute {
 	params.Limit = -1
 	params.Sort = "collect_time"
 	params.Order = "asc"

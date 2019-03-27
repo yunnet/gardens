@@ -1,16 +1,30 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
-	"time"
-	"fmt"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 	"github.com/tidwall/gjson"
-	"net/http"
 	"io/ioutil"
+	"net/http"
 	"sync"
+	"time"
 )
 
 type EquipmentSimCards struct {
@@ -120,7 +134,7 @@ func TrafficSync() (int64, error) {
 
 	num := 0
 	wg := sync.WaitGroup{}
-	for i, simcard := range data{
+	for i, simcard := range data {
 		url := getSimCardUrl(simcard.Sim_no, api, key, username, timestamp)
 
 		wg.Add(1)
@@ -135,7 +149,7 @@ func TrafficSync() (int64, error) {
 			defer resp.Body.Close()
 
 			body, err := ioutil.ReadAll(resp.Body)
-			if nil != err{
+			if nil != err {
 				fmt.Println("同步出错：" + sim)
 				return
 			}
@@ -151,7 +165,7 @@ func TrafficSync() (int64, error) {
 }
 
 //{"Status":1,"Message":"Success","Data":{"operatortype":1,"GPS":{"total":150.0,"used":9.54,"left":140.46},"package":[{"packageCode":"9","packageName":"150M/月 续费一年","beginTime":"2017-09-25 00:00:00","endTime":"2018-08-31 17:38:30","total":150.0,"used":9.54,"left":140.46}]}}
-func updateRecord(id int64, json string) error{
+func updateRecord(id int64, json string) error {
 	gjsonData := gjson.Parse(json)
 
 	//isOK := gjsonData.Get("Message")
@@ -179,13 +193,13 @@ func updateRecord(id int64, json string) error{
 		} else {
 			return err
 		}
-	}else {
+	} else {
 		return err
 	}
 }
 
 //生成sim连接url
-func getSimCardUrl(card, api, key, username string, timestamp int64)string {
+func getSimCardUrl(card, api, key, username string, timestamp int64) string {
 	url := fmt.Sprintf("card=%s&key=%s&timestamp=%d&username=%s", card, key, timestamp, username)
 	encoder := md5.New()
 	encoder.Write([]byte(url))

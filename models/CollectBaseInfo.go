@@ -1,10 +1,24 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
-	"github.com/astaxie/beego/orm"
 	"fmt"
+	"github.com/astaxie/beego/orm"
 	"strings"
+	"time"
 )
 
 type DtuRowOfDay struct {
@@ -79,7 +93,7 @@ type CollectBaseInfoQueryParam struct {
 	MeterAddress string
 }
 
-func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBaseInfo, int64) {
+func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([]*CollectBaseInfo, int64) {
 	if len(strings.TrimSpace(params.CollectTime)) <= 0 {
 		return nil, 0
 	}
@@ -91,7 +105,7 @@ func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBase
 	beginTime := params.CollectTime + " 00:00:00"
 	endTime := params.CollectTime + " 23:59:59"
 
-	data := make([] *CollectBaseInfo, 0)
+	data := make([]*CollectBaseInfo, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 
@@ -142,7 +156,7 @@ func CollectBaseInfoPageList(params *CollectBaseInfoQueryParam) ([] *CollectBase
 	return data, total
 }
 
-func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) [] *CollectBaseInfo {
+func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) []*CollectBaseInfo {
 	params.Limit = 65535
 	params.Sort = "collect_time"
 	params.Order = "asc"
@@ -151,11 +165,11 @@ func CollectBaseInfoDataList(params *CollectBaseInfoQueryParam) [] *CollectBaseI
 }
 
 //今日采集进度查询
-func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
+func GetDtuRowsTodayList() ([]*DtuRowOfDay, error) {
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := "call p_dtu_day_row_today()"
-	data := make([] *DtuRowOfDay, 0)
+	data := make([]*DtuRowOfDay, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err
@@ -164,11 +178,11 @@ func GetDtuRowsTodayList() ([] *DtuRowOfDay, error) {
 }
 
 //取月采集数量
-func GetCollectRowsOfMonth() ([] *CollectCountOfMonth, error) {
+func GetCollectRowsOfMonth() ([]*CollectCountOfMonth, error) {
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := fmt.Sprintf("SELECT collect_date, `rows` FROM v_collect_total_rows where collect_date <'%s'", time.Now().Format("2006-01-02"))
-	data := make([] *CollectCountOfMonth, 0)
+	data := make([]*CollectCountOfMonth, 0)
 	_, err := o.Raw(sql).QueryRows(&data)
 	if err != nil {
 		return nil, err
@@ -177,8 +191,8 @@ func GetCollectRowsOfMonth() ([] *CollectCountOfMonth, error) {
 }
 
 //获取概述信息
-func GetOverviewToday(choiceDate string) ([] *OverviewToday, error) {
-	data := make([] *OverviewToday, 0)
+func GetOverviewToday(choiceDate string) ([]*OverviewToday, error) {
+	data := make([]*OverviewToday, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 	sql := fmt.Sprintf(`call p_collect_overview('%s')`, choiceDate)

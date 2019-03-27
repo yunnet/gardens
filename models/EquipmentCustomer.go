@@ -1,9 +1,23 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
-	"github.com/astaxie/beego/orm"
 	"fmt"
+	"github.com/astaxie/beego/orm"
+	"time"
 )
 
 type EquipmentCustomer struct {
@@ -92,7 +106,7 @@ func EquipmentCustomerPageList(params *EquipmentCustomerQueryParam) ([]*Equipmen
 	return data, total
 }
 
-func EquipmentCustomerDataList(params *EquipmentCustomerQueryParam) [] *EquipmentCustomer {
+func EquipmentCustomerDataList(params *EquipmentCustomerQueryParam) []*EquipmentCustomer {
 	params.Limit = -1
 	params.Sort = "Id"
 	params.Order = "asc"
@@ -121,8 +135,8 @@ func (this *EquipmentCustomer) TableName() string {
 }
 
 //获取客户分布
-func GetCustomerZone() ([] *CustomerZone, error) {
-	data := make([] *CustomerZone, 0)
+func GetCustomerZone() ([]*CustomerZone, error) {
+	data := make([]*CustomerZone, 0)
 
 	o := orm.NewOrm()
 	sql := fmt.Sprintf(`SELECT customer_no, customer_name, zone, longitude, latitude, count(customer_no) as num FROM v_customer_room_meter WHERE meter_config_tag = 0 GROUP BY customer_no`)

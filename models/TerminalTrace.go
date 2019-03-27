@@ -1,10 +1,24 @@
+// Copyright 2018 gardens Author. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package models
 
 import (
-	"time"
-	"strings"
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strings"
+	"time"
 )
 
 type TerminalTrace struct {
@@ -23,9 +37,9 @@ type TerminalTraceQueryParam struct {
 }
 
 const C_SQL_TERMINAL_TRACE_ROWS = "SELECT count(1) as `rows` FROM collect_login_trace  where collect_time >= '%s' and collect_time <= '%s' and dtu_no like '%s%%' and meter_address like '%s%%' "
-const C_SQL_TERMINAL_TRACE  = `SELECT collect_time, dtu_no, meter_address, remote_address, linked FROM collect_login_trace where collect_time >= '%s' and collect_time <= '%s' and dtu_no like '%s%%' and meter_address like '%s%%' `
+const C_SQL_TERMINAL_TRACE = `SELECT collect_time, dtu_no, meter_address, remote_address, linked FROM collect_login_trace where collect_time >= '%s' and collect_time <= '%s' and dtu_no like '%s%%' and meter_address like '%s%%' `
 
-func TerminalTracePageList(params *TerminalTraceQueryParam) ([] *TerminalTrace, int64) {
+func TerminalTracePageList(params *TerminalTraceQueryParam) ([]*TerminalTrace, int64) {
 	if len(strings.TrimSpace(params.CollectTime)) <= 0 {
 		return nil, 0
 	}
@@ -35,7 +49,7 @@ func TerminalTracePageList(params *TerminalTraceQueryParam) ([] *TerminalTrace, 
 	beginTime := ary[0] + " 00:00:00"
 	endTime := ary[1] + " 23:59:59"
 
-	data := make([] *TerminalTrace, 0)
+	data := make([]*TerminalTrace, 0)
 	o := orm.NewOrm()
 	o.Using("kxtimingdata")
 
