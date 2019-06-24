@@ -203,3 +203,7 @@ func (this *BaseController) pageLogin() {
 	this.Redirect(url, 302)
 	this.StopRun()
 }
+
+func (this *BaseController) GetControllerAndAction() (string, string) {
+	
+}

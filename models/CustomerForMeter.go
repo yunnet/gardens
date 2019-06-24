@@ -16,6 +16,7 @@ package models
 
 import (
 	"encoding/json"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 )
@@ -69,7 +70,8 @@ func GetCustomerForMeter() (string, error) {
 	var company *CompanyItem
 	var dtu *DtuItem
 
-	master = &RootItem{Name: "电可托"}
+	var appName = beego.AppConfig.String("site.name")
+	master = &RootItem{Name: appName}
 
 	for _, row := range data {
 		meter := MeterItem{strconv.Itoa(row.MeterAddress), row.LoopName}
