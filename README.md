@@ -59,8 +59,8 @@
 <br>https: 在浏览器里打开 `https://localhost:10443` 进行访问
 
 ## 系统截图
-![登陆页面](https://github.com/yunnet/gardens/blob/master/doc/image/login.png)
-![仪表板](https://github.com/yunnet/gardens/blob/master/doc/image/dashboard.png)
+![登陆页面](https://github.com/yunnet/gardens/blob/master/doc/image/login2.png)
+![仪表板](https://github.com/yunnet/gardens/blob/master/doc/image/dashboard2.png)
 
 ## License
 * MIT
