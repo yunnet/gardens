@@ -60,7 +60,7 @@
 
 ## 系统截图
 ![登陆页面](https://github.com/yunnet/gardens/blob/master/doc/image/login2.png)
-![仪表板](https://github.com/yunnet/gardens/blob/master/doc/image/dashboard2.png)
+![仪表板](https://github.com/yunnet/gardens/blob/master/doc/image/dashboard3.png)
 
 ## License
 * MIT
