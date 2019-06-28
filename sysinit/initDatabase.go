@@ -15,7 +15,7 @@
 package sysinit
 
 import (
-	_ "github.com/yunnet/gardens/models"
+	_ "gardens/models"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

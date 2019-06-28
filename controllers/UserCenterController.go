@@ -17,9 +17,9 @@ package controllers
 import (
 	"strings"
 
-	"github.com/yunnet/gardens/enums"
-	"github.com/yunnet/gardens/models"
-	"github.com/yunnet/gardens/utils"
+	"gardens/enums"
+	"gardens/models"
+	"gardens/utils"
 
 	"github.com/astaxie/beego/orm"
 )

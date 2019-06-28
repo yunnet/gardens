@@ -19,8 +19,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/yunnet/gardens/enums"
-	"github.com/yunnet/gardens/models"
+	"gardens/enums"
+	"gardens/models"
 
 	"github.com/astaxie/beego/orm"
 	"io/ioutil"

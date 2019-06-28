@@ -17,7 +17,7 @@ package models
 import (
 	"fmt"
 
-	"github.com/yunnet/gardens/utils"
+	"gardens/utils"
 
 	"github.com/astaxie/beego/orm"
 )

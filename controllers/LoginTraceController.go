@@ -16,8 +16,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/yunnet/gardens/enums"
-	"github.com/yunnet/gardens/models"
+	"gardens/enums"
+	"gardens/models"
 )
 
 type LoginTraceController struct {

@@ -14,7 +14,7 @@
 
 package models
 
-import "github.com/yunnet/gardens/enums"
+import "gardens/enums"
 
 type JsonResult struct {
 	Code enums.JsonResultCode `json:"code"`

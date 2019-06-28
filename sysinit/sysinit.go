@@ -15,7 +15,7 @@
 package sysinit
 
 import (
-	"github.com/yunnet/gardens/utils"
+	"gardens/utils"
 
 	"github.com/astaxie/beego"
 )

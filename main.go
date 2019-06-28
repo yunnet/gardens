@@ -15,8 +15,8 @@
 package main
 
 import (
-	_ "github.com/yunnet/gardens/routers"
-	_ "github.com/yunnet/gardens/sysinit"
+	_ "gardens/routers"
+	_ "gardens/sysinit"
 
 	"github.com/astaxie/beego"
 )

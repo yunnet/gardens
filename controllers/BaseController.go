@@ -18,9 +18,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/yunnet/gardens/enums"
-	"github.com/yunnet/gardens/models"
-	"github.com/yunnet/gardens/utils"
+	"gardens/enums"
+	"gardens/models"
+	"gardens/utils"
 
 	"github.com/astaxie/beego"
 )
@@ -204,6 +204,6 @@ func (this *BaseController) pageLogin() {
 	this.StopRun()
 }
 
-func (this *BaseController) GetControllerAndAction() (string, string) {
+// func (this *BaseController) GetControllerAndAction() (string, string) {
 	
-}
+// }

@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/tidwall/gjson"
-	"github.com/yunnet/gardens/enums"
-	"github.com/yunnet/gardens/models"
-	"github.com/yunnet/gardens/utils"
+	"gardens/enums"
+	"gardens/models"
+	"gardens/utils"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -161,17 +161,17 @@ func (this *HomeController) GetCustomerForMeter() {
 
 	if err := utils.GetCache(key, &data); err == nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("use redis cache: GetCustomerZone spend: %d ns", after-before))
+		beego.Info(fmt.Sprintf("use redis cache: GetCustomerForMeter spend: %d ns", after-before))
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 
 	if data, err := models.GetCustomerForMeter(); err != nil {
 		this.jsonResult(enums.JRCodeFailed, "", 0)
 	} else {
-		utils.SetCache(key, data, 3600)
+		utils.SetCache(key, data, 3600)		
 
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("DB GetCustomerForMeter spend: %d ns", after-before))
+		beego.Info(fmt.Sprintf("::: DB GetCustomerForMeter spend: %d ns", after-before))
 		this.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }

@@ -16,7 +16,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/yunnet/gardens/models"
+	"gardens/models"
 )
 
 type TotalCollectRateController struct {

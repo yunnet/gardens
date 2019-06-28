@@ -55,7 +55,7 @@ func TestStruct2JSON(t *testing.T) {
 	var company *CompanyItem
 	var dtu *DtuItem
 
-	master = &RootItem{Name: "电可托"}
+	master = &RootItem{Name: "物联网"}
 
 	for _, row := range lists {
 		meter := MeterItem{strconv.Itoa(row.MeterAddress), row.CollectConfigName}

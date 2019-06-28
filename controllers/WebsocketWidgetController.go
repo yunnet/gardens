@@ -17,8 +17,8 @@ package controllers
 import (
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/yunnet/gardens/models"
-	"github.com/yunnet/gardens/utils"
+	"gardens/models"
+	"gardens/utils"
 	"log"
 	"time"
 )
