@@ -16,6 +16,7 @@ package models
 
 import (
 	"encoding/json"	
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 )
