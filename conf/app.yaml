@@ -1,0 +1,56 @@
+sys:
+  EnableAdmin: true
+  EnableHTTP: true
+  EnableHTTPS: false
+  EnableHttpTLS: true
+  HTTPPort: 8023
+  HTTPSCertFile: conf/server.crt
+  HTTPSKeyFile: conf/server.key
+  HTTPSPort: 10443
+  copyrequestbody: true
+  enablexsrf: false
+  sessionname: rmsbackusersessionid
+  xsrfexpire: 3600
+  xsrfkey: asdfioerjlasdfmFADFOEJF2323SDFF
+app:
+  appname: gardens
+  runmode: dev
+site:
+  app: 物联网
+  name: 后台管理系统
+  version: 1.0.15
+cache:
+  cache_expire: 10
+  db_dt_prefix: rms_
+  db_type: mysql
+  redis_host: 127.0.0.1:6379
+  redis_password: ''
+lang:
+  names: English|简体中文
+  types: en-US|zh-CN
+logs:
+  level: 7
+mysql:
+  db_alias: default
+  db_charset: utf8
+  db_host: 127.0.0.1
+  db_name: gardens
+  db_port: 3306
+  db_pwd: root
+  db_user: root
+postgres:
+  db_alias: default
+  db_host: localhost
+  db_name: sdrms
+  db_port: 5432
+  db_pwd: root
+  db_sslmode: disable
+  db_user: root
+sqlite3:
+  db_alias: default
+  db_name: sdrms.sqlite3
+simcard:
+  api: http://127.0.0.1:8089/api/Service/QueryCardPackage
+  key: '1231232131232123213'
+  username: '123213213213'
+

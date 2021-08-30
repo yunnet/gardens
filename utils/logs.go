@@ -44,6 +44,7 @@ func InitLogs() {
 		"daily":true,
 		"maxdays":10}`)
 	fileLogs.Async() //异步
+
 	runmode = strings.TrimSpace(strings.ToLower(beego.AppConfig.String("runmode")))
 	if runmode == "" {
 		runmode = "dev"

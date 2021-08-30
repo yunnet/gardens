@@ -43,7 +43,7 @@ type (
 )
 
 func TestStruct2JSON(t *testing.T) {
-	orm.RegisterDataBase("default", "mysql", "root:root@tcp(127.0.0.1:3306)/gdkxdl?charset=utf8&loc=Asia%2FShanghai", 30)
+	orm.RegisterDataBase("default", "mysql", "root:root@tcp(127.0.0.1:3306)/gardens?charset=utf8&loc=Asia%2FShanghai", 30)
 	sql := "SELECT customer_id, customer_name, dtu_no, meter_address, meter_type_no, collect_config_name FROM v_customer_for_meter"
 	lists := make([]*CustomerForMeter, 0)
 	_, err := orm.NewOrm().Raw(sql).QueryRows(&lists)

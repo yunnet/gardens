@@ -12,15 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package controllers
 
-import (
-	_ "gardens/routers"
-	_ "gardens/sysinit"
+type MainController struct {
+	BaseController
+}
 
-	beego "github.com/beego/beego/v2/server/web"
-)
+func (c *MainController) Prepare() {
+	c.BaseController.Prepare()
+	c.checkLogin()
+}
 
-func main() {
-	beego.Run()
+func (c *MainController) Index() {
+	c.Data["pageTitle"] = "首页"
+	//判断是否登录
+	//c.checkLogin()
+	c.setTpl()
+
+	c.LayoutSections = make(map[string]string)
+	c.LayoutSections["headcssjs"] = "home/index_headcssjs.html"
+	c.LayoutSections["footerjs"] = "home/index_footerjs.html"
 }

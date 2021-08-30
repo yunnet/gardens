@@ -12,15 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package models
 
 import (
-	_ "gardens/routers"
-	_ "gardens/sysinit"
-
-	beego "github.com/beego/beego/v2/server/web"
+	"github.com/beego/beego/v2/client/orm"
+	"time"
 )
 
-func main() {
-	beego.Run()
+//角色与资源关系表
+type RoleResourceRel struct {
+	Id       int
+	Role     *Role     `orm:"rel(fk)"`  //外键
+	Resource *Resource `orm:"rel(fk)" ` //外键
+	Created  time.Time `orm:"auto_now_add;type(datetime)"`
+}
+
+func init() {
+	orm.RegisterModel(new(RoleResourceRel))
+}
+
+//角色与资源多对多关系表
+func RoleResourceRelTBName() string {
+	return "sys_role_resource_rel"
+}
+
+func (c *RoleResourceRel) TableName() string {
+	return RoleResourceRelTBName()
 }
