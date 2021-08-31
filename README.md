@@ -50,13 +50,21 @@
 ## 使用
 * 安装本系统
 <br>`go get github.com/yunnet/gardens`
-* 将doc目录下的gdkxdl.sql和kxtimingdata.sql导入mysql(业务需求，分库治理)
+* 将doc目录下的gardens.sql和kxtimingdata.sql导入mysql(业务需求，分库治理)
 * 修改配置文件 `conf/app.conf`
-* 运行在gdkxdl目录使用beego官方提供的命令运行
+* 运行在gardens目录使用beego官方提供的命令运行
 <br>`bee run`
 * 访问方式
 <br>http: 在浏览器里打开 `http://localhost:8080` 进行访问
 <br>https: 在浏览器里打开 `https://localhost:10443` 进行访问
+
+升级
+go 1.17
+beego v2.0.1
+
+使用goland请设置代理
+https://goproxy.cn/
+
 
 ## 系统截图
 ![登陆页面](https://github.com/yunnet/gardens/blob/master/doc/image/login2.png)

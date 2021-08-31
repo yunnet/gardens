@@ -52,8 +52,7 @@ func TotalCollectRatePageList(params *TotalCollectRateQueryParam) ([]*TotalColle
 	endTime := ary[1] + " 23:59:59"
 
 	data := make([]*TotalCollectRate, 0)
-	o := orm.NewOrm()
-	o.Using("kxtimingdata")
+	o := orm.NewOrmUsingDB("kxtimingdata")
 
 	var total int64
 	sql := fmt.Sprintf(C_SQL_TOTALCOLLECTRATE_ROWS, beginTime, endTime, params.CustomerNO, params.CustomerName)

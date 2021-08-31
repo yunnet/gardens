@@ -104,11 +104,11 @@ func (c *EquipmentMeterTypeController) Edit() {
 
 //预处理
 func (c *EquipmentMeterTypeController) preform() {
-	tmp_str := c.Input().Get("ThreePhase")
+	tmp_str := c.GetString("ThreePhase")
 	if tmp_str == "on" {
-		c.Input().Set("ThreePhase", "1")
+		c.Data["ThreePhase"] = "1"
 	} else {
-		c.Input().Set("ThreePhase", "0")
+		c.Data["ThreePhase"] = "0"
 	}
 }
 
@@ -128,14 +128,15 @@ func (c *EquipmentMeterTypeController) Save() {
 	m.ChangeUser = c.curUser.RealName
 	o := orm.NewOrm()
 	if m.Id == 0 {
-		if err = o.Begin(); err != nil {
+		to, err := o.Begin()
+		if err != nil {
 			c.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
 			return
 		}
 
 		if m.MeterTypeNO, err = GetSysValNO("metertypeno"); err != nil {
 			c.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)
-			o.Rollback()
+			to.Rollback()
 			return
 		}
 
@@ -143,13 +144,13 @@ func (c *EquipmentMeterTypeController) Save() {
 		m.CreateDate = time.Now()
 
 		if _, err = o.Insert(&m); err == nil {
-			if err = o.Commit(); err != nil {
+			if err = to.Commit(); err != nil {
 				c.jsonResult(enums.JRCodeFailed, "添加提交失败", m.Id)
 			} else {
 				c.jsonResult(enums.JRCodeSucc, "添加成功", m.Id)
 			}
 		} else {
-			if err = o.Rollback(); err != nil {
+			if err = to.Rollback(); err != nil {
 				c.jsonResult(enums.JRCodeFailed, "添加回滚失败", m.Id)
 			} else {
 				c.jsonResult(enums.JRCodeFailed, "添加失败", m.Id)

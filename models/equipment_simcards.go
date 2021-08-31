@@ -18,8 +18,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/astaxie/beego"
 	"github.com/beego/beego/v2/client/orm"
+	beego "github.com/beego/beego/v2/server/web"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"net/http"
@@ -127,9 +127,9 @@ func TrafficSync() (int64, error) {
 	var params = EquipmentSimCardsQueryParam{}
 	data := EquipmentSimCardsDataList(&params)
 
-	api := beego.AppConfig.String("simcard::api")
-	key := beego.AppConfig.String("simcard::key")
-	username := beego.AppConfig.String("simcard::username")
+	api, _ := beego.AppConfig.String("simcard::api")
+	key, _ := beego.AppConfig.String("simcard::key")
+	username, _ := beego.AppConfig.String("simcard::username")
 	timestamp := time.Now().Unix()
 
 	num := 0

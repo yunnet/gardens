@@ -50,8 +50,7 @@ func TerminalTracePageList(params *TerminalTraceQueryParam) ([]*TerminalTrace, i
 	endTime := ary[1] + " 23:59:59"
 
 	data := make([]*TerminalTrace, 0)
-	o := orm.NewOrm()
-	o.Using("kxtimingdata")
+	o := orm.NewOrmUsingDB("kxtimingdata")
 
 	var total int64
 	sql := fmt.Sprintf(C_SQL_TERMINAL_TRACE_ROWS, beginTime, endTime, params.DTU_no, params.MeterAddress)

@@ -77,7 +77,7 @@ func InitDatabase() {
 		return
 	}
 
-	dbName2 := "gardensdata"
+	dbName2 := "kxtimingdata"
 
 	switch dbType {
 	case "sqlite3":

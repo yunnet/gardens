@@ -17,15 +17,12 @@ package sysinit
 import (
 	"gardens/utils"
 
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 func init() {
 	//启用Session
 	beego.BConfig.WebConfig.Session.SessionOn = true
-
-	//初始化日志
-	utils.InitLogs()
 
 	//初始化缓存
 	utils.InitCache()

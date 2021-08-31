@@ -58,8 +58,8 @@ func TotalDtuRowsPageList(params *TotalDtuRowsQueryParam) ([]*TotalDtuRows, int6
 	endTime := ary[1]
 
 	data := make([]*TotalDtuRows, 0)
-	o := orm.NewOrm()
-	o.Using("kxtimingdata")
+	o := orm.NewOrmUsingDB("kxtimingdata")
+
 	sql := fmt.Sprintf(C_SQL_TOTALDTUROWS,
 		beginTime,
 		endTime,

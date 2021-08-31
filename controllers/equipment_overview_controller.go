@@ -53,7 +53,7 @@ func (c *EquipmentOverviewController) DataGrid() {
 
 func (c *EquipmentOverviewController) DataList() {
 	var params = models.EquipmentOverviewQueryParam{}
-	params.CollectDate = c.Input().Get("CollectDate")
+	params.CollectDate = c.GetString("CollectDate")
 
 	data := models.EquipmentOverviewDataList(&params)
 	c.jsonResult(enums.JRCodeSucc, "", data)

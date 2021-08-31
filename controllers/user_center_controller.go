@@ -15,6 +15,7 @@
 package controllers
 
 import (
+	"github.com/beego/beego/v2/core/logs"
 	"strings"
 
 	"gardens/enums"
@@ -42,7 +43,7 @@ func (c *UserCenterController) Profile() {
 		c.pageError("数据无效，请刷新后重试")
 	}
 	c.Data["hasAvatar"] = len(m.Avatar) > 0
-	utils.LogDebug(m.Avatar)
+	logs.Debug(m.Avatar)
 
 	c.Data["m"] = m
 	c.setTpl()

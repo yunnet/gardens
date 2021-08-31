@@ -15,13 +15,14 @@
 package controllers
 
 import (
+	"github.com/beego/beego/v2/core/logs"
 	"strings"
 
 	"fmt"
 	"gardens/enums"
 	"gardens/models"
 	"gardens/utils"
-	"github.com/astaxie/beego"
+	beego "github.com/beego/beego/v2/server/web"
 	"github.com/tidwall/gjson"
 	"io/ioutil"
 	"net/http"
@@ -67,8 +68,10 @@ func (c *HomeController) Error() {
 }
 
 func (c *HomeController) Login() {
-	c.Data["pageTitle"] = beego.AppConfig.String("site.app") + beego.AppConfig.String("site.name") + " - 登陆"
-	c.Data["siteVersion"] = beego.AppConfig.String("site.version")
+	siteApp, _ := beego.AppConfig.String("site.app")
+	sitename, _ := beego.AppConfig.String("site.name")
+	c.Data["pageTitle"] = siteApp + sitename + " - 登陆"
+	c.Data["siteVersion"], _ = beego.AppConfig.String("site.version")
 
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["headcssjs"] = "home/login_headcssjs.html"
@@ -95,9 +98,9 @@ func (c *HomeController) DoLogin() {
 	userpwd := strings.TrimSpace(c.GetString("UserPwd"))
 
 	if err := models.LoginTraceAdd(username, remoteAddr, time.Now()); err != nil {
-		beego.Error("LoginTraceAdd error.")
+		logs.Error("LoginTraceAdd error.")
 	}
-	beego.Info(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
+	logs.Info(fmt.Sprintf("login: %s IP: %s", username, remoteAddr))
 
 	if len(username) == 0 || len(userpwd) == 0 {
 		c.jsonResult(enums.JRCodeFailed, "用户名和密码不正确", "")
@@ -127,13 +130,13 @@ func (c *HomeController) GetConfigValue() {
 	result := ""
 	err := true
 	if key == "siteApp" {
-		result = beego.AppConfig.String("site.app")
+		result, _ = beego.AppConfig.String("site.app")
 		err = false
 	} else if key == "siteName" {
-		result = beego.AppConfig.String("site.name")
+		result, _ = beego.AppConfig.String("site.name")
 		err = false
 	} else if key == "siteVersion" {
-		result = beego.AppConfig.String("site.version")
+		result, _ = beego.AppConfig.String("site.version")
 		err = false
 	}
 
@@ -161,17 +164,17 @@ func (c *HomeController) GetCustomerForMeter() {
 
 	if err := utils.GetCache(key, &data); err == nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("use redis cache: GetCustomerForMeter spend: %d ns", after-before))
+		logs.Info(fmt.Sprintf("use redis cache: GetCustomerForMeter spend: %d ns", after-before))
 		c.jsonResult(enums.JRCodeSucc, "", data)
 	}
 
 	if data, err := models.GetCustomerForMeter(); err != nil {
 		c.jsonResult(enums.JRCodeFailed, "", 0)
 	} else {
-		utils.SetCache(key, data, 3600)		
+		utils.SetCache(key, data, 3600)
 
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("::: DB GetCustomerForMeter spend: %d ns", after-before))
+		logs.Info(fmt.Sprintf("::: DB GetCustomerForMeter spend: %d ns", after-before))
 		c.jsonResult(enums.JRCodeSucc, "", data)
 	}
 }
@@ -182,7 +185,7 @@ func (c *HomeController) GetDtuCount() {
 	var count int64
 
 	if err := utils.GetCache(key, &count); err == nil {
-		beego.Info("use redis cache: GetDtuCount")
+		logs.Info("use redis cache: GetDtuCount")
 		c.jsonResult(enums.JRCodeSucc, "", count)
 	}
 
@@ -197,7 +200,7 @@ func (c *HomeController) GetMeterCount() {
 	var count int64
 
 	if err := utils.GetCache(key, &count); err == nil {
-		beego.Info("use redis cache: GetMeterCount")
+		logs.Info("use redis cache: GetMeterCount")
 		c.jsonResult(enums.JRCodeSucc, "", count)
 	}
 
@@ -212,7 +215,7 @@ func (c *HomeController) GetCollectCountOfMonth() {
 	var data []*models.CollectCountOfMonth
 
 	if err := utils.GetCache(key, &data); err == nil {
-		beego.Info("use redis cache: GetCollectCountOfMonth")
+		logs.Info("use redis cache: GetCollectCountOfMonth")
 		c.jsonResult(enums.JRCodeSucc, "", data)
 	}
 
@@ -230,7 +233,7 @@ func (c *HomeController) GetCustomerZone() {
 	var data []*models.EquipmentCustomer
 
 	if err := utils.GetCache(key, &data); err == nil {
-		beego.Info("use redis cache: GetCustomerZone")
+		logs.Info("use redis cache: GetCustomerZone")
 		c.jsonResult(enums.JRCodeSucc, "", data)
 	}
 
@@ -245,10 +248,10 @@ func (c *HomeController) GetCustomerZone() {
 //获取概述信息GetDtuRowForDay
 func (c *HomeController) GetOverviewToday() {
 	before := time.Now().Unix()
-	choiceDate := c.Input().Get("choiceDate")
+	choiceDate := c.GetString("choiceDate")
 	if data, err := models.GetOverviewToday(choiceDate); err != nil {
 		after := time.Now().Unix()
-		beego.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after-before))
+		logs.Info(fmt.Sprintf("GetOverviewToday spend: %d s", after-before))
 		c.jsonResult(enums.JRCodeFailed, "", 0)
 	} else {
 		c.jsonResult(enums.JRCodeSucc, "", data)
@@ -262,14 +265,14 @@ func (c *HomeController) GetWeather() {
 	go func(url string, ch chan string) {
 		resp, err := http.Get(url)
 		if err != nil {
-			beego.Error("同步天气出错." + err.Error())
+			logs.Error("同步天气出错." + err.Error())
 			return
 		}
 		defer resp.Body.Close()
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if nil != err {
-			beego.Error("同步天气出错：" + err.Error())
+			logs.Error("同步天气出错：" + err.Error())
 			return
 		}
 		ch <- string(body)

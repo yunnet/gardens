@@ -2550,14 +2550,14 @@ BEGIN
 
 		IF _view_name like 'collect_base_info_%' THEN			
 			SET @sqlText := CONCAT("create or replace view kxtimingdata.", @view_name,
-														 " AS ( select * from kxtimingdata.collect_base_info where collect_time >= str_to_date('", 
+														 " AS ( select * from kxtimingdata.collect_base_info where collect_time >= str_to_date('",
 														 @dates, 
 														 "','%Y-%m-%d') and collect_time < date_add(str_to_date('",
 														 @dates, "','%Y-%m-%d'), interval 1 day))"
 														 );
 
 		ELSEIF _view_name like 'collect_attach_info_%' THEN		
-			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name, 
+			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name,
 														 " AS ( select * from kxtimingdata.collect_attach_info where collect_time >= str_to_date('" ,
 														 @dates,
 														 "','%Y-%m-%d') and collect_time < date_add(str_to_date('",
@@ -2566,7 +2566,7 @@ BEGIN
 														 );
 
 		ELSEIF _view_name like 'collect_other_info_%' THEN
-			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name, 
+			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name,
 														 " AS ( select * from kxtimingdata.collect_other_info where collect_time >= str_to_date('" ,
 														 @dates,
 														 "','%Y-%m-%d') and collect_time < date_add(str_to_date('",
@@ -2574,7 +2574,7 @@ BEGIN
 														 "','%Y-%m-%d'), interval 1 day))"
 														 );		
 	  ELSEIF _view_name like 'collect_alarm_info_%' THEN
-			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name, 
+			SET @sqlText := CONCAT("create or replace view kxtimingdata.",	@view_name,
 														 " AS ( select * from kxtimingdata.collect_alarm_info where collect_time >= str_to_date('" ,
 														 @dates,
 														 "','%Y-%m-%d') and collect_time < date_add(str_to_date('",
@@ -2630,7 +2630,7 @@ BEGIN
 			update dtu_age_temp 
 			   set begin_time = (
 			SELECT collect_time AS begin_time 
-				FROM kxtimingdata.collect_base_info 
+				FROM kxtimingdata.collect_base_info
 				WHERE dtu_no = @dtu_no
 					AND meter_address = @meter_address
 					limit 1
@@ -2641,7 +2641,7 @@ BEGIN
 			update dtu_age_temp 
 			   set end_time = (
 			SELECT collect_time AS end_time 
-				FROM kxtimingdata.collect_base_info 
+				FROM kxtimingdata.collect_base_info
 				WHERE dtu_no = @dtu_no
 					AND meter_address = @meter_address
 				ORDER BY collect_time DESC

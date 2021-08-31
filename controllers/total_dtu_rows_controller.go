@@ -54,9 +54,9 @@ func (c *TotalDtuRowsController) DataGrid() {
 
 func (c *TotalDtuRowsController) DataList() {
 	var params = models.TotalDtuRowsQueryParam{}
-	params.CollectDate = c.Input().Get("CollectDate")
-	params.DTU_no = c.Input().Get("DTU_no")
-	params.MeterAddress = c.Input().Get("MeterAddress")
+	params.CollectDate = c.GetString("CollectDate")
+	params.DTU_no = c.GetString("DTU_no")
+	params.MeterAddress = c.GetString("MeterAddress")
 
 	data := models.TotalDtuRowsDataList(&params)
 	c.jsonResult(enums.JRCodeSucc, "", data)

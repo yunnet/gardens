@@ -16,12 +16,11 @@ package controllers
 
 import (
 	"fmt"
+	"github.com/beego/beego/v2/core/logs"
 	"strings"
 
 	"gardens/enums"
 	"gardens/models"
-	"gardens/utils"
-
 	beego "github.com/beego/beego/v2/server/web"
 )
 
@@ -124,7 +123,7 @@ func (c *BaseController) checkAuthor(ignores ...string) {
 
 	hasAuthor := c.checkActionAuthor(c.controllerName, c.actionName)
 	if !hasAuthor {
-		utils.LogDebug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", c.controllerName, c.actionName, c.curUser.Id))
+		logs.Debug(fmt.Sprintf("author control: path=%s.%s userid=%v  无权访问", c.controllerName, c.actionName, c.curUser.Id))
 
 		//如果没有权限
 		if !hasAuthor {
@@ -205,5 +204,5 @@ func (c *BaseController) pageLogin() {
 }
 
 // func (this *BaseController) GetControllerAndAction() (string, string) {
-	
+
 // }

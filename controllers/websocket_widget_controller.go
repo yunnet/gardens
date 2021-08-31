@@ -17,18 +17,22 @@ package controllers
 import (
 	"fmt"
 	"gardens/models"
-	"gardens/utils"
+	"github.com/beego/beego/v2/core/logs"
 	"github.com/gorilla/websocket"
 	"log"
+	"net/http"
 	"time"
 )
 
 var (
 	clients   = make(map[*websocket.Conn]bool)
 	broadcast = make(chan models.SendMessage)
+	upgrader  = websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}
 )
-
-var upgrader = websocket.Upgrader{}
 
 func init() {
 	go handleMessage()
@@ -40,7 +44,7 @@ type WebsocketWidgetController struct {
 
 func (c *WebsocketWidgetController) Prepare() {
 	c.BaseController.Prepare()
-	c.checkLogin()
+	//c.checkLogin()
 }
 
 func (c *WebsocketWidgetController) Index() {
@@ -62,7 +66,7 @@ func handleMessage() {
 		for client := range clients {
 			err := client.WriteJSON(msg)
 			if err != nil {
-				utils.LogError("client write JSON err: ")
+				logs.Error("client write JSON err: ", err)
 				client.Close()
 				delete(clients, client)
 			}

@@ -16,19 +16,20 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"encoding/gob"
 	"errors"
+	"github.com/beego/beego/v2/client/cache"
+	"github.com/beego/beego/v2/core/logs"
 	"time"
 
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/cache"
-	_ "github.com/astaxie/beego/cache/redis"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 var cc cache.Cache
 
 func InitCache() {
-	host := beego.AppConfig.String("cache::redis_host")
+	host, _ := beego.AppConfig.String("cache::redis_host")
 	//passWord := beego.AppConfig.String("cache::redis_password")
 	var err error
 	defer func() {
@@ -39,8 +40,8 @@ func InitCache() {
 	//cc, err = cache.NewCache("redis", `{"conn":"`+host+`","password":"`+passWord+`"}`)
 	cc, err = cache.NewCache("redis", `{"conn":"`+host+`"}`)
 	if err != nil {
-		LogError("Connect to the redis host " + host + " failed")
-		LogError(err)
+		logs.Error("Connect to the redis host " + host + " failed")
+		logs.Error(err)
 	}
 }
 
@@ -56,15 +57,15 @@ func SetCache(key string, value interface{}, timeout int) error {
 
 	defer func() {
 		if r := recover(); r != nil {
-			LogError(r)
+			logs.Error(r)
 			cc = nil
 		}
 	}()
 	timeouts := time.Duration(timeout) * time.Second
-	err = cc.Put(key, data, timeouts)
+	err = cc.Put(context.Background(), key, data, timeouts)
 	if err != nil {
-		LogError(err)
-		LogError("SetCache失败，key:" + key)
+		logs.Error(err)
+		logs.Error("SetCache失败，key:" + key)
 		return err
 	} else {
 		return nil
@@ -78,20 +79,20 @@ func GetCache(key string, to interface{}) error {
 
 	defer func() {
 		if r := recover(); r != nil {
-			LogError(r)
+			logs.Error(r)
 			cc = nil
 		}
 	}()
 
-	data := cc.Get(key)
+	data, _ := cc.Get(context.Background(), key)
 	if data == nil {
 		return errors.New("Cache不存在")
 	}
 
 	err := Decode(data.([]byte), to)
 	if err != nil {
-		LogError(err)
-		LogError("GetCache失败，key:" + key)
+		logs.Error(err)
+		logs.Error("GetCache失败，key:" + key)
 	}
 
 	return err
@@ -108,7 +109,7 @@ func DelCache(key string) error {
 			cc = nil
 		}
 	}()
-	err := cc.Delete(key)
+	err := cc.Delete(context.Background(), key)
 	if err != nil {
 		return errors.New("Cache删除失败")
 	} else {

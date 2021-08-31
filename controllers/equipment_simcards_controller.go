@@ -153,7 +153,6 @@ func (c *EquipmentSimCardsController) Delete() {
 	}
 }
 
-//abcdefg hijklmn opqrst uvwxyz
 func (c *EquipmentSimCardsController) TrafficSync() {
 	if num, err := models.TrafficSync(); err == nil {
 		c.jsonResult(enums.JRCodeSucc, fmt.Sprintf("同步成功 %d 项", num), 0)

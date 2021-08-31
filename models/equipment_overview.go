@@ -55,8 +55,8 @@ func EquipmentOverviewPageList(params *EquipmentOverviewQueryParam) ([]*Equipmen
 	endTime := ary[1]
 
 	data := make([]*EquipmentOverview, 0)
-	o := orm.NewOrm()
-	o.Using("kxtimingdata")
+	o := orm.NewOrmUsingDB("kxtimingdata")
+
 	sql := fmt.Sprintf(C_SQL_EQUIPMENTOVERVIEW,
 		beginTime,
 		endTime,
