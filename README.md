@@ -58,12 +58,13 @@
 <br>http: 在浏览器里打开 `http://localhost:8080` 进行访问
 <br>https: 在浏览器里打开 `https://localhost:10443` 进行访问
 
-升级
-go 1.17
-beego v2.0.1
+* 升级
+  <br>go 1.17
+  <br>beego v2.0.1
 
-使用goland请设置代理
-https://goproxy.cn/
+  使用goland请设置代理
+
+  https://goproxy.cn/
 
 
 ## 系统截图
