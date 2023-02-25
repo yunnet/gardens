@@ -24,7 +24,7 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/yinheli/mahonia v0.0.0-20131226213531-0eef680515cc
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/tools v0.0.0-20201211185031-d93e913c1a58 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
